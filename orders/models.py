@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
 
 class Pizza(models.Model):
     name = models.CharField(max_length=100)
@@ -10,7 +12,8 @@ class Pizza(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class Topping(models.Model):
     name = models.CharField(max_length=100)
     price_small = models.DecimalField(max_digits=5, decimal_places=2)
@@ -19,15 +22,15 @@ class Topping(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
 class Drink(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return self.name
-    
-from django.contrib.auth.models import User  # make sure this is at top
+
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -38,7 +41,8 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id}"
-    
+
+
 class OrderItem(models.Model):
     SIZE_CHOICES = [
         ('S', 'Small'),
@@ -51,10 +55,33 @@ class OrderItem(models.Model):
     pizza = models.ForeignKey(Pizza, on_delete=models.SET_NULL, null=True, blank=True)
     drink = models.ForeignKey(Drink, on_delete=models.SET_NULL, null=True, blank=True)
 
-    quantity = models.IntegerField()
-    size = models.CharField(max_length=1, choices=SIZE_CHOICES)
+    quantity = models.PositiveIntegerField()
+
+    #  FIX: size is optional 
+    size = models.CharField(max_length=1, choices=SIZE_CHOICES, null=True, blank=True)
 
     toppings = models.ManyToManyField(Topping, blank=True)
+
+    def clean(self):
+        #  Both selected
+        if self.pizza and self.drink:
+            raise ValidationError("Choose either pizza or drink, not both.")
+
+        #  None selected
+        if not self.pizza and not self.drink:
+            raise ValidationError("You must select either pizza or drink.")
+
+        #  Pizza MUST have size
+        if self.pizza and not self.size:
+            raise ValidationError("Pizza must have a size.")
+
+        #  Drink should NOT have size
+        if self.drink and self.size:
+            raise ValidationError("Drinks should not have a size.")
+
+        #  Drink cannot have toppings (safe check)
+        if self.drink and self.pk and self.toppings.exists():
+            raise ValidationError("Drinks cannot have toppings.")
 
     def __str__(self):
         return f"Item {self.id}"

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pizza Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 30px auto;
+            gap: 20px;
+        }
+
+        .menu-section {
+            flex: 3;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .account-section {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .item-box {
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .item-box:last-child {
+            border-bottom: none;
+        }
+
+        a, button {
+            display: inline-block;
+            margin-top: 8px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        a:hover, button:hover {
+            background-color: #0056b3;
+        }
+
+        .welcome-text {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="menu-section">
+            <h1>Pizza Menu</h1>
+
+            <h2>Pizzas</h2>
+            {% for pizza in pizzas %}
+                <div class="item-box">
+                    <strong>{{ pizza.name }}</strong><br>
+                    {{ pizza.description }}<br>
+                    Small: {{ pizza.price_small }} |
+                    Medium: {{ pizza.price_medium }} |
+                    Large: {{ pizza.price_large }}
+                </div>
+            {% empty %}
+                <p>No pizzas available.</p>
+            {% endfor %}
+
+            <h2>Drinks</h2>
+            {% for drink in drinks %}
+                <div class="item-box">
+                    {{ drink.name }} - {{ drink.price }}
+                </div>
+            {% empty %}
+                <p>No drinks available.</p>
+            {% endfor %}
+        </div>
+
+        <div class="account-section">
+            <h2>Account</h2>
+
+            {% if user.is_authenticated %}
+                <p class="welcome-text">Welcome, {{ user.username }}!</p>
+                <form action="/accounts/logout/" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            {% else %}
+                <p>Please login or register before placing an order.</p>
+                <a href="/accounts/login/">Login</a>
+                <a href="/register/">Register</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>
