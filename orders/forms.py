@@ -13,3 +13,10 @@ class PizzaCartForm(forms.Form):
 
 class DrinkCartForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, initial=1)
+
+
+class CheckoutForm(forms.Form):
+    delivery_address = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter delivery address'})
+    )

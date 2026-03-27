@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Pizza, Drink
-from .forms import PizzaCartForm, DrinkCartForm
+from .models import Pizza, Drink, Order, OrderItem
+from .forms import PizzaCartForm, DrinkCartForm, CheckoutForm
 
 
 def menu(request):
@@ -103,6 +103,73 @@ def view_cart(request):
     total = sum(item['subtotal'] for item in cart)
 
     return render(request, 'orders/cart.html', {
+        'cart': cart,
+        'total': total,
+    })
+
+@login_required
+def remove_from_cart(request, item_index):
+    cart = request.session.get('cart', [])
+
+    if 0 <= item_index < len(cart):
+        cart.pop(item_index)
+        request.session['cart'] = cart
+
+    return redirect('view_cart')
+
+
+@login_required
+def clear_cart(request):
+    request.session['cart'] = []
+    return redirect('view_cart')
+
+@login_required
+def checkout(request):
+    cart = request.session.get('cart', [])
+    total = sum(item['subtotal'] for item in cart)
+
+    if not cart:
+        return redirect('view_cart')
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            delivery_address = form.cleaned_data['delivery_address']
+
+            order = Order.objects.create(
+                user=request.user,
+                total_price=total,
+                status='Pending',
+                delivery_address=delivery_address
+            )
+
+            for item in cart:
+                if item['type'] == 'pizza':
+                    pizza = get_object_or_404(Pizza, id=item['id'])
+                    OrderItem.objects.create(
+                        order=order,
+                        pizza=pizza,
+                        drink=None,
+                        quantity=item['quantity'],
+                        size=item['size']
+                    )
+                elif item['type'] == 'drink':
+                    drink = get_object_or_404(Drink, id=item['id'])
+                    OrderItem.objects.create(
+                        order=order,
+                        pizza=None,
+                        drink=drink,
+                        quantity=item['quantity'],
+                        size=None
+                    )
+
+            request.session['cart'] = []
+            return redirect('menu')
+    else:
+        form = CheckoutForm()
+
+    return render(request, 'orders/checkout.html', {
+        'form': form,
         'cart': cart,
         'total': total,
     })

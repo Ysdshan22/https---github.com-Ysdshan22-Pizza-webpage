@@ -2,35 +2,89 @@
 <html>
 <head>
     <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f8f8;
+        }
+
+        .cart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        a, button {
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        a:hover, button:hover {
+            background-color: #0056b3;
+        }
+
+        .danger {
+            background-color: #dc3545;
+        }
+
+        .danger:hover {
+            background-color: #a71d2a;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Cart</h1>
+    <div class="cart-box">
+        <h1>Your Cart</h1>
 
-    {% if cart %}
-        <ul>
+        {% if cart %}
             {% for item in cart %}
-                <li>
+                <div class="cart-item">
                     {% if item.type == 'pizza' %}
-                        Pizza: {{ item.name }} |
-                        Size: {{ item.size }} |
-                        Quantity: {{ item.quantity }} |
-                        Unit Price: {{ item.price }} |
-                        Subtotal: {{ item.subtotal }}
+                        <strong>Pizza:</strong> {{ item.name }} |
+                        <strong>Size:</strong> {{ item.size }} |
+                        <strong>Quantity:</strong> {{ item.quantity }} |
+                        <strong>Unit Price:</strong> {{ item.price }} |
+                        <strong>Subtotal:</strong> {{ item.subtotal }}
                     {% else %}
-                        Drink: {{ item.name }} |
-                        Quantity: {{ item.quantity }} |
-                        Unit Price: {{ item.price }} |
-                        Subtotal: {{ item.subtotal }}
+                        <strong>Drink:</strong> {{ item.name }} |
+                        <strong>Quantity:</strong> {{ item.quantity }} |
+                        <strong>Unit Price:</strong> {{ item.price }} |
+                        <strong>Subtotal:</strong> {{ item.subtotal }}
                     {% endif %}
-                </li>
+
+                    <br>
+                    <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">Remove</a>
+                </div>
             {% endfor %}
-        </ul>
 
-        <h3>Total: {{ total }}</h3>
-    {% else %}
-        <p>Your cart is empty.</p>
-    {% endif %}
+            <h3>Total: {{ total }}</h3>
 
-    <a href="{% url 'menu' %}">Back to Menu</a>
+            <a class="danger" href="{% url 'clear_cart' %}">Clear Cart</a>
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+
+        <a href="{% url 'menu' %}">Back to Menu</a>
+    </div>
 </body>
 </html>
