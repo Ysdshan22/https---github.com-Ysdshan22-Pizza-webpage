@@ -126,16 +126,17 @@
         <div class="account-section">
             <h2>Account</h2>
 
-            {% if user.is_authenticated %}
-                <p class="welcome-text">Welcome, {{ user.username }}!</p>
+          {% if user.is_authenticated %}
+            <p class="welcome-text">Welcome, {{ user.username }}!</p>
 
-                <a href="{% url 'view_cart' %}">View Cart</a>
+            <a href="{% url 'view_cart' %}">View Cart</a>
+            <a href="{% url 'order_history' %}">My Orders</a>
 
-                <form action="/accounts/logout/" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            {% else %}
+            <form action="/accounts/logout/" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
                 <p>Please login or register before placing an order.</p>
                 <a href="/accounts/login/">Login</a>
                 <a href="/register/">Register</a>

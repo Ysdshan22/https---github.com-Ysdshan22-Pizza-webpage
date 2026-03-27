@@ -25,19 +25,27 @@ def menu(request):
     })
 
 
+from django.contrib.auth.models import User
+
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = UserCreationForm()
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
 
-    return render(request, 'orders/register.html', {
-        'form': form
-    })
+        user = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        )
 
+        return redirect('login')
+
+    return render(request, 'orders/register.html')
 
 @login_required
 def add_pizza_to_cart(request, pizza_id):
@@ -139,7 +147,7 @@ def checkout(request):
             order = Order.objects.create(
                 user=request.user,
                 total_price=total,
-                status='Pending',
+                status='P',
                 delivery_address=delivery_address
             )
 
@@ -172,4 +180,12 @@ def checkout(request):
         'form': form,
         'cart': cart,
         'total': total,
+    })
+
+@login_required
+def order_history(request):
+    orders = Order.objects.filter(user=request.user).order_by('-date')
+
+    return render(request, 'orders/order_history.html', {
+        'orders': orders
     })

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f8f8;
+        }
+
+        .order-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .order {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .item {
+            margin-left: 20px;
+            padding: 5px 0;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-box">
+        <h1>My Orders</h1>
+
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order">
+                    <p><strong>Order ID:</strong> {{ order.id }}</p>
+                    <p><strong>Date:</strong> {{ order.date }}</p>
+                    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+                    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+                    <p><strong>Total Price:</strong> {{ order.total_price }}</p>
+
+                    <h3>Items:</h3>
+                    {% for item in order.orderitem_set.all %}
+                        <div class="item">
+                            {% if item.pizza %}
+                                Pizza: {{ item.pizza.name }} |
+                                Size: {{ item.size }} |
+                                Quantity: {{ item.quantity }}
+                            {% elif item.drink %}
+                                Drink: {{ item.drink.name }} |
+                                Quantity: {{ item.quantity }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You have not placed any orders yet.</p>
+        {% endif %}
+
+        <a href="{% url 'menu' %}">Back to Menu</a>
+    </div>
+</body>
+</html>
