@@ -9,6 +9,7 @@ class Pizza(models.Model):
     price_small = models.DecimalField(max_digits=5, decimal_places=2)
     price_medium = models.DecimalField(max_digits=5, decimal_places=2)
     price_large = models.DecimalField(max_digits=5, decimal_places=2)
+    available_toppings = models.ManyToManyField('Topping', blank=True)
 
     def __str__(self):
         return self.name

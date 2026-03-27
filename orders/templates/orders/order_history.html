@@ -1,49 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="{% static 'orders/style.css' %}">
+    
     <title>My Orders</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f8f8f8;
-        }
-
-        .order-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        .order {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .item {
-            margin-left: 20px;
-            padding: 5px 0;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            padding: 8px 14px;
-            border-radius: 6px;
-        }
-
-        a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    
 </head>
 <body>
     <div class="order-box">

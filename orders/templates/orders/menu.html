@@ -1,85 +1,11 @@
+{% load static %}
 {% load custom_filters %}
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="{% static 'orders/style.css' %}">
     <title>Pizza Menu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-
-        .container {
-            display: flex;
-            max-width: 1200px;
-            margin: 30px auto;
-            gap: 20px;
-        }
-
-        .menu-section {
-            flex: 3;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .account-section {
-            flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            height: fit-content;
-        }
-
-        h1, h2 {
-            color: #333;
-        }
-
-        .item-box {
-            border-bottom: 1px solid #ddd;
-            padding: 12px 0;
-        }
-
-        .item-box:last-child {
-            border-bottom: none;
-        }
-
-        a, button {
-            display: inline-block;
-            margin-top: 8px;
-            margin-right: 10px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            padding: 8px 14px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        }
-
-        a:hover, button:hover {
-            background-color: #0056b3;
-        }
-
-        .welcome-text {
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        form {
-            margin-top: 10px;
-        }
-
-        input, select {
-            margin-top: 5px;
-            margin-bottom: 8px;
-            padding: 6px;
-            width: 100%;
-            max-width: 220px;
-        }
-    </style>
+    
 </head>
 <body>
 
