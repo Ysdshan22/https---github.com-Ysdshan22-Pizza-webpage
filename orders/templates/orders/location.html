@@ -1,0 +1,227 @@
+{% extends 'orders/base.html' %}
+{% block title %}Choose Your Location | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .location-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #fdf6ec 0%, #f5ebe0 100%);
+    }
+    .location-hero {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    .location-hero .emoji {
+        font-size: 4rem;
+        margin-bottom: 16px;
+        display: block;
+        animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .location-hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 10px;
+    }
+    .location-hero h1 em {
+        color: #c0392b;
+        font-style: normal;
+    }
+    .location-hero p {
+        color: #8b6f5e;
+        font-size: 1rem;
+        max-width: 400px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    .locations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        max-width: 960px;
+        width: 100%;
+    }
+    .location-card {
+        background: #fff;
+        border: 2px solid #e8d5b7;
+        border-radius: 16px;
+        padding: 28px;
+        cursor: pointer;
+        transition: all 0.25s;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+    }
+    .location-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #c0392b;
+        transform: scaleX(0);
+        transition: transform 0.25s;
+    }
+    .location-card:hover {
+        border-color: #c0392b;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 28px rgba(192,57,43,0.15);
+    }
+    .location-card:hover::before {
+        transform: scaleX(1);
+    }
+    .location-card .city-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .location-card .address {
+        color: #8b6f5e;
+        font-size: 0.88rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.5;
+    }
+    .location-card .phone {
+        color: #c0392b;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .location-card .select-btn {
+        margin-top: 18px;
+        width: 100%;
+        padding: 10px;
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .location-card .select-btn:hover {
+        background: #96281b;
+    }
+    .open-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: #eafaf1;
+        color: #1a7a40;
+        border: 1px solid #2ecc71;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    .divider {
+        width: 60px;
+        height: 3px;
+        background: #c0392b;
+        margin: 16px auto 40px;
+        border-radius: 2px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="location-page">
+    <div class="location-hero">
+        <span class="emoji">🍕</span>
+        <h1>Welcome to Napoli<em>Pizza</em></h1>
+        <div class="divider"></div>
+        <p>Select your nearest location and we will deliver hot, fresh pizza right to your door.</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="locations-grid">
+
+            <div class="location-card" onclick="selectLocation(1)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">🏙 Oslo</div>
+                <div class="address">📍 Karl Johans gate 12, 0154 Oslo</div>
+                <div class="phone">📞 +47 22 00 11 00</div>
+                <button type="submit" name="location_id" value="1" class="select-btn">
+                    Order from Oslo
+                </button>
+            </div>
+
+            <div class="location-card" onclick="selectLocation(2)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">🌊 Bergen</div>
+                <div class="address">📍 Bryggen 5, 5003 Bergen</div>
+                <div class="phone">📞 +47 55 00 22 00</div>
+                <button type="submit" name="location_id" value="2" class="select-btn">
+                    Order from Bergen
+                </button>
+            </div>
+
+            <div class="location-card" onclick="selectLocation(3)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">🎓 Trondheim</div>
+                <div class="address">📍 Nordre gate 8, 7011 Trondheim</div>
+                <div class="phone">📞 +47 73 00 33 00</div>
+                <button type="submit" name="location_id" value="3" class="select-btn">
+                    Order from Trondheim
+                </button>
+            </div>
+
+            <div class="location-card" onclick="selectLocation(4)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">❄️ Tromsø</div>
+                <div class="address">📍 Storgata 20, 9008 Tromsø</div>
+                <div class="phone">📞 +47 77 00 44 00</div>
+                <button type="submit" name="location_id" value="4" class="select-btn">
+                    Order from Tromsø
+                </button>
+            </div>
+
+            <div class="location-card" onclick="selectLocation(5)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">🛳 Stavanger</div>
+                <div class="address">📍 Øvre Holmegate 3, 4006 Stavanger</div>
+                <div class="phone">📞 +47 51 00 55 00</div>
+                <button type="submit" name="location_id" value="5" class="select-btn">
+                    Order from Stavanger
+                </button>
+            </div>
+
+            <div class="location-card" onclick="selectLocation(6)">
+                <span class="open-badge">✓ Open Now</span>
+                <div class="city-name">🏔 Lillehammer</div>
+                <div class="address">📍 Storgata 55, 2609 Lillehammer</div>
+                <div class="phone">📞 +47 61 00 66 00</div>
+                <button type="submit" name="location_id" value="6" class="select-btn">
+                    Order from Lillehammer
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endblock %}

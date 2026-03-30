@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NapoliPizza{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdf6ec;
+            --surface: #fff8f0;
+            --surface2: #f5ebe0;
+            --border: #e8d5b7;
+            --red: #c0392b;
+            --red-dark: #96281b;
+            --orange: #e67e22;
+            --text: #2c1810;
+            --muted: #8b6f5e;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e8d5b7' fill-opacity='0.3'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,248,240,0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 2px solid var(--border);
+            padding: 0 40px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-brand em { color: var(--red); font-style: normal; }
+        .navbar-links { display: flex; align-items: center; gap: 6px; }
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-link:hover { color: var(--text); background: var(--surface2); }
+        .nav-location {
+            font-size: 0.8rem;
+            color: var(--muted);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .restaurant-phone {
+            font-size: 0.82rem;
+            color: var(--red);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-red { background: var(--red); color: #fff; }
+        .btn-red:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(192,57,43,0.3); }
+        .btn-outline { background: transparent; color: var(--text); border: 2px solid var(--border); }
+        .btn-outline:hover { background: var(--surface2); border-color: var(--red); color: var(--red); }
+        .btn-ghost { background: transparent; color: var(--muted); border: none; }
+        .btn-ghost:hover { color: var(--red); background: var(--surface2); }
+
+        .cart-badge {
+            background: var(--red);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Messages */
+        .messages-wrap {
+            position: fixed;
+            top: 78px;
+            right: 20px;
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 360px;
+        }
+        .msg {
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease;
+        }
+        .msg-success { background: #eafaf1; border: 1px solid #2ecc71; color: #1a7a40; }
+        .msg-error   { background: #fdf0f0; border: 1px solid var(--red); color: var(--red); }
+        .msg-info    { background: #eaf4fb; border: 1px solid #3498db; color: #1a5a8a; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Layout */
+        .page { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+        .section-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            background: var(--text);
+            color: #f0ead6;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 0.85rem;
+        }
+        footer .footer-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #f0ead6;
+            margin-bottom: 8px;
+        }
+        footer .footer-brand em { color: var(--orange); font-style: normal; }
+        footer .footer-links { display: flex; flex-direction: column; gap: 8px; }
+        footer .footer-links a { color: #b0a090; text-decoration: none; transition: color 0.2s; }
+        footer .footer-links a:hover { color: #f0ead6; }
+        footer .footer-col h4 { color: var(--orange); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-bottom {
+            background: #1a0f08;
+            color: #6b5a4e;
+            text-align: center;
+            padding: 14px;
+            font-size: 0.78rem;
+        }
+
+        @media (max-width: 640px) {
+            .navbar { padding: 0 16px; }
+            .page { padding: 20px 16px; }
+            footer { padding: 24px 16px; }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-brand" href="{% url 'home' %}">🍕 Napoli<em>Pizza</em></a>
+    <div class="navbar-links">
+        {% if request.session.location_id %}
+            <span class="nav-location">📍 {{ request.session.location_city|default:"Oslo" }}</span>
+        {% endif %}
+        <span class="restaurant-phone">📞 +47 22 00 00 00</span>
+        {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'home' %}">Menu</a>
+            <a class="nav-link" href="{% url 'profile' %}">👤 {{ user.first_name }}</a>
+            <a class="btn btn-outline" href="{% url 'view_cart' %}">
+                🛒 Cart
+                {% if request.session.cart %}
+                    <span class="cart-badge">{{ request.session.cart|length }}</span>
+                {% endif %}
+            </a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline">
+                {% csrf_token %}
+                <button class="btn btn-ghost" type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a class="nav-link" href="{% url 'home' %}">Menu</a>
+            <a class="btn btn-outline" href="{% url 'login' %}">Sign In</a>
+            <a class="btn btn-red" href="{% url 'register' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
+
+{% if messages %}
+<div class="messages-wrap">
+    {% for msg in messages %}
+        <div class="msg msg-{{ msg.tags }}">
+            {% if msg.tags == 'success' %}✓{% elif msg.tags == 'error' %}✕{% else %}ℹ{% endif %}
+            {{ msg }}
+        </div>
+    {% endfor %}
+</div>
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.msg').forEach(m => {
+            m.style.transition = 'opacity 0.5s';
+            m.style.opacity = '0';
+            setTimeout(() => m.remove(), 500);
+        });
+    }, 4000);
+</script>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<footer>
+    <div class="footer-col">
+        <div class="footer-brand">🍕 Napoli<em>Pizza</em></div>
+        <div style="color:#b0a090; max-width:220px; line-height:1.6">
+            Hand-tossed, wood-fired, delivered fresh across Norway.
+        </div>
+    </div>
+    <div class="footer-col">
+        <h4>Quick Links</h4>
+        <div class="footer-links">
+            <a href="{% url 'home' %}">Menu</a>
+            <a href="{% url 'location_select' %}">Locations</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">My Profile</a>
+                <a href="{% url 'order_history' %}">My Orders</a>
+            {% else %}
+                <a href="{% url 'login' %}">Sign In</a>
+                <a href="{% url 'register' %}">Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="footer-col">
+        <h4>Contact</h4>
+        <div class="footer-links">
+            <a href="#">📞 +47 22 00 00 00</a>
+            <a href="#">✉ hello@napolipizza.no</a>
+            <a href="{% url 'location_select' %}">📍 Find Us</a>
+        </div>
+    </div>
+    <div class="footer-col">
+        <h4>Info</h4>
+        <div class="footer-links">
+            <a href="#">Allergen Info</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+    </div>
+</footer>
+<div class="footer-bottom">
+    &copy; 2026 NapoliPizza Norway &bull; ELE 3921 Spring 2026
+</div>
+
+</body>
+</html>

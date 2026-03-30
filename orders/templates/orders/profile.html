@@ -1,0 +1,347 @@
+{% extends 'orders/base.html' %}
+{% block title %}My Profile | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .profile-hero {
+        background: linear-gradient(135deg, #2c1810, #c0392b);
+        border-radius: 20px;
+        padding: 36px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 8px 32px rgba(192,57,43,0.2);
+    }
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        flex-shrink: 0;
+        border: 3px solid rgba(255,255,255,0.3);
+    }
+    .profile-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    .profile-email { color: #d4b8a8; font-size: 0.9rem; }
+    .profile-stats {
+        margin-left: auto;
+        display: flex;
+        gap: 28px;
+    }
+    .profile-stat { text-align: center; }
+    .profile-stat .num {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #f4a261;
+    }
+    .profile-stat .label { font-size: 0.75rem; color: #d4b8a8; }
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 24px;
+        align-items: flex-start;
+    }
+
+    /* Sidebar */
+    .profile-sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .sidebar-card {
+        background: #fff;
+        border: 1.5px solid #e8d5b7;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .sidebar-card-header {
+        background: #fdf6ec;
+        padding: 14px 20px;
+        border-bottom: 1px solid #e8d5b7;
+        font-weight: 700;
+        color: #2c1810;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .sidebar-card-body { padding: 16px 20px; }
+    .info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 14px;
+    }
+    .info-row:last-child { margin-bottom: 0; }
+    .info-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #8b6f5e;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .info-value { font-size: 0.9rem; color: #2c1810; font-weight: 500; }
+    .sidebar-links { display: flex; flex-direction: column; }
+    .sidebar-link {
+        padding: 12px 20px;
+        color: #5a3e35;
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        border-bottom: 1px solid #f0e4d0;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .sidebar-link:last-child { border-bottom: none; }
+    .sidebar-link:hover { background: #fdf6ec; color: #c0392b; padding-left: 26px; }
+
+    /* Orders */
+    .orders-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .order-card {
+        background: #fff;
+        border: 1.5px solid #e8d5b7;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.2s;
+    }
+    .order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .order-card-header {
+        background: #fdf6ec;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #e8d5b7;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .order-id {
+        font-weight: 700;
+        color: #2c1810;
+        font-size: 0.95rem;
+    }
+    .order-id span { color: #c0392b; }
+    .order-date { color: #8b6f5e; font-size: 0.82rem; }
+    .order-status {
+        background: #eafaf1;
+        color: #1a7a40;
+        border: 1px solid #2ecc71;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+    .order-total {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #c0392b;
+    }
+    .order-card-body { padding: 16px 20px; }
+    .order-items-list { display: flex; flex-direction: column; gap: 8px; }
+    .order-item-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        color: #5a3e35;
+        padding: 8px 12px;
+        background: #fdf6ec;
+        border-radius: 8px;
+    }
+    .order-item-name { font-weight: 600; color: #2c1810; }
+    .order-item-qty {
+        background: #e8d5b7;
+        color: #2c1810;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+    .order-item-price { color: #c0392b; font-weight: 600; }
+    .reorder-btn {
+        margin-top: 14px;
+        padding: 9px 20px;
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+    .reorder-btn:hover { background: #96281b; }
+
+    .no-orders {
+        text-align: center;
+        padding: 60px 20px;
+        background: #fff;
+        border-radius: 20px;
+        border: 2px dashed #e8d5b7;
+    }
+    .no-orders .emoji { font-size: 3rem; display: block; margin-bottom: 14px; }
+    .no-orders h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        color: #2c1810;
+        margin-bottom: 8px;
+    }
+    .no-orders p { color: #8b6f5e; margin-bottom: 20px; }
+
+    @media (max-width: 768px) {
+        .profile-hero { flex-direction: column; text-align: center; }
+        .profile-stats { margin-left: 0; }
+        .profile-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <!-- Hero -->
+    <div class="profile-hero">
+        <div class="profile-avatar">👤</div>
+        <div>
+            <div class="profile-name">{{ user.first_name }} {{ user.last_name }}</div>
+            <div class="profile-email">{{ user.email }}</div>
+        </div>
+        <div class="profile-stats">
+            <div class="profile-stat">
+                <div class="num">{{ orders.count }}</div>
+                <div class="label">Orders</div>
+            </div>
+            <div class="profile-stat">
+                <div class="num">🍕</div>
+                <div class="label">Pizza Lover</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+            <div class="sidebar-card">
+                <div class="sidebar-card-header">👤 Account Info</div>
+                <div class="sidebar-card-body">
+                    <div class="info-row">
+                        <span class="info-label">First Name</span>
+                        <span class="info-value">{{ user.first_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Name</span>
+                        <span class="info-value">{{ user.last_name }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">{{ user.email }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Member Since</span>
+                        <span class="info-value">{{ user.date_joined|date:"F Y" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="sidebar-card-header">🔗 Quick Links</div>
+                <div class="sidebar-links">
+                    <a class="sidebar-link" href="{% url 'home' %}">🍕 Browse Menu</a>
+                    <a class="sidebar-link" href="{% url 'view_cart' %}">🛒 View Cart</a>
+                    <a class="sidebar-link" href="{% url 'location_select' %}">📍 Change Location</a>
+                    <a class="sidebar-link" href="{% url 'password_reset' %}">🔑 Change Password</a>
+                    <a class="sidebar-link" href="#" style="color:#c0392b;"
+                       onclick="document.getElementById('logoutForm').submit()">
+                        🚪 Sign Out
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="orders-section">
+            <h2>📦 My Orders</h2>
+
+            {% if orders %}
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div>
+                            <div class="order-id">Order <span>#{{ order.id }}</span></div>
+                            <div class="order-date">{{ order.created_at|date:"d F Y, H:i" }}</div>
+                        </div>
+                        <span class="order-status">✓ Delivered</span>
+                        <div class="order-total">kr {{ order.total }}</div>
+                    </div>
+                    <div class="order-card-body">
+                        <div class="order-items-list">
+                            {% for item in order.items.all %}
+                            <div class="order-item-row">
+                                <span class="order-item-name">
+                                    {% if item.item.category.slug == 'drinks' %}🥤
+                                    {% elif item.item.category.slug == 'vegan' %}🌱
+                                    {% else %}🍕{% endif %}
+                                    {{ item.item.name }}
+                                </span>
+                                <span class="order-item-qty">x{{ item.quantity }}</span>
+                                <span class="order-item-price">kr {{ item.price }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <a href="{% url 'reorder' order.id %}" class="reorder-btn">
+                            🔁 Reorder This
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-orders">
+                    <span class="emoji">🍕</span>
+                    <h3>No orders yet</h3>
+                    <p>You have not placed any orders. Let's change that!</p>
+                    <a href="{% url 'home' %}" class="reorder-btn">Browse Menu →</a>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<form id="logoutForm" action="{% url 'logout' %}" method="post" style="display:none">
+    {% csrf_token %}
+</form>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Login | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrap {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    .auth-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 40px;
+        width: 100%;
+        max-width: 380px;
+        box-shadow: var(--shadow);
+    }
+    .auth-logo { text-align: center; margin-bottom: 30px; }
+    .auth-logo .icon { font-size: 2.8rem; }
+    .auth-logo h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 10px; }
+    .auth-logo p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+    .field-group { margin-bottom: 16px; }
+    .field-lbl { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        padding: 11px 14px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .field-input:focus { border-color: var(--red); }
+
+    .error-box {
+        background: rgba(230,57,70,0.08);
+        border: 1px solid rgba(230,57,70,0.28);
+        border-radius: 9px;
+        padding: 10px 14px;
+        color: #f09090;
+        font-size: 0.84rem;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .divider {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin: 18px 0;
+        position: relative;
+    }
+    .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+    .divider span { background: var(--surface); padding: 0 12px; position: relative; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="icon">🍕</div>
+            <h1>Welcome Back</h1>
+            <p>Login to NapoliPizza</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="error-box">✕ Invalid username or password. Please try again.</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="field-group">
+                <label class="field-lbl">Username</label>
+                <input class="field-input" type="text" name="username" autofocus required>
+            </div>
+            <div class="field-group">
+                <label class="field-lbl">Password</label>
+                <input class="field-input" type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-red"
+                    style="width:100%;justify-content:center;padding:13px;margin-top:6px;font-size:0.95rem">
+                Login
+            </button>
+        </form>
+
+        <div class="divider"><span>New here?</span></div>
+        <a href="{% url 'register' %}" class="btn btn-outline"
+           style="width:100%;justify-content:center;padding:11px">
+            Create an Account
+        </a>
+    </div>
+</div>
+{% endblock %}

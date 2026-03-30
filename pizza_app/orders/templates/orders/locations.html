@@ -1,0 +1,137 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Our Locations | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .loc-hero {
+        text-align: center;
+        padding: 70px 40px 50px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(160deg, #000e1a 0%, #0d0d0d 60%);
+        position: relative;
+    }
+    .loc-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(52,152,219,0.06) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .loc-hero h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 10px; }
+    .loc-hero h1 em { color: var(--orange); font-style: normal; }
+    .loc-hero p { color: var(--muted); font-size: 1rem; max-width: 480px; margin: 0 auto; }
+
+    .loc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+        gap: 24px;
+        padding: 44px 40px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    .loc-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+    .loc-card:hover {
+        border-color: rgba(244,162,97,0.35);
+        transform: translateY(-5px);
+        box-shadow: 0 14px 44px rgba(0,0,0,0.45);
+    }
+    .loc-map-area {
+        height: 185px;
+        background: linear-gradient(135deg, #080d1a, #0d1a0d);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .loc-map-area iframe { width: 100%; height: 100%; border: none; }
+    .loc-map-placeholder { font-size: 5rem; opacity: 0.5; }
+
+    .loc-body { padding: 22px; }
+    .loc-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+    .loc-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 7px 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        line-height: 1.5;
+    }
+    .loc-row:last-child { border-bottom: none; }
+    .loc-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .hours-text { color: #7aefb0; font-weight: 600; }
+
+    .empty-locs {
+        text-align: center;
+        padding: 80px 40px;
+        color: var(--muted);
+    }
+    .empty-locs .e-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-locs h2 { font-family: 'Playfair Display', serif; color: var(--text); font-size: 1.6rem; margin-bottom: 8px; }
+
+    @media (max-width: 640px) {
+        .loc-hero { padding: 50px 20px 40px; }
+        .loc-grid { padding: 28px 16px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="loc-hero">
+    <h1>Find Us <em>Near You</em></h1>
+    <p>Visit one of our restaurants for dine-in, or order online for home delivery.</p>
+</div>
+
+{% if locations %}
+<div class="loc-grid">
+    {% for loc in locations %}
+    <div class="loc-card">
+        <div class="loc-map-area">
+            {% if loc.map_embed_url %}
+                <iframe src="{{ loc.map_embed_url }}" allowfullscreen loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            {% else %}
+                <div class="loc-map-placeholder">🗺</div>
+            {% endif %}
+        </div>
+        <div class="loc-body">
+            <div class="loc-name">{{ loc.name }}</div>
+            <div class="loc-row">
+                <span class="loc-icon">🏠</span>
+                <span>{{ loc.address }}, {{ loc.city }}</span>
+            </div>
+            <div class="loc-row">
+                <span class="loc-icon">📞</span>
+                <span>{{ loc.phone }}</span>
+            </div>
+            <div class="loc-row">
+                <span class="loc-icon">🕐</span>
+                <span class="hours-text">{{ loc.opening_hours }}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-locs">
+    <div class="e-icon">🗺</div>
+    <h2>Locations Coming Soon</h2>
+    <p style="margin-bottom:24px">Our location details will appear here. Order online in the meantime!</p>
+    <a href="{% url 'menu' %}" class="btn btn-red" style="padding:11px 28px">Order Online</a>
+</div>
+{% endif %}
+{% endblock %}

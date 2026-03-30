@@ -1,0 +1,58 @@
+[
+  {"model": "orders.location", "pk": 1, "fields": {"city": "Oslo", "address": "Karl Johans gate 12, 0154 Oslo", "phone": "+47 22 00 11 00"}},
+  {"model": "orders.location", "pk": 2, "fields": {"city": "Bergen", "address": "Bryggen 5, 5003 Bergen", "phone": "+47 55 00 22 00"}},
+  {"model": "orders.location", "pk": 3, "fields": {"city": "Trondheim", "address": "Nordre gate 8, 7011 Trondheim", "phone": "+47 73 00 33 00"}},
+  {"model": "orders.location", "pk": 4, "fields": {"city": "Tromsø", "address": "Storgata 20, 9008 Tromsø", "phone": "+47 77 00 44 00"}},
+  {"model": "orders.location", "pk": 5, "fields": {"city": "Stavanger", "address": "Øvre Holmegate 3, 4006 Stavanger", "phone": "+47 51 00 55 00"}},
+  {"model": "orders.location", "pk": 6, "fields": {"city": "Lillehammer", "address": "Storgata 55, 2609 Lillehammer", "phone": "+47 61 00 66 00"}},
+
+  {"model": "orders.allergen", "pk": 1, "fields": {"name": "Gluten"}},
+  {"model": "orders.allergen", "pk": 2, "fields": {"name": "Dairy"}},
+  {"model": "orders.allergen", "pk": 3, "fields": {"name": "Eggs"}},
+  {"model": "orders.allergen", "pk": 4, "fields": {"name": "Nuts"}},
+  {"model": "orders.allergen", "pk": 5, "fields": {"name": "Soy"}},
+  {"model": "orders.allergen", "pk": 6, "fields": {"name": "Sesame"}},
+  {"model": "orders.allergen", "pk": 7, "fields": {"name": "Fish"}},
+  {"model": "orders.allergen", "pk": 8, "fields": {"name": "Sulphites"}},
+
+  {"model": "orders.category", "pk": 1, "fields": {"name": "Deals", "slug": "discounts", "order": 1}},
+  {"model": "orders.category", "pk": 2, "fields": {"name": "Best Sellers", "slug": "bestsellers", "order": 2}},
+  {"model": "orders.category", "pk": 3, "fields": {"name": "Classic", "slug": "classic", "order": 3}},
+  {"model": "orders.category", "pk": 4, "fields": {"name": "Vegetarian", "slug": "vegetarian", "order": 4}},
+  {"model": "orders.category", "pk": 5, "fields": {"name": "Vegan", "slug": "vegan", "order": 5}},
+  {"model": "orders.category", "pk": 6, "fields": {"name": "Meal Deals", "slug": "meal-deals", "order": 6}},
+  {"model": "orders.category", "pk": 7, "fields": {"name": "Drinks", "slug": "drinks", "order": 7}},
+
+  {"model": "orders.menuitem", "pk": 1, "fields": {"name": "Margherita Magic", "description": "Classic San Marzano tomato base, fresh Norwegian mozzarella, basil leaves and a drizzle of extra virgin olive oil. Simple, perfect, iconic.", "price": "149.00", "category": 1, "allergens": [1, 2], "is_available": true, "discount_percent": 20}},
+  {"model": "orders.menuitem", "pk": 2, "fields": {"name": "Bergen Smoked Salmon", "description": "Cream cheese base, Norwegian smoked salmon, red onion, capers, fresh dill and lemon zest on a crispy thin crust.", "price": "219.00", "category": 1, "allergens": [1, 2, 7], "is_available": true, "discount_percent": 15}},
+  {"model": "orders.menuitem", "pk": 3, "fields": {"name": "Truffle Prosciutto", "description": "White truffle cream, aged prosciutto, rocket, shaved parmesan and a generous drizzle of truffle oil.", "price": "259.00", "category": 2, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 4, "fields": {"name": "Napoli Classic", "description": "Slow cooked San Marzano tomato sauce, fior di latte mozzarella, black olives, anchovies and capers. A true taste of Naples.", "price": "189.00", "category": 2, "allergens": [1, 2, 7], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 5, "fields": {"name": "Norwegian BBQ Chicken", "description": "Smoky BBQ base, grilled chicken, red onion, yellow peppers, sweetcorn and melted mozzarella. A Norwegian crowd pleaser.", "price": "199.00", "category": 2, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 6, "fields": {"name": "Quattro Formaggi", "description": "Four cheese blend of mozzarella, gorgonzola, fontina and parmesan on a white cream base. Rich, indulgent and irresistible.", "price": "209.00", "category": 3, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 7, "fields": {"name": "Diavola Spicy", "description": "Fiery tomato sauce, spicy Calabrian salami, fresh chilli, black olives and mozzarella. Not for the faint hearted.", "price": "199.00", "category": 3, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 8, "fields": {"name": "Prosciutto e Funghi", "description": "Tomato base, premium prosciutto cotto, mixed wild mushrooms, mozzarella and fresh thyme. A timeless Italian classic.", "price": "209.00", "category": 3, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 9, "fields": {"name": "Garden Harvest", "description": "Roasted courgette, aubergine, red peppers, cherry tomatoes, red onion and mozzarella on a herbed tomato base.", "price": "179.00", "category": 4, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 10, "fields": {"name": "Spinach and Ricotta", "description": "Creamy ricotta base, fresh baby spinach, roasted garlic, pine nuts, cherry tomatoes and parmesan shavings.", "price": "189.00", "category": 4, "allergens": [1, 2, 4], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 11, "fields": {"name": "Caprese Deluxe", "description": "Sliced fresh tomatoes, thick mozzarella, fresh basil, balsamic glaze and olive oil on a light tomato base.", "price": "179.00", "category": 4, "allergens": [1, 2], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 12, "fields": {"name": "Vegan Fiesta", "description": "Tomato base, vegan mozzarella, roasted peppers, mushrooms, sweetcorn, red onion, olives and fresh basil. 100% plant based.", "price": "189.00", "category": 5, "allergens": [1], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 13, "fields": {"name": "Vegan BBQ Jackfruit", "description": "Smoky BBQ base, pulled jackfruit, caramelised onions, roasted peppers, vegan cheese and fresh coriander.", "price": "199.00", "category": 5, "allergens": [1, 5], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 14, "fields": {"name": "Pizza and Mozzarella Sticks", "description": "Any classic pizza paired with 6 golden fried mozzarella sticks and a marinara dipping sauce. Perfect for sharing.", "price": "229.00", "category": 6, "allergens": [1, 2], "is_available": true, "discount_percent": 10}},
+  {"model": "orders.menuitem", "pk": 15, "fields": {"name": "Pizza and Churros", "description": "Any classic pizza paired with 4 warm cinnamon churros dusted with sugar, served with chocolate dipping sauce.", "price": "219.00", "category": 6, "allergens": [1, 2, 3], "is_available": true, "discount_percent": 10}},
+  {"model": "orders.menuitem", "pk": 16, "fields": {"name": "Pizza and Chilli Poppers", "description": "Any classic pizza paired with 6 crispy chilli cheese poppers with a cool sour cream dip on the side.", "price": "219.00", "category": 6, "allergens": [1, 2], "is_available": true, "discount_percent": 10}},
+  {"model": "orders.menuitem", "pk": 17, "fields": {"name": "Coca Cola", "description": "Ice cold Coca Cola 500ml. The perfect companion for any pizza.", "price": "49.00", "category": 7, "allergens": [], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 18, "fields": {"name": "Sparkling Water", "description": "Norwegian Farris sparkling mineral water 500ml. Refreshing and light.", "price": "39.00", "category": 7, "allergens": [], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 19, "fields": {"name": "Homemade Lemonade", "description": "Freshly squeezed lemon juice, sparkling water, mint and honey. Made fresh daily.", "price": "59.00", "category": 7, "allergens": [], "is_available": true, "discount_percent": 0}},
+  {"model": "orders.menuitem", "pk": 20, "fields": {"name": "Mango Lassi", "description": "Creamy yoghurt blended with fresh mango, a hint of cardamom and honey. A refreshing Indian classic.", "price": "69.00", "category": 7, "allergens": [2], "is_available": true, "discount_percent": 0}}
+]
+```
+
+---
+
+Now run this to load all the data:
+```
+python manage.py loaddata orders/fixtures/data.json
+```
+
+Then start the server:
+```
+python manage.py runserver

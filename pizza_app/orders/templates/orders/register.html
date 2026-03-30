@@ -1,0 +1,119 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Register | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrap {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    .auth-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        padding: 40px;
+        width: 100%;
+        max-width: 430px;
+        box-shadow: var(--shadow);
+    }
+    .auth-logo { text-align: center; margin-bottom: 30px; }
+    .auth-logo .icon { font-size: 2.8rem; }
+    .auth-logo h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 10px; }
+    .auth-logo p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+    .field-group { margin-bottom: 16px; }
+    .field-lbl { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        padding: 11px 14px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .field-input:focus { border-color: var(--red); }
+
+    .name-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .error-box {
+        background: rgba(230,57,70,0.08);
+        border: 1px solid rgba(230,57,70,0.28);
+        border-radius: 9px;
+        padding: 10px 14px;
+        color: #f09090;
+        font-size: 0.84rem;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .divider {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin: 18px 0;
+        position: relative;
+    }
+    .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+    .divider span { background: var(--surface); padding: 0 12px; position: relative; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div class="icon">🍕</div>
+            <h1>Create Account</h1>
+            <p>Join NapoliPizza and start ordering</p>
+        </div>
+
+        {% if error %}
+        <div class="error-box">✕ {{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="field-group">
+                <label class="field-lbl">Username *</label>
+                <input class="field-input" type="text" name="username" placeholder="Choose a username" required autofocus>
+            </div>
+            <div class="field-group">
+                <label class="field-lbl">Password *</label>
+                <input class="field-input" type="password" name="password" placeholder="Choose a secure password" required>
+            </div>
+            <div class="name-grid">
+                <div class="field-group">
+                    <label class="field-lbl">First Name</label>
+                    <input class="field-input" type="text" name="first_name" placeholder="First">
+                </div>
+                <div class="field-group">
+                    <label class="field-lbl">Last Name</label>
+                    <input class="field-input" type="text" name="last_name" placeholder="Last">
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-lbl">Email</label>
+                <input class="field-input" type="email" name="email" placeholder="your@email.com">
+            </div>
+            <button type="submit" class="btn btn-red"
+                    style="width:100%;justify-content:center;padding:13px;margin-top:6px;font-size:0.95rem">
+                Create Account
+            </button>
+        </form>
+
+        <div class="divider"><span>Already have an account?</span></div>
+        <a href="/accounts/login/" class="btn btn-outline"
+           style="width:100%;justify-content:center;padding:11px">Login</a>
+    </div>
+</div>
+{% endblock %}
