@@ -1,0 +1,153 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}My Orders | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .history-wrap { max-width: 880px; margin: 0 auto; padding: 40px; }
+
+    .order-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 18px;
+        transition: border-color 0.25s;
+    }
+    .order-card:hover { border-color: rgba(230,57,70,0.3); }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .order-id { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; }
+    .order-date { color: var(--muted); font-size: 0.8rem; margin-top: 3px; }
+
+    .status-badge {
+        padding: 5px 13px;
+        border-radius: 50px;
+        font-size: 0.73rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+    .s-P  { background: rgba(244,162,97,0.12);  color: var(--orange); border: 1px solid rgba(244,162,97,0.28); }
+    .s-PR { background: rgba(52,152,219,0.12);  color: #74b9ff;       border: 1px solid rgba(52,152,219,0.28); }
+    .s-R  { background: rgba(155,89,182,0.12);  color: #c39bd3;       border: 1px solid rgba(155,89,182,0.28); }
+    .s-D  { background: rgba(46,204,113,0.12);  color: #7aefb0;       border: 1px solid rgba(46,204,113,0.28); }
+
+    .order-items { border-top: 1px solid var(--border); padding-top: 14px; }
+    .order-item-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .order-item-row:last-child { border-bottom: none; }
+    .item-dot { color: rgba(255,255,255,0.15); }
+
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+        margin-top: 14px;
+    }
+    .order-address { color: var(--muted); font-size: 0.8rem; }
+    .order-total { font-weight: 700; color: var(--orange); font-size: 1.05rem; }
+    .coupon-chip {
+        display: inline-block;
+        background: rgba(46,204,113,0.08);
+        border: 1px solid rgba(46,204,113,0.22);
+        color: #7aefb0;
+        padding: 2px 9px;
+        border-radius: 4px;
+        font-size: 0.73rem;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+    .empty-state { text-align: center; padding: 80px 20px; }
+    .empty-state .e-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-state h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 8px; }
+    .empty-state p { color: var(--muted); margin-bottom: 28px; }
+
+    @media (max-width: 640px) { .history-wrap { padding: 24px 16px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="history-wrap">
+    <h1 class="section-title">My Orders</h1>
+    <p class="section-sub">Your complete order history with status updates</p>
+
+    {% if orders %}
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-header">
+            <div>
+                <div class="order-id">Order #{{ order.id }}</div>
+                <div class="order-date">{{ order.date|date:"d M Y, H:i" }}</div>
+            </div>
+            <span class="status-badge s-{{ order.status }}">{{ order.get_status_display }}</span>
+        </div>
+
+        <div class="order-items">
+            {% for item in order.orderitem_set.all %}
+            <div class="order-item-row">
+                {% if item.pizza %}
+                    <span>🍕</span>
+                    <span>{{ item.pizza.name }}</span>
+                    <span class="item-dot">|</span>
+                    <span>{{ item.get_size_display }}</span>
+                    <span class="item-dot">|</span>
+                    <span>x{{ item.quantity }}</span>
+                {% elif item.drink %}
+                    <span>🥤</span>
+                    <span>{{ item.drink.name }}</span>
+                    <span class="item-dot">|</span>
+                    <span>x{{ item.quantity }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="order-footer">
+            <div>
+                <div class="order-address">📍 {{ order.delivery_address }}</div>
+                {% if order.coupon_code %}
+                <div><span class="coupon-chip">🏷 {{ order.coupon_code }} &mdash; saved NOK {{ order.discount_amount }}</span></div>
+                {% endif %}
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <div class="order-total">NOK {{ order.total_price }}</div>
+                <a href="{% url 'reorder' order.id %}" class="btn btn-outline"
+                   style="padding:7px 14px;font-size:0.8rem">
+                    ↺ Reorder
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <div class="e-icon">🍽</div>
+        <h2>No orders yet</h2>
+        <p>Your order history will appear here once you place your first order.</p>
+        <a href="{% url 'menu' %}" class="btn btn-red" style="padding:11px 28px">Browse Menu</a>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'menu' %}" class="btn btn-outline" style="margin-top:28px">← Back to Menu</a>
+</div>
+{% endblock %}

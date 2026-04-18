@@ -1,0 +1,195 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Cart | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-wrap { max-width: 960px; margin: 0 auto; padding: 40px; }
+    .page-header { margin-bottom: 32px; }
+
+    /* ── Cart table ───────────────────── */
+    .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+    .cart-table th {
+        text-align: left;
+        padding: 10px 14px;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
+    }
+    .cart-table td { padding: 16px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .cart-table tr:last-child td { border-bottom: none; }
+    .item-emoji { font-size: 2.2rem; line-height: 1; }
+    .item-name  { font-weight: 600; font-size: 0.95rem; }
+    .item-meta  { color: var(--muted); font-size: 0.78rem; margin-top: 3px; }
+    .price-text { font-size: 0.9rem; }
+    .subtotal-text { color: var(--orange); font-weight: 700; }
+
+    /* ── Summary card ─────────────────── */
+    .summary-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 26px;
+        max-width: 440px;
+        margin-left: auto;
+    }
+    .summary-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 18px; }
+    .s-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 0.88rem; color: var(--muted); }
+    .s-row.total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 14px; font-size: 1.15rem; font-weight: 700; color: var(--text); }
+    .discount-val { color: #7aefb0; font-weight: 600; }
+
+    /* ── Coupon section ───────────────── */
+    .coupon-section { margin: 18px 0; padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .coupon-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .coupon-row { display: flex; gap: 8px; }
+    .coupon-input {
+        flex: 1;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.88rem;
+        padding: 9px 14px;
+        outline: none;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: border-color 0.2s;
+    }
+    .coupon-input:focus { border-color: var(--red); }
+    .coupon-input::placeholder { text-transform: none; letter-spacing: 0; color: var(--muted); }
+    .coupon-applied {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(46,204,113,0.08);
+        border: 1px solid rgba(46,204,113,0.25);
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: #7aefb0;
+        font-size: 0.85rem;
+    }
+    .coupon-applied .remove-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.78rem;
+        transition: color 0.2s;
+    }
+    .coupon-applied .remove-link:hover { color: var(--red); }
+
+    /* ── Empty cart ───────────────────── */
+    .empty-cart { text-align: center; padding: 80px 20px; }
+    .empty-cart .e-icon { font-size: 4rem; margin-bottom: 16px; }
+    .empty-cart h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 8px; }
+    .empty-cart p { color: var(--muted); margin-bottom: 28px; }
+
+    @media (max-width: 640px) {
+        .cart-wrap { padding: 24px 16px; }
+        .cart-table th:nth-child(4),
+        .cart-table td:nth-child(4) { display: none; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cart-wrap">
+    <div class="page-header">
+        <h1 class="section-title">🛒 Your Cart</h1>
+        {% if cart %}
+        <p class="section-sub">{{ cart|length }} item{{ cart|length|pluralize }} ready to order</p>
+        {% endif %}
+    </div>
+
+    {% if cart %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Item</th>
+                <th>Details</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td><div class="item-emoji">{{ item.emoji|default:"🍽" }}</div></td>
+                <td><div class="item-name">{{ item.name }}</div></td>
+                <td>
+                    <div class="item-meta">
+                        {% if item.type == 'pizza' %}
+                            {% if item.size == 'S' %}Small{% elif item.size == 'M' %}Medium{% else %}Large{% endif %}
+                            {% if item.toppings %} &bull; {{ item.toppings|join:", " }}{% endif %}
+                        {% else %}
+                            Drink
+                        {% endif %}
+                    </div>
+                </td>
+                <td class="price-text">{{ item.quantity }}</td>
+                <td class="price-text">NOK {{ item.price }}</td>
+                <td><span class="subtotal-text">NOK {{ item.subtotal }}</span></td>
+                <td>
+                    <a href="{% url 'remove_from_cart' forloop.counter0 %}"
+                       class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem">✕</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="summary-card">
+        <div class="summary-title">Order Summary</div>
+
+        <!-- Coupon -->
+        <div class="coupon-section">
+            <div class="coupon-label">Coupon Code</div>
+            {% if coupon %}
+            <div class="coupon-applied">
+                <span>🏷 <strong>{{ coupon.code }}</strong> &mdash; {{ coupon.discount }}% off</span>
+                <a href="{% url 'remove_coupon' %}" class="remove-link">Remove</a>
+            </div>
+            {% else %}
+            <form method="post" action="{% url 'apply_coupon' %}">
+                {% csrf_token %}
+                <div class="coupon-row">
+                    <input type="text" name="coupon_code" class="coupon-input" placeholder="Enter coupon code">
+                    <button type="submit" class="btn btn-outline" style="padding:9px 16px">Apply</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+
+        <div class="s-row"><span>Subtotal</span><span>NOK {{ subtotal }}</span></div>
+        {% if discount %}
+        <div class="s-row"><span>Discount</span><span class="discount-val">- NOK {{ discount }}</span></div>
+        {% endif %}
+        <div class="s-row total"><span>Total</span><span>NOK {{ total }}</span></div>
+
+        <a href="{% url 'checkout' %}" class="btn btn-red"
+           style="width:100%;justify-content:center;padding:13px;margin-top:20px;font-size:0.95rem">
+            Proceed to Checkout →
+        </a>
+        <a href="{% url 'clear_cart' %}" class="btn btn-ghost"
+           style="width:100%;justify-content:center;margin-top:8px;font-size:0.82rem">
+            Clear Cart
+        </a>
+    </div>
+
+    {% else %}
+    <div class="empty-cart">
+        <div class="e-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Add some delicious pizzas or drinks to get started.</p>
+        <a href="{% url 'menu' %}" class="btn btn-red" style="padding:11px 28px">Browse Menu</a>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'menu' %}" class="btn btn-ghost" style="margin-top:28px">← Back to Menu</a>
+</div>
+{% endblock %}

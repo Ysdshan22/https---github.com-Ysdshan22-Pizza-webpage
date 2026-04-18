@@ -1,0 +1,148 @@
+{% extends 'orders/base.html' %}
+
+{% block title %}Checkout | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .checkout-wrap { max-width: 1020px; margin: 0 auto; padding: 40px; }
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 28px;
+        align-items: start;
+    }
+    @media (max-width: 800px) { .checkout-grid { grid-template-columns: 1fr; } }
+
+    .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+    }
+    .panel-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.15rem;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Delivery form ─────────────────── */
+    .field-group { margin-bottom: 20px; }
+    .field-lbl { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field-input {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        padding: 12px 16px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .field-input:focus { border-color: var(--red); }
+    .field-err { color: var(--red); font-size: 0.78rem; margin-top: 4px; }
+
+    /* ── Order summary ─────────────────── */
+    .order-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.87rem;
+    }
+    .order-row:last-of-type { border-bottom: none; }
+    .order-item-name { font-weight: 600; }
+    .order-item-meta { color: var(--muted); font-size: 0.77rem; margin-top: 2px; }
+    .order-price { color: var(--orange); font-weight: 700; white-space: nowrap; }
+
+    .s-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.88rem; color: var(--muted); }
+    .s-row.total { border-top: 1px solid var(--border); margin-top: 10px; padding-top: 14px; font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .discount-val { color: #7aefb0; }
+
+    .note-box {
+        background: rgba(230,57,70,0.06);
+        border: 1px solid rgba(230,57,70,0.18);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-wrap">
+    <h1 class="section-title" style="margin-bottom:6px">Checkout</h1>
+    <p class="section-sub">Confirm your order and enter delivery details.</p>
+
+    <div class="checkout-grid">
+        <!-- Delivery form -->
+        <div class="panel">
+            <div class="panel-title">Delivery Details</div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field-group">
+                    <label class="field-lbl">Delivery Address</label>
+                    <input class="field-input" type="text" name="delivery_address"
+                           placeholder="e.g. Karl Johans gate 1, Oslo" required>
+                    {% if form.delivery_address.errors %}
+                        <p class="field-err">{{ form.delivery_address.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="note-box">
+                    🕐 Estimated delivery time: 30–45 minutes after order confirmation.
+                </div>
+
+                <button type="submit" class="btn btn-red"
+                        style="width:100%;justify-content:center;padding:14px;margin-top:22px;font-size:1rem">
+                    Place Order
+                </button>
+            </form>
+        </div>
+
+        <!-- Order summary -->
+        <div>
+            <div class="panel">
+                <div class="panel-title">Order Summary</div>
+
+                {% for item in cart %}
+                <div class="order-row">
+                    <div>
+                        <div class="order-item-name">{{ item.emoji|default:"🍽" }} {{ item.name }}</div>
+                        <div class="order-item-meta">
+                            {% if item.type == 'pizza' %}
+                                {% if item.size == 'S' %}Small{% elif item.size == 'M' %}Medium{% else %}Large{% endif %}
+                                &bull; Qty {{ item.quantity }}
+                                {% if item.toppings %}&bull; {{ item.toppings|join:", " }}{% endif %}
+                            {% else %}
+                                Drink &bull; Qty {{ item.quantity }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="order-price">NOK {{ item.subtotal }}</div>
+                </div>
+                {% endfor %}
+
+                <div style="margin-top:14px">
+                    <div class="s-row"><span>Subtotal</span><span>NOK {{ subtotal }}</span></div>
+                    {% if discount %}
+                    <div class="s-row">
+                        <span>Discount {% if coupon %}({{ coupon.code }}){% endif %}</span>
+                        <span class="discount-val">- NOK {{ discount }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="s-row total"><span>Total</span><span>NOK {{ total }}</span></div>
+                </div>
+            </div>
+            <a href="{% url 'view_cart' %}" class="btn btn-ghost" style="margin-top:12px">← Edit Cart</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

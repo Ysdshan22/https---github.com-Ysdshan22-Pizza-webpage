@@ -1,0 +1,258 @@
+[
+  {
+    "model": "orders.topping",
+    "pk": 1,
+    "fields": {
+      "name": "Extra Mozzarella",
+      "price_small": "1.50",
+      "price_medium": "2.00",
+      "price_large": "2.50"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 2,
+    "fields": {
+      "name": "Mushrooms",
+      "price_small": "1.00",
+      "price_medium": "1.50",
+      "price_large": "2.00"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 3,
+    "fields": {
+      "name": "Jalapeños",
+      "price_small": "1.00",
+      "price_medium": "1.50",
+      "price_large": "2.00"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 4,
+    "fields": {
+      "name": "Black Olives",
+      "price_small": "1.00",
+      "price_medium": "1.50",
+      "price_large": "2.00"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 5,
+    "fields": {
+      "name": "Sun-Dried Tomatoes",
+      "price_small": "1.50",
+      "price_medium": "2.00",
+      "price_large": "2.50"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 6,
+    "fields": {
+      "name": "Pepperoni",
+      "price_small": "2.00",
+      "price_medium": "2.50",
+      "price_large": "3.00"
+    }
+  },
+  {
+    "model": "orders.topping",
+    "pk": 7,
+    "fields": {
+      "name": "Roasted Garlic",
+      "price_small": "0.75",
+      "price_medium": "1.00",
+      "price_large": "1.25"
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 1,
+    "fields": {
+      "name": "Margherita",
+      "description": "San Marzano tomato, fresh fior di latte, basil, extra-virgin olive oil.",
+      "price_small": "89.00",
+      "price_medium": "119.00",
+      "price_large": "149.00",
+      "emoji": "🍕",
+      "available_toppings": [1, 2, 4, 5, 7]
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 2,
+    "fields": {
+      "name": "Pepperoni",
+      "description": "Tomato base, mozzarella, double-stacked crispy pepperoni, oregano.",
+      "price_small": "99.00",
+      "price_medium": "129.00",
+      "price_large": "159.00",
+      "emoji": "🔥",
+      "available_toppings": [1, 2, 3, 6, 7]
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 3,
+    "fields": {
+      "name": "Quattro Formaggi",
+      "description": "Mozzarella, gorgonzola, provolone, and parmigiano on a white cream base.",
+      "price_small": "109.00",
+      "price_medium": "139.00",
+      "price_large": "169.00",
+      "emoji": "🧀",
+      "available_toppings": [1, 2, 4, 7]
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 4,
+    "fields": {
+      "name": "Vegetariana",
+      "description": "Grilled courgette, capsicum, red onion, cherry tomatoes, and goat cheese.",
+      "price_small": "95.00",
+      "price_medium": "125.00",
+      "price_large": "155.00",
+      "emoji": "🥦",
+      "available_toppings": [1, 2, 3, 4, 5, 7]
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 5,
+    "fields": {
+      "name": "Diavola",
+      "description": "Spicy tomato, mozzarella, hot salami, chilli flakes, and fresh basil.",
+      "price_small": "105.00",
+      "price_medium": "135.00",
+      "price_large": "165.00",
+      "emoji": "🌶️",
+      "available_toppings": [1, 3, 6, 7]
+    }
+  },
+  {
+    "model": "orders.pizza",
+    "pk": 6,
+    "fields": {
+      "name": "Prosciutto e Funghi",
+      "description": "Tomato, mozzarella, Parma ham, portobello mushrooms, truffle oil.",
+      "price_small": "115.00",
+      "price_medium": "145.00",
+      "price_large": "175.00",
+      "emoji": "🥩",
+      "available_toppings": [1, 2, 4, 5, 7]
+    }
+  },
+  {
+    "model": "orders.drink",
+    "pk": 1,
+    "fields": {
+      "name": "Coca-Cola",
+      "price": "35.00",
+      "emoji": "🥤"
+    }
+  },
+  {
+    "model": "orders.drink",
+    "pk": 2,
+    "fields": {
+      "name": "Sprite",
+      "price": "35.00",
+      "emoji": "🍋"
+    }
+  },
+  {
+    "model": "orders.drink",
+    "pk": 3,
+    "fields": {
+      "name": "Sparkling Water",
+      "price": "25.00",
+      "emoji": "💧"
+    }
+  },
+  {
+    "model": "orders.drink",
+    "pk": 4,
+    "fields": {
+      "name": "Fresh Orange Juice",
+      "price": "49.00",
+      "emoji": "🍊"
+    }
+  },
+  {
+    "model": "orders.drink",
+    "pk": 5,
+    "fields": {
+      "name": "Italian Lemonade",
+      "price": "45.00",
+      "emoji": "🍹"
+    }
+  },
+  {
+    "model": "orders.coupon",
+    "pk": 1,
+    "fields": {
+      "code": "PIZZA10",
+      "discount_percent": 10,
+      "active": true
+    }
+  },
+  {
+    "model": "orders.coupon",
+    "pk": 2,
+    "fields": {
+      "code": "WELCOME20",
+      "discount_percent": 20,
+      "active": true
+    }
+  },
+  {
+    "model": "orders.coupon",
+    "pk": 3,
+    "fields": {
+      "code": "STUDENT15",
+      "discount_percent": 15,
+      "active": true
+    }
+  },
+  {
+    "model": "orders.location",
+    "pk": 1,
+    "fields": {
+      "name": "NapoliPizza Oslo Sentrum",
+      "address": "Karl Johans gate 12",
+      "city": "Oslo",
+      "phone": "+47 22 11 33 44",
+      "opening_hours": "Mon–Fri 11:00–22:00, Sat–Sun 12:00–23:00",
+      "map_embed_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2000.1234567890!2d10.7388!3d59.9139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTnCsDU0JzUwLjAiTiAxMMKwNDQnMTkuNyJF!5e0!3m2!1sen!2sno!4v1234567890"
+    }
+  },
+  {
+    "model": "orders.location",
+    "pk": 2,
+    "fields": {
+      "name": "NapoliPizza Grünerløkka",
+      "address": "Thorvald Meyers gate 36",
+      "city": "Oslo",
+      "phone": "+47 22 44 55 66",
+      "opening_hours": "Daily 12:00–23:00",
+      "map_embed_url": ""
+    }
+  },
+  {
+    "model": "orders.location",
+    "pk": 3,
+    "fields": {
+      "name": "NapoliPizza Bergen",
+      "address": "Strandkaien 2",
+      "city": "Bergen",
+      "phone": "+47 55 22 33 44",
+      "opening_hours": "Mon–Sun 11:30–22:30",
+      "map_embed_url": ""
+    }
+  }
+]

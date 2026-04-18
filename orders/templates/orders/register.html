@@ -1,59 +1,299 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-    <style>
-        body {
-            font-family: Arial;
-            margin: 30px;
-            background-color: #f8f8f8;
-        }
+{% extends 'orders/base.html' %}
+{% block title %}Sign Up | NapoliPizza{% endblock %}
 
-        .form-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin: auto;
-        }
+{% block extra_css %}
+<style>
+    .auth-page {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+    .auth-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        max-width: 900px;
+        width: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    .auth-left {
+        background: linear-gradient(145deg, #2c1810, #c0392b);
+        padding: 52px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+    }
+    .auth-left .big-emoji { font-size: 4rem; margin-bottom: 20px; }
+    .auth-left h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        line-height: 1.3;
+    }
+    .auth-left p { color: #d4b8a8; font-size: 0.9rem; line-height: 1.7; margin-bottom: 30px; }
+    .auth-perks { display: flex; flex-direction: column; gap: 12px; }
+    .auth-perk {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: #f0e0d0;
+    }
+    .auth-perk .perk-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+    .auth-right { background: #fff; padding: 52px 40px; }
+    .auth-right h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 6px;
+    }
+    .auth-right .subtitle { color: #8b6f5e; font-size: 0.88rem; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #2c1810;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e8d5b7;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        color: #2c1810;
+        background: #fdf6ec;
+        transition: all 0.2s;
+        outline: none;
+    }
+    .form-group input:focus {
+        border-color: #c0392b;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+    }
+    .form-group input.error { border-color: #c0392b; background: #fff8f8; }
+    .form-group input.success { border-color: #2ecc71; background: #f8fff8; }
+    .field-hint {
+        font-size: 0.75rem;
+        margin-top: 4px;
+        display: none;
+    }
+    .field-hint.show { display: block; }
+    .field-hint.error { color: #c0392b; }
+    .field-hint.success { color: #1a7a40; }
+    .submit-btn {
+        width: 100%;
+        padding: 13px;
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 6px;
+    }
+    .submit-btn:hover {
+        background: #96281b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px rgba(192,57,43,0.3);
+    }
+    .auth-links {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #8b6f5e;
+    }
+    .auth-links a { color: #c0392b; font-weight: 600; text-decoration: none; }
+    .auth-links a:hover { text-decoration: underline; }
+    .password-strength {
+        height: 4px;
+        border-radius: 2px;
+        margin-top: 6px;
+        background: #e8d5b7;
+        transition: all 0.3s;
+    }
+    .password-strength.weak { background: #c0392b; width: 33%; }
+    .password-strength.medium { background: #e67e22; width: 66%; }
+    .password-strength.strong { background: #2ecc71; width: 100%; }
+    @media (max-width: 640px) {
+        .auth-container { grid-template-columns: 1fr; }
+        .auth-left { padding: 32px 24px; }
+        .auth-right { padding: 32px 24px; }
+        .form-row { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
 
-        input, button {
-            display: block;
-            width: 100%;
-            margin-top: 10px;
-            padding: 8px;
-            border-radius: 6px;
-        }
+{% block content %}
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="big-emoji">🎉</div>
+            <h2>Join NapoliPizza Norway</h2>
+            <p>Create your free account and start ordering the best Italian pizza across Norway in minutes.</p>
+            <div class="auth-perks">
+                <div class="auth-perk">
+                    <div class="perk-icon">🚀</div>
+                    Fast checkout every time
+                </div>
+                <div class="auth-perk">
+                    <div class="perk-icon">🎁</div>
+                    Member only deals and discounts
+                </div>
+                <div class="auth-perk">
+                    <div class="perk-icon">📦</div>
+                    Full order history and tracking
+                </div>
+                <div class="auth-perk">
+                    <div class="perk-icon">🔁</div>
+                    Reorder favourites in one click
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <h3>Create Account</h3>
+            <p class="subtitle">It only takes a minute. No spam, we promise.</p>
 
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-        }
+            {% if messages %}
+                {% for msg in messages %}
+                    <div style="background:#fdf0f0; border:1px solid #c0392b; color:#c0392b; padding:10px 14px; border-radius:8px; font-size:0.85rem; margin-bottom:16px;">
+                        ✕ {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-box">
-        <h2>Register</h2>
+            <form method="post" id="registerForm">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" id="first_name"
+                               placeholder="Ola" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" id="last_name"
+                               placeholder="Nordmann" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" id="email"
+                           placeholder="ola@example.no" required>
+                    <div class="field-hint" id="email-hint"></div>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" id="phone"
+                           placeholder="+47 000 00 000">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" id="password"
+                           placeholder="Min. 8 characters" required>
+                    <div class="password-strength" id="pwd-strength"></div>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="password2" id="password2"
+                           placeholder="Repeat your password" required>
+                    <div class="field-hint" id="pwd2-hint"></div>
+                </div>
+                <button type="submit" class="submit-btn">Create Account →</button>
+            </form>
 
-        <form method="post">
-            {% csrf_token %}
-
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-
-            <input type="text" name="first_name" placeholder="First Name">
-            <input type="text" name="last_name" placeholder="Last Name">
-            <input type="email" name="email" placeholder="Email">
-
-            <button type="submit">Register</button>
-        </form>
-
-        <a href="{% url 'menu' %}">Back to Menu</a>
+            <div class="auth-links">
+                Already have an account? <a href="{% url 'login' %}">Sign In</a>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+
+<script>
+
+let emailTimer;
+document.getElementById('email').addEventListener('input', function() {
+    clearTimeout(emailTimer);
+    const hint = document.getElementById('email-hint');
+    const val = this.value;
+    if (!val.includes('@')) return;
+    emailTimer = setTimeout(() => {
+        fetch(`/check-email/?email=${encodeURIComponent(val)}`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.exists) {
+                    this.classList.add('error');
+                    this.classList.remove('success');
+                    hint.textContent = '✕ This email is already registered.';
+                    hint.className = 'field-hint show error';
+                } else {
+                    this.classList.add('success');
+                    this.classList.remove('error');
+                    hint.textContent = '✓ Email is available.';
+                    hint.className = 'field-hint show success';
+                }
+            });
+    }, 500);
+});
+
+
+document.getElementById('password').addEventListener('input', function() {
+    const bar = document.getElementById('pwd-strength');
+    const v = this.value;
+    if (v.length === 0) { bar.className = 'password-strength'; return; }
+    if (v.length < 6) { bar.className = 'password-strength weak'; return; }
+    if (v.length < 10) { bar.className = 'password-strength medium'; return; }
+    bar.className = 'password-strength strong';
+});
+
+document.getElementById('password2').addEventListener('input', function() {
+    const hint = document.getElementById('pwd2-hint');
+    if (this.value === document.getElementById('password').value) {
+        this.classList.add('success');
+        this.classList.remove('error');
+        hint.textContent = '✓ Passwords match.';
+        hint.className = 'field-hint show success';
+    } else {
+        this.classList.add('error');
+        this.classList.remove('success');
+        hint.textContent = '✕ Passwords do not match.';
+        hint.className = 'field-hint show error';
+    }
+});
+
+
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    const p1 = document.getElementById('password').value;
+    const p2 = document.getElementById('password2').value;
+    if (p1 !== p2) {
+        e.preventDefault();
+        document.getElementById('pwd2-hint').textContent = '✕ Passwords do not match.';
+        document.getElementById('pwd2-hint').className = 'field-hint show error';
+    }
+});
+</script>
+{% endblock %}

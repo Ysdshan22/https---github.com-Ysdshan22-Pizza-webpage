@@ -1,0 +1,662 @@
+{% extends 'orders/base.html' %}
+{% block title %}Menu | NapoliPizza{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-banner {
+        background: linear-gradient(120deg, #2c1810 60%, #c0392b 100%);
+        color: #fff;
+        padding: 48px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+    .hero-banner h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.6rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+    .hero-banner h1 em { color: #f4a261; font-style: normal; }
+    .hero-banner p { color: #d4b8a8; font-size: 0.95rem; max-width: 420px; line-height: 1.6; }
+    .hero-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 20px;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #f4a261;
+    }
+    .hero-stat .label { font-size: 0.75rem; color: #d4b8a8; }
+    .hero-emoji { font-size: 6rem; line-height: 1; }
+
+    /* Category tabs */
+    .cat-tabs {
+        position: sticky;
+        top: 68px;
+        z-index: 90;
+        background: rgba(253,246,236,0.97);
+        border-bottom: 2px solid #e8d5b7;
+        padding: 0 40px;
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+        padding: 14px 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #8b6f5e;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+        transition: all 0.2s;
+        background: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        font-family: 'Poppins', sans-serif;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .cat-tab:hover { color: #c0392b; }
+    .cat-tab.active { color: #c0392b; border-bottom-color: #c0392b; }
+
+    /* Menu sections */
+    .menu-page { padding: 40px; max-width: 1200px; margin: 0 auto; }
+    .menu-section { margin-bottom: 60px; }
+    .menu-section-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #e8d5b7;
+    }
+    .menu-section-header .icon { font-size: 1.8rem; }
+    .menu-section-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #2c1810;
+    }
+    .menu-section-header p { color: #8b6f5e; font-size: 0.85rem; margin-top: 2px; }
+    .section-badge {
+        margin-left: auto;
+        background: #fdf0f0;
+        color: #c0392b;
+        border: 1px solid #c0392b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    /* Item cards */
+    .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+    }
+    .item-card {
+        background: #fff;
+        border: 1.5px solid #e8d5b7;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.25s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        cursor: pointer;
+        position: relative;
+    }
+    .item-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 28px rgba(192,57,43,0.13);
+        border-color: #c0392b;
+    }
+    .item-emoji-box {
+        background: linear-gradient(135deg, #fdf6ec, #f5ebe0);
+        padding: 28px;
+        text-align: center;
+        font-size: 3.5rem;
+        line-height: 1;
+        position: relative;
+    }
+    .discount-ribbon {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #c0392b;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    .best-seller-ribbon {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #e67e22;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    .veg-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 1.1rem;
+    }
+    .item-body { padding: 16px; }
+    .item-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 6px;
+    }
+    .item-desc {
+        color: #8b6f5e;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .item-allergens {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+    .allergen-tag {
+        background: #fdf0f0;
+        color: #c0392b;
+        border: 1px solid #f5c6c6;
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+    .item-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+    }
+    .item-price {
+        display: flex;
+        flex-direction: column;
+    }
+    .price-original {
+        font-size: 0.78rem;
+        color: #aaa;
+        text-decoration: line-through;
+    }
+    .price-final {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2c1810;
+    }
+    .price-final.discounted { color: #c0392b; }
+    .add-btn {
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .add-btn:hover { background: #96281b; transform: scale(1.04); }
+
+    /* Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+        background: #fff;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 520px;
+        max-height: 88vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-header {
+        background: linear-gradient(135deg, #2c1810, #4a1f10);
+        color: #fff;
+        padding: 22px 24px;
+        border-radius: 20px 20px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .modal-header h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    .modal-header p { color: #d4b8a8; font-size: 0.82rem; }
+    .modal-close {
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.3); }
+    .modal-body { padding: 24px; }
+    .modal-desc {
+        color: #5a3e35;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 18px;
+        padding: 14px;
+        background: #fdf6ec;
+        border-radius: 10px;
+        border-left: 3px solid #c0392b;
+    }
+    .modal-section-title {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #2c1810;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
+        margin-top: 18px;
+    }
+    .allergen-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 18px;
+    }
+    .allergen-item {
+        background: #fdf0f0;
+        color: #c0392b;
+        border: 1.5px solid #f5c6c6;
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .modal-footer {
+        padding: 18px 24px;
+        border-top: 1px solid #e8d5b7;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fdf6ec;
+        border-radius: 0 0 20px 20px;
+    }
+    .modal-price {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c1810;
+    }
+    .modal-price .old { font-size: 0.9rem; color: #aaa; text-decoration: line-through; margin-right: 6px; font-family: 'Poppins', sans-serif; }
+    .modal-add-btn {
+        background: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 28px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .modal-add-btn:hover { background: #96281b; transform: translateY(-1px); }
+
+    /* Cart notification */
+    .cart-notif {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #2c1810;
+        color: #fff;
+        padding: 14px 22px;
+        border-radius: 12px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        display: none;
+        align-items: center;
+        gap: 10px;
+        z-index: 2000;
+        animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .cart-notif a {
+        color: #f4a261;
+        font-weight: 700;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<div class="hero-banner">
+    <div>
+        <h1>Authentic <em>Italian</em> Pizza<br>Delivered in Norway 🇳🇴</h1>
+        <p>Hand-tossed dough, San Marzano tomatoes, and the finest Norwegian ingredients. Fresh from our wood-fired oven to your door.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="num">{{ items.count }}+</div>
+                <div class="label">Menu Items</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num">6</div>
+                <div class="label">Locations</div>
+            </div>
+            <div class="hero-stat">
+                <div class="num">30</div>
+                <div class="label">Min Delivery</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-emoji">🍕</div>
+</div>
+
+<!-- Category Tabs -->
+<div class="cat-tabs">
+    <a class="cat-tab active" href="#discounts">🔥 Deals</a>
+    <a class="cat-tab" href="#bestsellers">⭐ Best Sellers</a>
+    <a class="cat-tab" href="#classic">🍕 Classic</a>
+    <a class="cat-tab" href="#vegetarian">🥦 Vegetarian</a>
+    <a class="cat-tab" href="#vegan">🌱 Vegan</a>
+    <a class="cat-tab" href="#mealdeals">🍗 Meal Deals</a>
+    <a class="cat-tab" href="#drinks">🥤 Drinks</a>
+</div>
+
+<div class="menu-page">
+
+    {% for category in categories %}
+    <div class="menu-section" id="{{ category.slug }}">
+        <div class="menu-section-header">
+            <span class="icon">
+                {% if category.slug == 'discounts' %}🔥
+                {% elif category.slug == 'bestsellers' %}⭐
+                {% elif category.slug == 'classic' %}🍕
+                {% elif category.slug == 'vegetarian' %}🥦
+                {% elif category.slug == 'vegan' %}🌱
+                {% elif category.slug == 'meal-deals' %}🍗
+                {% elif category.slug == 'drinks' %}🥤
+                {% else %}🍽{% endif %}
+            </span>
+            <div>
+                <h2>{{ category.name }}</h2>
+                <p>
+                    {% if category.slug == 'discounts' %}Limited time offers, grab them before they are gone!
+                    {% elif category.slug == 'bestsellers' %}Our most loved pizzas by customers across Norway.
+                    {% elif category.slug == 'classic' %}Timeless Italian recipes, perfected over generations.
+                    {% elif category.slug == 'vegetarian' %}Fresh and flavourful, made without meat.
+                    {% elif category.slug == 'vegan' %}100% plant-based, 100% delicious.
+                    {% elif category.slug == 'meal-deals' %}Pizza plus sides for the perfect meal.
+                    {% elif category.slug == 'drinks' %}Cold drinks to go with your pizza.
+                    {% else %}Explore our menu.{% endif %}
+                </p>
+            </div>
+            {% if category.slug == 'discounts' %}
+                <span class="section-badge">UP TO 30% OFF</span>
+            {% elif category.slug == 'bestsellers' %}
+                <span class="section-badge">CUSTOMER FAVOURITES</span>
+            {% endif %}
+        </div>
+
+        <div class="items-grid">
+            {% for item in items %}
+            {% if item.category == category %}
+            <div class="item-card" onclick="openModal({{ item.id }}, '{{ item.name|escapejs }}', '{{ item.description|escapejs }}', {{ item.price }}, {{ item.discounted_price }}, {{ item.discount_percent }}, [{% for a in item.allergens.all %}'{{ a.name }}'{% if not forloop.last %},{% endif %}{% endfor %}], '{{ category.slug }}')">
+                <div class="item-emoji-box">
+                    {% if item.discount_percent > 0 %}
+                        <span class="discount-ribbon">{{ item.discount_percent }}% OFF</span>
+                    {% elif category.slug == 'bestsellers' %}
+                        <span class="best-seller-ribbon">⭐ Best Seller</span>
+                    {% endif %}
+                    {% if category.slug == 'vegetarian' %}
+                        <span class="veg-badge">🥦</span>
+                    {% elif category.slug == 'vegan' %}
+                        <span class="veg-badge">🌱</span>
+                    {% endif %}
+                    {% if category.slug == 'drinks' %}🥤
+                    {% elif category.slug == 'meal-deals' %}🍗
+                    {% elif category.slug == 'vegan' %}🌱
+                    {% else %}🍕{% endif %}
+                </div>
+                <div class="item-body">
+                    <div class="item-name">{{ item.name }}</div>
+                    <div class="item-desc">{{ item.description }}</div>
+                    {% if item.allergens.all %}
+                    <div class="item-allergens">
+                        {% for allergen in item.allergens.all %}
+                            <span class="allergen-tag">{{ allergen.name }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="item-footer">
+                        <div class="item-price">
+                            {% if item.discount_percent > 0 %}
+                                <span class="price-original">kr {{ item.price }}</span>
+                                <span class="price-final discounted">kr {{ item.discounted_price }}</span>
+                            {% else %}
+                                <span class="price-final">kr {{ item.price }}</span>
+                            {% endif %}
+                        </div>
+                        <button class="add-btn" onclick="event.stopPropagation(); openModal({{ item.id }}, '{{ item.name|escapejs }}', '{{ item.description|escapejs }}', {{ item.price }}, {{ item.discounted_price }}, {{ item.discount_percent }}, [{% for a in item.allergens.all %}'{{ a.name }}'{% if not forloop.last %},{% endif %}{% endfor %}], '{{ category.slug }}')">
+                            + Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- Item Modal -->
+<div class="modal-overlay" id="itemModal" onclick="closeModalOutside(event)">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h3 id="modal-name"></h3>
+                <p id="modal-category"></p>
+            </div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-desc" id="modal-desc"></div>
+
+            <div class="modal-section-title">🌾 Allergen Information</div>
+            <div class="allergen-list" id="modal-allergens"></div>
+
+            <div id="no-allergens" style="display:none; color:#8b6f5e; font-size:0.85rem; margin-bottom:16px;">
+                ✓ No major allergens
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-price">
+                <span class="old" id="modal-old-price"></span>
+                <span id="modal-final-price"></span>
+            </div>
+            <button class="modal-add-btn" id="modal-add-btn">🛒 Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<!-- Cart notification -->
+<div class="cart-notif" id="cartNotif">
+    ✓ Added to cart! <a href="{% url 'view_cart' %}">View Cart →</a>
+</div>
+
+<script>
+let currentItemId = null;
+
+function openModal(id, name, desc, price, discountedPrice, discountPct, allergens, catSlug) {
+    currentItemId = id;
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-desc').textContent = desc;
+
+    const catNames = {
+        'discounts': '🔥 Deal Item',
+        'bestsellers': '⭐ Best Seller',
+        'classic': '🍕 Classic Pizza',
+        'vegetarian': '🥦 Vegetarian',
+        'vegan': '🌱 Vegan',
+        'meal-deals': '🍗 Meal Deal',
+        'drinks': '🥤 Drinks'
+    };
+    document.getElementById('modal-category').textContent = catNames[catSlug] || 'Menu Item';
+
+    const allergenList = document.getElementById('modal-allergens');
+    allergenList.innerHTML = '';
+    const noAllergens = document.getElementById('no-allergens');
+
+    const allergenIcons = {
+        'Gluten': '🌾', 'Dairy': '🥛', 'Eggs': '🥚', 'Nuts': '🥜',
+        'Soy': '🫘', 'Sesame': '🌻', 'Fish': '🐟', 'Shellfish': '🦐',
+        'Celery': '🥬', 'Mustard': '🌭', 'Sulphites': '🍷', 'Lupin': '🌼'
+    };
+
+    if (allergens.length > 0) {
+        noAllergens.style.display = 'none';
+        allergenList.style.display = 'flex';
+        allergens.forEach(a => {
+            const span = document.createElement('span');
+            span.className = 'allergen-item';
+            span.textContent = (allergenIcons[a] || '⚠') + ' ' + a;
+            allergenList.appendChild(span);
+        });
+    } else {
+        allergenList.style.display = 'none';
+        noAllergens.style.display = 'block';
+    }
+
+    const oldEl = document.getElementById('modal-old-price');
+    const finalEl = document.getElementById('modal-final-price');
+    if (discountPct > 0) {
+        oldEl.textContent = 'kr ' + price.toFixed(2);
+        finalEl.textContent = 'kr ' + discountedPrice.toFixed(2);
+        finalEl.style.color = '#c0392b';
+    } else {
+        oldEl.textContent = '';
+        finalEl.textContent = 'kr ' + price.toFixed(2);
+        finalEl.style.color = '#2c1810';
+    }
+
+    document.getElementById('itemModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('itemModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+    if (e.target.id === 'itemModal') closeModal();
+}
+
+document.getElementById('modal-add-btn').addEventListener('click', function() {
+    if (!currentItemId) return;
+    fetch(`/add-to-cart/${currentItemId}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken'), 'Content-Type': 'application/json' }
+    }).then(() => {
+        closeModal();
+        showCartNotif();
+        updateCartBadge();
+    });
+});
+
+function showCartNotif() {
+    const n = document.getElementById('cartNotif');
+    n.style.display = 'flex';
+    setTimeout(() => { n.style.display = 'none'; }, 3500);
+}
+
+function updateCartBadge() {
+    const badge = document.querySelector('.cart-badge');
+    if (badge) {
+        badge.textContent = parseInt(badge.textContent || 0) + 1;
+    }
+}
+
+function getCookie(name) {
+    let v = null;
+    document.cookie.split(';').forEach(c => {
+        c = c.trim();
+        if (c.startsWith(name + '=')) v = decodeURIComponent(c.slice(name.length + 1));
+    });
+    return v;
+}
+
+
+const sections = document.querySelectorAll('.menu-section');
+const tabs = document.querySelectorAll('.cat-tab');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 140) current = s.id;
+    });
+    tabs.forEach(t => {
+        t.classList.toggle('active', t.getAttribute('href') === '#' + current);
+    });
+});
+</script>
+{% endblock %}

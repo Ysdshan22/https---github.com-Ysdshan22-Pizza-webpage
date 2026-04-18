@@ -1,179 +1,146 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Pizza, Drink, Order, OrderItem, Side
-from .forms import PizzaCartForm, DrinkCartForm, CheckoutForm
-
-
-def get_pizza_image(name):
-    n = name.lower()
-    if 'margherita' in n: return 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80'
-    if 'pepperoni' in n: return 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80'
-    if 'picante' in n or 'pikanta' in n: return 'https://images.unsplash.com/photo-1548369937-47519962c11a?w=400&q=80'
-    if 'beef' in n: return 'https://unsplash.com/photos/pizza-on-brown-wooden-tray-oYkC51pOQBk'
-    if 'chicken' in n: return 'https://unsplash.com/photos/a-pizza-sitting-on-top-of-a-white-plate-DEzv3gH5rIg'
-    if 'nduja' in n: return 'https://unsplash.com/photos/round-cooked-pizza-x00CzBt4Dfk'
-    if 'truffle salami' in n or 'salami' in n: return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
-    if 'tomat' in n: return 'https://unsplash.com/photos/a-pizza-with-tomatoes-and-basil-otZSAyb65_o'
-    if 'devil' in n: return 'https://images.unsplash.com/photo-1481070414801-51fd732d7184?w=400&q=80'
-    return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'
-
-
-def get_drink_image(name):
-    n = name.lower()
-    if 'cola' in n or 'coca' in n: return 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=300&q=80'
-    if 'fanta' in n: return 'https://unsplash.com/photos/fanta-orange-can-on-brown-wooden-table-aKYu-H5pHJY'
-    if 'pepsi' in n: return 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=300&q=80'
-    if 'farris' in n or 'water' in n or 'vann' in n: return 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=80'
-    if 'solo' in n: return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=80'
-    if 'sprite' in n or 'sprit' in n: return 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=300&q=80'
-    if 'red bull' in n or 'energy' in n: return 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=300&q=80'
-    return 'https://images.unsplash.com/photo-1581636625402-29b2a704ef13?w=300&q=80'
-
-
-def get_side_image(name, side_type):
-    n = name.lower()
-    # Dips
-    if 'truffle' in n: return 'https://unsplash.com/photos/a-bowl-of-food-on-a-wooden-table-T3lfuNL7iLM'
-    if 'bbq' in n: return 'https://unsplash.com/photos/lettuce-radishes-and-hotdogs-on-a-wire-rack-w416BDSQnVc'
-    if 'cheddar' in n: return 'https://unsplash.com/photos/lettuce-radishes-and-hotdogs-on-a-wire-rack-w416BDSQnVc'
-    if 'classic' in n and side_type == 'dip': return 'https://unsplash.com/photos/fried-food-on-white-plastic-container-Mzi4fdo93xQ'
-    if 'spicy' in n and side_type == 'dip': return 'https://unsplash.com/photos/red-chili-and-white-garlic-xgsjxQeYppE'
-    # Sides
-    if 'fish' in n: return 'https://images.unsplash.com/photo-1519984388953-d2406bc725e1?w=300&q=80'
-    if 'nugget' in n or 'chicken' in n: return 'https://images.unsplash.com/photo-1562802378-063ec186a863?w=300&q=80'
-    if 'mozzarella' in n or 'mozzerella' in n: return 'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=300&q=80'
-    if 'chilli' in n or 'chili' in n: return 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=300&q=80'
-    if 'churros' in n: return 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=300&q=80'
-    if 'salat' in n or 'salad' in n or 'caprese' in n: return 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=300&q=80'
-    return 'https://images.unsplash.com/photo-1472476443507-c7a5948772fc?w=300&q=80'
-
-
-def menu(request):
-    pizzas = Pizza.objects.all()
-    drinks = Drink.objects.all()
-    sides = Side.objects.filter(side_type__in=['nuggets', 'mozzarella', 'churros', 'chilli', 'salad'])
-    dips = Side.objects.filter(side_type='dip')
-
-    for pizza in pizzas:
-        pizza.fallback_image = get_pizza_image(pizza.name)
-
-    for drink in drinks:
-        drink.display_image = get_drink_image(drink.name)
-
-    for side in sides:
-        side.display_image = get_side_image(side.name, side.side_type)
-
-    for dip in dips:
-        dip.display_image = get_side_image(dip.name, dip.side_type)
-
-    return render(request, 'orders/menu.html', {
-        'pizzas': pizzas,
-        'drinks': drinks,
-        'sides': sides,
-        'dips': dips,
-    })
-
-
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import JsonResponse
+from .models import MenuItem, Category, Location, Order, OrderItem
 
-def register(request):
+def location_select(request):
+    locations = Location.objects.all()
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
+        location_id = request.POST.get('location_id')
+        request.session['location_id'] = location_id
+        return redirect('home')
+    return render(request, 'orders/location.html', {'locations': locations})
+
+def home(request):
+    if not request.session.get('location_id'):
+        return redirect('location_select')
+    categories = Category.objects.all().order_by('order')
+    items = MenuItem.objects.filter(is_available=True).select_related('category')
+    return render(request, 'orders/home.html', {'categories': categories, 'items': items})
+
+def register_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        password = request.POST.get('password')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered.')
+            return redirect('register')
         user = User.objects.create_user(
-            username=username, password=password,
-            first_name=first_name, last_name=last_name, email=email
+            username=email,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
         )
-        return redirect('login')
+        user.save()
+        login(request, user)
+        messages.success(request, 'Account created successfully!')
+        return redirect('home')
     return render(request, 'orders/register.html')
 
-
-@login_required
-def add_pizza_to_cart(request, pizza_id):
-    pizza = get_object_or_404(Pizza, id=pizza_id)
+def login_view(request):
     if request.method == 'POST':
-        size = request.POST.get(f'pizza_{pizza.id}-size', 'S')
-        quantity = int(request.POST.get(f'pizza_{pizza.id}-quantity', 1))
-        dietary = request.POST.get(f'pizza_{pizza.id}-dietary', '')
-        if size == 'S': price = float(pizza.price_small)
-        elif size == 'M': price = float(pizza.price_medium)
-        else: price = float(pizza.price_large)
-        cart = request.session.get('cart', [])
-        cart.append({'type': 'pizza', 'id': pizza.id, 'name': pizza.name,
-                     'size': size, 'quantity': quantity, 'dietary': dietary,
-                     'price': price, 'subtotal': price * quantity})
-        request.session['cart'] = cart
-    return redirect('menu')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user:
+            login(request, user)
+            return redirect('home')
+        messages.error(request, 'Invalid email or password.')
+    return render(request, 'orders/login.html')
 
+def logout_view(request):
+    logout(request)
+    return redirect('location_select')
 
-@login_required
-def add_drink_to_cart(request, drink_id):
-    drink = get_object_or_404(Drink, id=drink_id)
-    if request.method == 'POST':
-        quantity = int(request.POST.get(f'drink_{drink.id}-quantity', 1))
-        price = float(drink.price)
-        cart = request.session.get('cart', [])
-        cart.append({'type': 'drink', 'id': drink.id, 'name': drink.name,
-                     'quantity': quantity, 'price': price, 'subtotal': price * quantity})
-        request.session['cart'] = cart
-    return redirect('menu')
-
-
-@login_required
 def view_cart(request):
     cart = request.session.get('cart', [])
-    total = sum(item['subtotal'] for item in cart)
-    return render(request, 'orders/cart.html', {'cart': cart, 'total': total})
+    items = []
+    total = 0
+    for entry in cart:
+        item = MenuItem.objects.get(id=entry['id'])
+        price = item.discounted_price()
+        subtotal = price * entry['quantity']
+        total += subtotal
+        items.append({'item': item, 'quantity': entry['quantity'], 'subtotal': subtotal})
+    return render(request, 'orders/cart.html', {'items': items, 'total': total})
 
-
-@login_required
-def remove_from_cart(request, item_index):
-    cart = request.session.get('cart', [])
-    if 0 <= item_index < len(cart):
-        cart.pop(item_index)
+def add_to_cart(request, item_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', [])
+        for entry in cart:
+            if entry['id'] == item_id:
+                entry['quantity'] += 1
+                request.session['cart'] = cart
+                return JsonResponse({'status': 'updated'})
+        cart.append({'id': item_id, 'quantity': 1})
         request.session['cart'] = cart
-    return redirect('view_cart')
+    return JsonResponse({'status': 'added'})
 
-
-@login_required
-def clear_cart(request):
-    request.session['cart'] = []
-    return redirect('view_cart')
-
-
-@login_required
-def checkout(request):
+def remove_from_cart(request, item_id):
     cart = request.session.get('cart', [])
-    total = sum(item['subtotal'] for item in cart)
+    cart = [e for e in cart if e['id'] != item_id]
+    request.session['cart'] = cart
+    return redirect('view_cart')
+
+def checkout(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    cart = request.session.get('cart', [])
     if not cart:
         return redirect('view_cart')
+    items = []
+    total = 0
+    for entry in cart:
+        item = MenuItem.objects.get(id=entry['id'])
+        price = item.discounted_price()
+        subtotal = price * entry['quantity']
+        total += subtotal
+        items.append({'item': item, 'quantity': entry['quantity'], 'subtotal': subtotal})
     if request.method == 'POST':
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            delivery_address = form.cleaned_data['delivery_address']
-            order = Order.objects.create(user=request.user, total_price=total,
-                                         status='P', delivery_address=delivery_address)
-            for item in cart:
-                if item['type'] == 'pizza':
-                    pizza = get_object_or_404(Pizza, id=item['id'])
-                    OrderItem.objects.create(order=order, pizza=pizza, drink=None,
-                                             quantity=item['quantity'], size=item['size'],
-                                             dietary=item.get('dietary', ''))
-                elif item['type'] == 'drink':
-                    drink = get_object_or_404(Drink, id=item['id'])
-                    OrderItem.objects.create(order=order, pizza=None, drink=drink,
-                                             quantity=item['quantity'], size=None)
-            request.session['cart'] = []
-            return redirect('menu')
-    else:
-        form = CheckoutForm()
-    return render(request, 'orders/checkout.html', {'form': form, 'cart': cart, 'total': total})
-
+        location_id = request.session.get('location_id')
+        location = Location.objects.get(id=location_id) if location_id else None
+        order = Order.objects.create(user=request.user, total=total, location=location)
+        for entry in items:
+            OrderItem.objects.create(
+                order=order,
+                item=entry['item'],
+                quantity=entry['quantity'],
+                price=entry['item'].discounted_price()
+            )
+        request.session['cart'] = []
+        messages.success(request, 'Order placed successfully!')
+        return redirect('order_history')
+    return render(request, 'orders/checkout.html', {'items': items, 'total': total})
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-date')
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'orders/order_history.html', {'orders': orders})
+
+def check_email(request):
+    email = request.GET.get('email', '')
+    exists = User.objects.filter(email=email).exists()
+    return JsonResponse({'exists': exists})
+def item_detail(request, item_id):
+    item = get_object_or_404(MenuItem, id=item_id)
+    return JsonResponse({
+        'id': item.id,
+        'name': item.name,
+        'description': item.description,
+        'price': float(item.price),
+        'discounted_price': float(item.discounted_price()),
+        'discount_percent': item.discount_percent,
+        'allergens': [a.name for a in item.allergens.all()],
+    })
+
+@login_required
+def profile(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'orders/profile.html', {'orders': orders})

@@ -1,27 +1,23 @@
 from django.contrib import admin
-from .models import Pizza, Side, Topping, Drink, Order, OrderItem
+from .models import Location, Category, MenuItem, Allergen, Order, OrderItem
 
-@admin.register(Pizza)
-class PizzaAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price_small', 'price_medium', 'price_large', 'can_be_vegetarian', 'can_be_vegan')
-    list_filter = ('category', 'can_be_vegetarian', 'can_be_vegan')
-    search_fields = ('name',)
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ['name', 'category', 'price', 'discount_percent', 'is_available']
+    list_filter = ['category', 'is_available']
+    filter_horizontal = ['allergens']
 
-@admin.register(Side)
-class SideAdmin(admin.ModelAdmin):
-    list_display = ('name', 'side_type', 'price')
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'order']
 
-@admin.register(Topping)
-class ToppingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price_small', 'price_medium', 'price_large')
-
-@admin.register(Drink)
-class DrinkAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price')
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ['city', 'address', 'phone']
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'total_price', 'status', 'date')
-    list_filter = ('status',)
+    list_display = ['id', 'user', 'total', 'created_at']
 
+admin.site.register(Allergen)
 admin.site.register(OrderItem)
