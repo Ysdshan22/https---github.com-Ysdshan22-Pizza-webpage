@@ -5,7 +5,6 @@
 <head>
     <link rel="stylesheet" href="{% static 'orders/style.css' %}">
     <title>Pizza Menu</title>
-    
 </head>
 <body>
 
@@ -14,25 +13,34 @@
         <div class="menu-section">
             <h1>Pizza Menu</h1>
 
-            <h2>Pizzas</h2>
-            {% for pizza in pizzas %}
-                <div class="item-box">
-                    <strong>{{ pizza.name }}</strong><br>
-                    {{ pizza.description }}<br>
-                    Small: {{ pizza.price_small }} |
-                    Medium: {{ pizza.price_medium }} |
-                    Large: {{ pizza.price_large }}
+           <h2>Pizzas</h2>
+{% for item in pizza_data %}
+    <div class="item-box">
+        <strong>{{ item.pizza.name }}</strong><br>
+        {{ item.pizza.description }}<br>
+        Small: {{ item.pizza.price_small }} |
+        Medium: {{ item.pizza.price_medium }} |
+        Large: {{ item.pizza.price_large }}
 
-                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
-                        {% csrf_token %}
-                        {{ pizza_forms|get_item:pizza.id }}
-                        <button type="submit">Add Pizza to Cart</button>
-                    </form>
-                </div>
-            {% empty %}
-                <p>No pizzas available.</p>
-            {% endfor %}
+        <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+            {% csrf_token %}
 
+            <p><strong>Size:</strong></p>
+            {{ item.form.size }}
+
+            <p><strong>Quantity:</strong></p>
+            {{ item.form.quantity }}
+
+            <p><strong>Toppings:</strong></p>
+            {{ item.form.toppings }}
+
+            <button type="submit">Add Pizza to Cart</button>
+        </form>
+    </div>
+    
+{% empty %}
+    <p>No pizzas available.</p>
+{% endfor %}
             <h2>Drinks</h2>
             {% for drink in drinks %}
                 <div class="item-box">
@@ -52,17 +60,17 @@
         <div class="account-section">
             <h2>Account</h2>
 
-          {% if user.is_authenticated %}
-            <p class="welcome-text">Welcome, {{ user.username }}!</p>
+            {% if user.is_authenticated %}
+                <p class="welcome-text">Welcome, {{ user.username }}!</p>
 
-            <a href="{% url 'view_cart' %}">View Cart</a>
-            <a href="{% url 'order_history' %}">My Orders</a>
+                <a href="{% url 'view_cart' %}">View Cart</a>
+                <a href="{% url 'order_history' %}">My Orders</a>
 
-            <form action="/accounts/logout/" method="post">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
+                <form action="/accounts/logout/" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            {% else %}
                 <p>Please login or register before placing an order.</p>
                 <a href="/accounts/login/">Login</a>
                 <a href="/register/">Register</a>

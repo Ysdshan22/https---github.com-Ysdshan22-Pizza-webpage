@@ -19,6 +19,12 @@
                         <strong>Quantity:</strong> {{ item.quantity }} |
                         <strong>Unit Price:</strong> {{ item.price }} |
                         <strong>Subtotal:</strong> {{ item.subtotal }}
+
+                        {% if item.toppings %}
+                            <br>
+                            <strong>Toppings:</strong>
+                            {{ item.toppings|join:", " }}
+                        {% endif %}
                     {% else %}
                         <strong>Drink:</strong> {{ item.name }} |
                         <strong>Quantity:</strong> {{ item.quantity }} |

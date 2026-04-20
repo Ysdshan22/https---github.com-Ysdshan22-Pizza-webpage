@@ -9,20 +9,26 @@ def menu(request):
     pizzas = Pizza.objects.all()
     drinks = Drink.objects.all()
 
-    pizza_forms = {}
+    pizza_data = []
     for pizza in pizzas:
-        pizza_forms[pizza.id] = PizzaCartForm(prefix=f"pizza_{pizza.id}")
+        form = PizzaCartForm(prefix=f"pizza_{pizza.id}")
+        form.fields['toppings'].queryset = pizza.available_toppings.all()
+
+        pizza_data.append({
+            'pizza': pizza,
+            'form': form,
+        })
 
     drink_forms = {}
     for drink in drinks:
         drink_forms[drink.id] = DrinkCartForm(prefix=f"drink_{drink.id}")
 
     return render(request, 'orders/menu.html', {
-        'pizzas': pizzas,
+        'pizza_data': pizza_data,
         'drinks': drinks,
-        'pizza_forms': pizza_forms,
         'drink_forms': drink_forms,
     })
+
 
 
 from django.contrib.auth.models import User
@@ -51,17 +57,37 @@ def register(request):
 def add_pizza_to_cart(request, pizza_id):
     pizza = get_object_or_404(Pizza, id=pizza_id)
     form = PizzaCartForm(request.POST, prefix=f"pizza_{pizza.id}")
+    form.fields['toppings'].queryset = pizza.available_toppings.all()
 
     if form.is_valid():
         size = form.cleaned_data['size']
         quantity = form.cleaned_data['quantity']
+        toppings = form.cleaned_data['toppings']
 
         if size == 'S':
-            price = float(pizza.price_small)
+            base_price = float(pizza.price_small)
         elif size == 'M':
-            price = float(pizza.price_medium)
+            base_price = float(pizza.price_medium)
         else:
-            price = float(pizza.price_large)
+            base_price = float(pizza.price_large)
+
+        topping_names = []
+        topping_ids = []
+        toppings_total = 0
+
+        for topping in toppings:
+            topping_names.append(topping.name)
+            topping_ids.append(topping.id)
+
+            if size == 'S':
+                toppings_total += float(topping.price_small)
+            elif size == 'M':
+                toppings_total += float(topping.price_medium)
+            else:
+                toppings_total += float(topping.price_large)
+
+        unit_price = base_price + toppings_total
+        subtotal = unit_price * quantity
 
         cart = request.session.get('cart', [])
 
@@ -71,8 +97,10 @@ def add_pizza_to_cart(request, pizza_id):
             'name': pizza.name,
             'size': size,
             'quantity': quantity,
-            'price': price,
-            'subtotal': price * quantity,
+            'price': unit_price,
+            'subtotal': subtotal,
+            'toppings': topping_names,
+            'topping_ids': topping_ids,
         })
 
         request.session['cart'] = cart
