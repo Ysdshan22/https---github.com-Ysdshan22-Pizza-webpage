@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PizzaNor - Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #111; }
+
+        .navbar {
+            background: #fff; border-bottom: 1px solid #eee;
+            padding: 0 30px; height: 60px; display: flex;
+            align-items: center; position: sticky; top: 0; z-index: 200;
+        }
+        .nav-logo { font-size: 22px; font-weight: bold; color: #E8231A; text-decoration: none; margin-right: auto; }
+        .nav-links { display: flex; align-items: center; gap: 20px; font-size: 14px; }
+        .nav-links a { text-decoration: none; color: #333; }
+        .nav-links a:hover { color: #E8231A; }
+        .cart-btn { background: #E8231A !important; color: #fff !important; padding: 8px 16px !important; border-radius: 8px !important; font-weight: bold; }
+        .cart-btn:hover { background: #c01e14 !important; }
+        .inline-form { display: inline; }
+        .logout-btn { background: none; border: 1px solid #ddd; color: #555; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+
+        .hero { position: relative; height: 260px; overflow: hidden; }
+        .hero img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.52);
+            display: flex; flex-direction: column; justify-content: center; padding: 0 60px;
+        }
+        .hero-overlay h1 { font-size: 36px; color: #fff; margin-bottom: 6px; }
+        .hero-overlay p { font-size: 15px; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
+        .hero-order-btn {
+            display: inline-block; background: #E8231A; color: #fff;
+            padding: 11px 26px; border-radius: 8px; text-decoration: none;
+            font-weight: bold; font-size: 14px; width: fit-content;
+        }
+
+        .cat-bar {
+            background: #fff; border-bottom: 1px solid #eee;
+            padding: 0 30px; display: flex; gap: 0; overflow-x: auto;
+            position: sticky; top: 60px; z-index: 100;
+        }
+        .cat-tab {
+            padding: 14px 18px; font-size: 14px; font-weight: 500; color: #555;
+            cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
+            background: none; border-top: none; border-left: none; border-right: none;
+            text-decoration: none; display: inline-block;
+        }
+        .cat-tab:hover { color: #E8231A; }
+        .cat-tab.active { color: #E8231A; border-bottom-color: #E8231A; font-weight: 600; }
+
+        .menu-content { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .section { margin-bottom: 40px; }
+        .section-heading {
+            font-size: 20px; font-weight: bold; margin-bottom: 16px;
+            padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
+        }
+        .sub-heading { font-size: 15px; font-weight: 600; color: #444; margin: 24px 0 12px; }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .pizza-card {
+            background: #fff; border-radius: 12px; overflow: hidden;
+            border: 1px solid #eee; display: flex; flex-direction: column;
+            transition: box-shadow 0.2s;
+        }
+        .pizza-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
+        .card-img { width: 100%; height: 155px; object-fit: cover; display: block; }
+        .card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
+        .card-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .card-desc { font-size: 12px; color: #777; line-height: 1.4; margin-bottom: 8px; flex: 1; }
+
+        .dietary-toggles { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+        .diet-btn {
+            font-size: 10px; padding: 3px 7px; border-radius: 20px;
+            border: 1px solid #ddd; background: #f9f9f9; color: #666;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .diet-btn:hover { border-color: #E8231A; color: #E8231A; background: #fff5f5; }
+        .diet-btn.active { background: #E8231A; color: #fff; border-color: #E8231A; }
+
+        .card-price { font-size: 15px; font-weight: bold; color: #E8231A; margin-bottom: 8px; }
+        .size-select {
+            width: 100%; padding: 6px 8px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 12px; margin-bottom: 8px;
+            background: #fff; color: #111;
+        }
+        .qty-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .qty-controls { display: flex; align-items: center; border: 1px solid #E8231A; border-radius: 8px; overflow: hidden; }
+        .qty-btn {
+            background: #fff; border: none; width: 30px; height: 30px;
+            font-size: 16px; cursor: pointer; color: #E8231A;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .qty-btn:hover { background: #fff5f5; }
+        .qty-num { width: 28px; text-align: center; font-size: 13px; font-weight: 600; color: #E8231A; }
+        .add-btn {
+            background: #E8231A; color: #fff; border: none;
+            padding: 7px 14px; border-radius: 8px; font-size: 13px;
+            cursor: pointer; font-weight: 600;
+        }
+        .add-btn:hover { background: #c01e14; }
+        .add-link {
+            display: block; text-align: center; background: #E8231A; color: #fff;
+            padding: 8px; border-radius: 8px; font-size: 13px;
+            text-decoration: none; font-weight: 600; margin-top: 6px;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+        }
+        .item-card {
+            background: #fff; border-radius: 12px; overflow: hidden;
+            border: 1px solid #eee; transition: box-shadow 0.2s;
+        }
+        .item-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .item-img { width: 100%; height: 120px; object-fit: cover; display: block; }
+        .item-body { padding: 10px 12px; }
+        .item-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+        .item-desc { font-size: 11px; color: #888; margin-bottom: 4px; line-height: 1.3; }
+        .item-price { font-size: 14px; font-weight: bold; color: #E8231A; margin-top: 4px; }
+
+        .combo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .combo-card {
+            background: #fff; border-radius: 12px; border: 1px solid #eee;
+            padding: 18px; transition: box-shadow 0.2s;
+        }
+        .combo-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
+        .combo-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .combo-desc { font-size: 12px; color: #777; margin-bottom: 10px; line-height: 1.5; }
+        .combo-includes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+        .combo-tag {
+            font-size: 11px; background: #f5f5f5; border-radius: 6px;
+            padding: 3px 8px; color: #444; border: 1px solid #eee;
+        }
+        .combo-price { font-size: 17px; font-weight: bold; color: #E8231A; }
+        .combo-save { font-size: 11px; color: #888; margin-top: 3px; }
+        .deal-badge {
+            background: #E8231A; color: #fff; font-size: 10px; font-weight: bold;
+            padding: 2px 7px; border-radius: 20px; display: inline-block; margin-left: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="nav-logo">PizzaNor</a>
+    <div class="nav-links">
+        <a href="#">Oslo</a>
+        <a href="#">+47 22 00 00 00</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'order_history' %}">My Orders</a>
+            <a href="{% url 'view_cart' %}" class="cart-btn">Cart</a>
+            <form action="/accounts/logout/" method="post" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        {% else %}
+            <a href="/accounts/login/">Sign in</a>
+            <a href="/register/" class="cart-btn">Sign up</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="hero">
+    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=80" alt="Pizza" />
+    <div class="hero-overlay">
+        <h1>Fresh pizza,<br>fast delivery</h1>
+        <p>Delivered in Oslo in 30 minutes</p>
+        <a href="#menu" class="hero-order-btn">Order now</a>
+    </div>
+</div>
+
+<div class="cat-bar" id="menu">
+    <a href="#" class="cat-tab active" onclick="showSection('all', this); return false;">All Pizzas</a>
+    <a href="#" class="cat-tab" onclick="showSection('bestseller', this); return false;">Best Sellers</a>
+    <a href="#" class="cat-tab" onclick="showSection('deals', this); return false;">Deals</a>
+    <a href="#" class="cat-tab" onclick="showSection('sides', this); return false;">Sides</a>
+    <a href="#" class="cat-tab" onclick="showSection('dips', this); return false;">Dips</a>
+    <a href="#" class="cat-tab" onclick="showSection('drinks', this); return false;">Drinks</a>
+</div>
+
+<div class="menu-content">
+
+    <!-- ALL PIZZAS -->
+    <div class="section" id="sec-all">
+        <div class="section-heading">All Pizzas</div>
+        <div class="card-grid">
+            {% for pizza in pizzas %}
+            <div class="pizza-card">
+                {% if pizza.image %}
+                    <img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
+                {% else %}
+                    <img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />
+                {% endif %}
+                <div class="card-body">
+                    <div class="card-name">{{ pizza.name }}</div>
+                    <div class="card-desc">{{ pizza.description }}</div>
+                    <div class="dietary-toggles">
+                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
+                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
+                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
+                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
+                    </div>
+                    <div class="card-price">from {{ pizza.price_small }} kr</div>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="apqty-{{ pizza.id }}" value="1">
+                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="all-diet-{{ pizza.id }}" value="">
+                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
+                            <option value="S">Small - {{ pizza.price_small }} kr</option>
+                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
+                            <option value="L">Large - {{ pizza.price_large }} kr</option>
+                        </select>
+                        <div class="qty-row">
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty('apqty-{{ pizza.id }}', -1)">−</button>
+                                <span class="qty-num" id="apqty-{{ pizza.id }}-display">1</span>
+                                <button type="button" class="qty-btn" onclick="changeQty('apqty-{{ pizza.id }}', 1)">+</button>
+                            </div>
+                            <button type="submit" class="add-btn">Add to cart</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}<p>No pizzas available yet.</p>{% endfor %}
+        </div>
+    </div>
+
+    <!-- BEST SELLERS -->
+    <div class="section" id="sec-bestseller" style="display:none;">
+        <div class="section-heading">Best Sellers</div>
+        <div class="card-grid">
+            {% for pizza in pizzas %}{% if pizza.category == 'bestseller' %}
+            <div class="pizza-card">
+                {% if pizza.image %}<img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
+                {% else %}<img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />{% endif %}
+                <div class="card-body">
+                    <div class="card-name">{{ pizza.name }}</div>
+                    <div class="card-desc">{{ pizza.description }}</div>
+                    <div class="dietary-toggles">
+                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
+                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
+                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
+                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
+                    </div>
+                    <div class="card-price">from {{ pizza.price_small }} kr</div>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="bspqty-{{ pizza.id }}" value="1">
+                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="bs-diet-{{ pizza.id }}" value="">
+                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
+                            <option value="S">Small - {{ pizza.price_small }} kr</option>
+                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
+                            <option value="L">Large - {{ pizza.price_large }} kr</option>
+                        </select>
+                        <div class="qty-row">
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty('bspqty-{{ pizza.id }}', -1)">−</button>
+                                <span class="qty-num" id="bspqty-{{ pizza.id }}-display">1</span>
+                                <button type="button" class="qty-btn" onclick="changeQty('bspqty-{{ pizza.id }}', 1)">+</button>
+                            </div>
+                            <button type="submit" class="add-btn">Add to cart</button>
+                        </div>
+                    </form>
+                    {% else %}<a href="/accounts/login/" class="add-link">Sign in to order</a>{% endif %}
+                </div>
+            </div>
+            {% endif %}{% endfor %}
+        </div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="section" id="sec-deals" style="display:none;">
+        <div class="section-heading">Deals</div>
+        <div class="combo-grid">
+            <div class="combo-card">
+                <div class="combo-title">Classic Combo</div>
+                <div class="combo-desc">Any small pizza with a side and a drink of your choice.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">Any Pizza (S)</span>
+                    <span class="combo-tag">Any Side</span>
+                    <span class="combo-tag">Any Drink</span>
+                </div>
+                <div class="combo-price">from 229 kr</div>
+                <div class="combo-save">Save up to 24 kr</div>
+            </div>
+            <div class="combo-card">
+                <div class="combo-title">Family Deal</div>
+                <div class="combo-desc">Two large pizzas, two sides, and four drinks.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">2x Pizza (L)</span>
+                    <span class="combo-tag">2x Sides</span>
+                    <span class="combo-tag">4x Drinks</span>
+                </div>
+                <div class="combo-price">from 699 kr</div>
+                <div class="combo-save">Save up to 120 kr</div>
+            </div>
+            <div class="combo-card">
+                <div class="combo-title">Pizza + Dip</div>
+                <div class="combo-desc">Any medium pizza with two dipping sauces of your choice.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">Any Pizza (M)</span>
+                    <span class="combo-tag">2x Dips</span>
+                </div>
+                <div class="combo-price">from 199 kr</div>
+                <div class="combo-save">Save up to 18 kr</div>
+            </div>
+            <div class="combo-card">
+                <div class="combo-title">Lunch Special</div>
+                <div class="combo-desc">Small pizza with one side and one drink, weekdays only.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">Any Pizza (S)</span>
+                    <span class="combo-tag">1x Side</span>
+                    <span class="combo-tag">1x Drink</span>
+                </div>
+                <div class="combo-price">from 189 kr</div>
+                <div class="combo-save">Save up to 30 kr</div>
+            </div>
+            <div class="combo-card">
+                <div class="combo-title">Party Pack</div>
+                <div class="combo-desc">Four pizzas, four sides, and eight drinks for a group.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">4x Pizza (M)</span>
+                    <span class="combo-tag">4x Sides</span>
+                    <span class="combo-tag">8x Drinks</span>
+                </div>
+                <div class="combo-price">from 1299 kr</div>
+                <div class="combo-save">Save up to 230 kr</div>
+            </div>
+            <div class="combo-card">
+                <div class="combo-title">Dip Lover</div>
+                <div class="combo-desc">Any large pizza with all five dipping sauces.</div>
+                <div class="combo-includes">
+                    <span class="combo-tag">Any Pizza (L)</span>
+                    <span class="combo-tag">All 5 Dips</span>
+                </div>
+                <div class="combo-price">from 319 kr</div>
+                <div class="combo-save">Save up to 40 kr</div>
+            </div>
+        </div>
+
+        {% if pizzas %}
+        <div class="sub-heading">Pizzas on Deal</div>
+        <div class="card-grid">
+            {% for pizza in pizzas %}{% if pizza.category == 'discount' %}
+            <div class="pizza-card">
+                {% if pizza.image %}<img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
+                {% else %}<img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />{% endif %}
+                <div class="card-body">
+                    <div class="card-name">{{ pizza.name }} <span class="deal-badge">DEAL</span></div>
+                    <div class="card-desc">{{ pizza.description }}</div>
+                    <div class="dietary-toggles">
+                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
+                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
+                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
+                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
+                    </div>
+                    <div class="card-price">from {{ pizza.price_small }} kr</div>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="dpqty-{{ pizza.id }}" value="1">
+                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="deal-diet-{{ pizza.id }}" value="">
+                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
+                            <option value="S">Small - {{ pizza.price_small }} kr</option>
+                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
+                            <option value="L">Large - {{ pizza.price_large }} kr</option>
+                        </select>
+                        <div class="qty-row">
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty('dpqty-{{ pizza.id }}', -1)">−</button>
+                                <span class="qty-num" id="dpqty-{{ pizza.id }}-display">1</span>
+                                <button type="button" class="qty-btn" onclick="changeQty('dpqty-{{ pizza.id }}', 1)">+</button>
+                            </div>
+                            <button type="submit" class="add-btn">Add to cart</button>
+                        </div>
+                    </form>
+                    {% else %}<a href="/accounts/login/" class="add-link">Sign in to order</a>{% endif %}
+                </div>
+            </div>
+            {% endif %}{% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- SIDES -->
+    <div class="section" id="sec-sides" style="display:none;">
+        <div class="section-heading">Sides</div>
+        <div class="item-grid">
+            {% for side in sides %}
+            <div class="item-card">
+                <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}" />
+                <div class="item-body">
+                    <div class="item-name">{{ side.name }}</div>
+                    <div class="item-desc">{{ side.description }}</div>
+                    <div class="item-price">{{ side.price }} kr</div>
+                </div>
+            </div>
+            {% empty %}<p>No sides available yet.</p>{% endfor %}
+        </div>
+    </div>
+
+    <!-- DIPS -->
+    <div class="section" id="sec-dips" style="display:none;">
+        <div class="section-heading">Dips</div>
+        <div class="item-grid">
+            {% for dip in dips %}
+            <div class="item-card">
+                <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}" />
+                <div class="item-body">
+                    <div class="item-name">{{ dip.name }}</div>
+                    <div class="item-desc">{{ dip.description }}</div>
+                    <div class="item-price">{{ dip.price }} kr</div>
+                </div>
+            </div>
+            {% empty %}<p>No dips available yet.</p>{% endfor %}
+        </div>
+    </div>
+
+    <!-- DRINKS -->
+    <div class="section" id="sec-drinks" style="display:none;">
+        <div class="section-heading">Drinks</div>
+        <div class="item-grid">
+            {% for drink in drinks %}
+            <div class="item-card">
+                <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}" />
+                <div class="item-body">
+                    <div class="item-name">{{ drink.name }}</div>
+                    <div class="item-price" style="margin-bottom:8px;">{{ drink.price }} kr</div>
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="drink_{{ drink.id }}-quantity" id="drqty-{{ drink.id }}" value="1">
+                        <div class="qty-row">
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty('drqty-{{ drink.id }}', -1)">−</button>
+                                <span class="qty-num" id="drqty-{{ drink.id }}-display">1</span>
+                                <button type="button" class="qty-btn" onclick="changeQty('drqty-{{ drink.id }}', 1)">+</button>
+                            </div>
+                            <button type="submit" class="add-btn">Add</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}<p>No drinks available yet.</p>{% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+function changeQty(inputId, change) {
+    var input = document.getElementById(inputId);
+    var display = document.getElementById(inputId + '-display');
+    var newVal = Math.max(1, parseInt(input.value) + change);
+    input.value = newVal;
+    if (display) display.textContent = newVal;
+}
+
+function showSection(name, el) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['all','bestseller','deals','sides','dips','drinks'].forEach(function(s) {
+        var sec = document.getElementById('sec-' + s);
+        if (sec) sec.style.display = (s === name) ? 'block' : 'none';
+    });
+}
+
+function toggleDiet(btn, inputId, value) {
+    var input = document.getElementById(inputId);
+    var siblings = btn.parentElement.querySelectorAll('.diet-btn');
+    if (btn.classList.contains('active')) {
+        btn.classList.remove('active');
+        input.value = '';
+    } else {
+        siblings.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        input.value = value;
+    }
+}
+</script>
+
+</body>
+</html>

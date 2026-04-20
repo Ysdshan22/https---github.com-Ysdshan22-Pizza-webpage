@@ -1,0 +1,86 @@
+from django.db import migrations, models
+import django.db.models.deletion
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        ('auth', '0012_alter_user_first_name_max_length'),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Pizza',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('description', models.TextField()),
+                ('ingredients', models.TextField(blank=True)),
+                ('allergens', models.CharField(blank=True, max_length=255)),
+                ('category', models.CharField(choices=[('bestseller','Best Seller'),('discount','Discount'),('classic','Classic')], default='classic', max_length=20)),
+                ('can_be_vegetarian', models.BooleanField(default=True)),
+                ('can_be_vegan', models.BooleanField(default=True)),
+                ('can_be_glutenfree', models.BooleanField(default=True)),
+                ('can_be_dairyfree', models.BooleanField(default=True)),
+                ('price_small', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('price_medium', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('price_large', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('image', models.ImageField(blank=True, null=True, upload_to='pizzas/')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Side',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('side_type', models.CharField(choices=[('nuggets','Chicken Nuggets'),('mozzarella','Mozzarella Sticks'),('churros','Churros'),('chilli','Chilli Poppers'),('dip','Dip Sauce'),('salad','Salad')], default='dip', max_length=20)),
+                ('description', models.TextField(blank=True)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=5)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Topping',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('price_small', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('price_medium', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('price_large', models.DecimalField(decimal_places=2, max_digits=5)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Drink',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=5)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Order',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('total_price', models.DecimalField(decimal_places=2, max_digits=7)),
+                ('status', models.CharField(choices=[('P','Pending'),('PR','Preparing'),('D','Delivered')], default='P', max_length=2)),
+                ('delivery_address', models.CharField(max_length=255)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auth.user')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='OrderItem',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('quantity', models.PositiveIntegerField()),
+                ('size', models.CharField(blank=True, choices=[('S','Small'),('M','Medium'),('L','Large')], max_length=1, null=True)),
+                ('dietary', models.CharField(blank=True, choices=[('','Standard'),('vegetarian','Vegetarian'),('vegan','Vegan'),('glutenfree','Gluten-Free'),('dairyfree','Dairy-Free')], default='', max_length=20)),
+                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='orders.order')),
+                ('pizza', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='orders.pizza')),
+                ('drink', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='orders.drink')),
+                ('side', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='orders.side')),
+                ('toppings', models.ManyToManyField(blank=True, to='orders.topping')),
+            ],
+        ),
+    ]

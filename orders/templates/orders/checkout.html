@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f8f8;
+        }
+
+        .checkout-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        input, button, a {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        button, a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        button:hover, a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-box">
+        <h1>Checkout</h1>
+
+        <h2>Order Summary</h2>
+
+        {% for item in cart %}
+            <div class="cart-item">
+                {% if item.type == 'pizza' %}
+                    <strong>Pizza:</strong> {{ item.name }} |
+                    <strong>Size:</strong> {{ item.size }} |
+                    <strong>Quantity:</strong> {{ item.quantity }} |
+                    <strong>Subtotal:</strong> {{ item.subtotal }}
+                {% else %}
+                    <strong>Drink:</strong> {{ item.name }} |
+                    <strong>Quantity:</strong> {{ item.quantity }} |
+                    <strong>Subtotal:</strong> {{ item.subtotal }}
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <h3>Total: {{ total }}</h3>
+
+        <h2>Delivery Details</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Place Order</button>
+        </form>
+
+        <a href="{% url 'view_cart' %}">Back to Cart</a>
+    </div>
+</body>
+</html>
