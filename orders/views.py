@@ -1,11 +1,10 @@
-from urllib import request
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Pizza, Drink, Order, OrderItem, Topping
 from .forms import PizzaCartForm, DrinkCartForm, CheckoutForm
-
+from django.contrib import messages
 
 def menu(request):
     pizzas = Pizza.objects.all()
@@ -50,7 +49,7 @@ def register(request):
             last_name=last_name,
             email=email
         )
-
+        messages.success(request, "Account created successfully. Please log in.")
         return redirect('login')
 
     return render(request, 'orders/register.html')
@@ -92,7 +91,6 @@ def add_pizza_to_cart(request, pizza_id):
         subtotal = unit_price * quantity
 
         cart = request.session.get('cart', [])
-
         cart.append({
             'type': 'pizza',
             'id': pizza.id,
@@ -104,8 +102,9 @@ def add_pizza_to_cart(request, pizza_id):
             'toppings': topping_names,
             'topping_ids': topping_ids,
         })
-
         request.session['cart'] = cart
+
+        messages.success(request, "Pizza added to cart successfully.")
 
     return redirect('menu')
 
@@ -120,7 +119,6 @@ def add_drink_to_cart(request, drink_id):
         price = float(drink.price)
 
         cart = request.session.get('cart', [])
-
         cart.append({
             'type': 'drink',
             'id': drink.id,
@@ -129,8 +127,9 @@ def add_drink_to_cart(request, drink_id):
             'price': price,
             'subtotal': price * quantity,
         })
-
         request.session['cart'] = cart
+
+        messages.success(request, "Drink added to cart successfully.")
 
     return redirect('menu')
 
@@ -151,14 +150,15 @@ def remove_from_cart(request, item_index):
 
     if 0 <= item_index < len(cart):
         cart.pop(item_index)
-        request.session['cart'] = cart
-
+        request.session['cart'] = cart  
+    messages.success(request, "Item removed from cart.")
     return redirect('view_cart')
 
 
 @login_required
 def clear_cart(request):
     request.session['cart'] = []
+    messages.success(request, "Cart cleared successfully.")
     return redirect('view_cart')
 
 @login_required
@@ -208,6 +208,7 @@ def checkout(request):
                     )
 
             request.session['cart'] = []
+            messages.success(request, "Your order has been placed successfully.")
             return redirect('menu')
     else:
         form = CheckoutForm()

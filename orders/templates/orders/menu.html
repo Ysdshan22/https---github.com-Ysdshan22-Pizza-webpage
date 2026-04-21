@@ -11,36 +11,48 @@
     <div class="container">
 
         <div class="menu-section">
-            <h1>Pizza Menu</h1>
+   
 
-           <h2>Pizzas</h2>
-{% for item in pizza_data %}
-    <div class="item-box">
-        <strong>{{ item.pizza.name }}</strong><br>
-        {{ item.pizza.description }}<br>
-        Small: {{ item.pizza.price_small }} |
-        Medium: {{ item.pizza.price_medium }} |
-        Large: {{ item.pizza.price_large }}
+    <div class="menu-section">
 
-        <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
-            {% csrf_token %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-box">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-            <p><strong>Size:</strong></p>
-            {{ item.form.size }}
+    <h1>Pizza Menu</h1>
 
-            <p><strong>Quantity:</strong></p>
-            {{ item.form.quantity }}
+            <h2>Pizzas</h2>
+            {% for item in pizza_data %}
+                <div class="item-box">
+                    <strong>{{ item.pizza.name }}</strong><br>
+                    {{ item.pizza.description }}<br>
+                    Small: {{ item.pizza.price_small }} |
+                    Medium: {{ item.pizza.price_medium }} |
+                    Large: {{ item.pizza.price_large }}
 
-            <p><strong>Toppings:</strong></p>
-            {{ item.form.toppings }}
+                    <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+                        {% csrf_token %}
 
-            <button type="submit">Add Pizza to Cart</button>
-        </form>
-    </div>
-    
-{% empty %}
-    <p>No pizzas available.</p>
-{% endfor %}
+                        <p><strong>Size:</strong></p>
+                        {{ item.form.size }}
+
+                        <p><strong>Quantity:</strong></p>
+                        {{ item.form.quantity }}
+
+                        <p><strong>Toppings:</strong></p>
+                        {{ item.form.toppings }}
+
+                        <button type="submit">Add Pizza to Cart</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No pizzas available.</p>
+            {% endfor %}
+
             <h2>Drinks</h2>
             {% for drink in drinks %}
                 <div class="item-box">
