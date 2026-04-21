@@ -1,7 +1,9 @@
+from urllib import request
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Pizza, Drink, Order, OrderItem
+from .models import Pizza, Drink, Order, OrderItem, Topping
 from .forms import PizzaCartForm, DrinkCartForm, CheckoutForm
 
 
@@ -132,7 +134,6 @@ def add_drink_to_cart(request, drink_id):
 
     return redirect('menu')
 
-
 @login_required
 def view_cart(request):
     cart = request.session.get('cart', [])
@@ -142,6 +143,7 @@ def view_cart(request):
         'cart': cart,
         'total': total,
     })
+
 
 @login_required
 def remove_from_cart(request, item_index):
@@ -182,13 +184,19 @@ def checkout(request):
             for item in cart:
                 if item['type'] == 'pizza':
                     pizza = get_object_or_404(Pizza, id=item['id'])
-                    OrderItem.objects.create(
+
+                    order_item = OrderItem.objects.create(
                         order=order,
                         pizza=pizza,
                         drink=None,
                         quantity=item['quantity'],
                         size=item['size']
                     )
+
+                    if 'topping_ids' in item:
+                        selected_toppings = Topping.objects.filter(id__in=item['topping_ids'])
+                        order_item.toppings.set(selected_toppings)
+
                 elif item['type'] == 'drink':
                     drink = get_object_or_404(Drink, id=item['id'])
                     OrderItem.objects.create(
