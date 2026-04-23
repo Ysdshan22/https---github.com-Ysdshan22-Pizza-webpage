@@ -1,4 +1,6 @@
 from django import forms
+from .models import Topping
+
 
 class PizzaCartForm(forms.Form):
     SIZE_CHOICES = [
@@ -9,6 +11,12 @@ class PizzaCartForm(forms.Form):
 
     size = forms.ChoiceField(choices=SIZE_CHOICES)
     quantity = forms.IntegerField(min_value=1, initial=1)
+
+    toppings = forms.ModelMultipleChoiceField(
+        queryset=Topping.objects.all(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple
+    )
 
 
 class DrinkCartForm(forms.Form):

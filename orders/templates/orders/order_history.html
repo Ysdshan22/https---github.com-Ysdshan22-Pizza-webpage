@@ -65,6 +65,15 @@
                                 Pizza: {{ item.pizza.name }} |
                                 Size: {{ item.size }} |
                                 Quantity: {{ item.quantity }}
+
+                                {% if item.toppings.all %}
+                                    <br>
+                                    Toppings:
+                                    {% for t in item.toppings.all %}
+                                        {{ t.name }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
                             {% elif item.drink %}
                                 Drink: {{ item.drink.name }} |
                                 Quantity: {{ item.quantity }}

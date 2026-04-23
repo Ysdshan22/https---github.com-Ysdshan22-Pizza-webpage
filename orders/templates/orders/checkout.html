@@ -44,10 +44,28 @@
         button:hover, a:hover {
             background-color: #0056b3;
         }
+
+        .message-box {
+            background: #eaf7ea;
+            color: #1f6b2a;
+            border: 1px solid #b7e1bd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="checkout-box">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <h1>Checkout</h1>
 
         <h2>Order Summary</h2>
@@ -59,6 +77,11 @@
                     <strong>Size:</strong> {{ item.size }} |
                     <strong>Quantity:</strong> {{ item.quantity }} |
                     <strong>Subtotal:</strong> {{ item.subtotal }}
+
+                    {% if item.toppings %}
+                        <br>
+                        <strong>Toppings:</strong> {{ item.toppings|join:", " }}
+                    {% endif %}
                 {% else %}
                     <strong>Drink:</strong> {{ item.name }} |
                     <strong>Quantity:</strong> {{ item.quantity }} |

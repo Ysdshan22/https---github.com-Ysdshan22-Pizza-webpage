@@ -2,12 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Topping(models.Model):
+    name = models.CharField(max_length=100)
+    price_small = models.DecimalField(max_digits=5, decimal_places=2)
+    price_medium = models.DecimalField(max_digits=5, decimal_places=2)
+    price_large = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
+
 class Pizza(models.Model):
     CATEGORY_CHOICES = [
         ('bestseller', 'Best Seller'),
         ('discount', 'Discount'),
         ('classic', 'Classic'),
     ]
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     ingredients = models.TextField(blank=True)
@@ -21,6 +32,7 @@ class Pizza(models.Model):
     price_medium = models.DecimalField(max_digits=5, decimal_places=2)
     price_large = models.DecimalField(max_digits=5, decimal_places=2)
     image = models.ImageField(upload_to='pizzas/', blank=True, null=True)
+    available_toppings = models.ManyToManyField(Topping, blank=True)
 
     def __str__(self):
         return self.name
@@ -35,20 +47,11 @@ class Side(models.Model):
         ('dip', 'Dip Sauce'),
         ('salad', 'Salad'),
     ]
+
     name = models.CharField(max_length=100)
     side_type = models.CharField(max_length=20, choices=SIDE_CHOICES, default='dip')
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-
-    def __str__(self):
-        return self.name
-
-
-class Topping(models.Model):
-    name = models.CharField(max_length=100)
-    price_small = models.DecimalField(max_digits=5, decimal_places=2)
-    price_medium = models.DecimalField(max_digits=5, decimal_places=2)
-    price_large = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -68,6 +71,7 @@ class Order(models.Model):
         ('PR', 'Preparing'),
         ('D', 'Delivered'),
     ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=7, decimal_places=2)
@@ -84,6 +88,7 @@ class OrderItem(models.Model):
         ('M', 'Medium'),
         ('L', 'Large'),
     ]
+
     DIETARY_CHOICES = [
         ('', 'Standard'),
         ('vegetarian', 'Vegetarian'),
@@ -91,6 +96,7 @@ class OrderItem(models.Model):
         ('glutenfree', 'Gluten-Free'),
         ('dairyfree', 'Dairy-Free'),
     ]
+
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     pizza = models.ForeignKey(Pizza, on_delete=models.SET_NULL, null=True, blank=True)
     drink = models.ForeignKey(Drink, on_delete=models.SET_NULL, null=True, blank=True)

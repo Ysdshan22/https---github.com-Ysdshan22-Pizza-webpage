@@ -1,0 +1,200 @@
+/*GENERAL STYLES */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+a,
+button {
+    display: inline-block;
+    margin-top: 8px;
+    margin-right: 10px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    width: auto;
+}
+
+a:hover,
+button:hover {
+    background-color: #0056b3;
+}
+
+input,
+select {
+    margin-top: 5px;
+    margin-bottom: 8px;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+/*  MENU PAGE */
+
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    gap: 20px;
+}
+
+.menu-section {
+    flex: 3;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.account-section {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.item-box {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0;
+}
+
+.item-box:last-child {
+    border-bottom: none;
+}
+
+.welcome-text {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.menu-section form {
+    margin-top: 10px;
+}
+
+.menu-section input,
+.menu-section select {
+    width: 100%;
+    max-width: 220px;
+}
+
+/*  CART PAGE */
+
+.cart-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.danger {
+    background-color: #dc3545;
+}
+
+.danger:hover {
+    background-color: #a71d2a;
+}
+
+/* CHECKOUT PAGE */
+
+.checkout-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.checkout-box .cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0;
+}
+
+.checkout-box .cart-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-box input {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* ORDER HISTORY PAGE */
+
+.order-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+.order {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.item {
+    margin-left: 20px;
+    padding: 5px 0;
+}
+
+/*   LOGIN / REGISTER PAGES ,  login.html and register.html */
+
+.form-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+.form-box input,
+.form-box select,
+.form-box button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.form-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.form-box button:hover {
+    background-color: #0056b3;
+}
+.message-box {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 15px 0;
+}

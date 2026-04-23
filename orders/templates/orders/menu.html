@@ -55,7 +55,15 @@
             font-size: 20px; font-weight: bold; margin-bottom: 16px;
             padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
         }
-        .sub-heading { font-size: 15px; font-weight: 600; color: #444; margin: 24px 0 12px; }
+
+        .message-box {
+            background: #eaf7ea;
+            color: #1f6b2a;
+            border: 1px solid #b7e1bd;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
 
         .card-grid {
             display: grid;
@@ -73,36 +81,28 @@
         .card-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
         .card-desc { font-size: 12px; color: #777; line-height: 1.4; margin-bottom: 8px; flex: 1; }
 
-        .dietary-toggles { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-        .diet-btn {
-            font-size: 10px; padding: 3px 7px; border-radius: 20px;
-            border: 1px solid #ddd; background: #f9f9f9; color: #666;
-            cursor: pointer; transition: all 0.15s;
-        }
-        .diet-btn:hover { border-color: #E8231A; color: #E8231A; background: #fff5f5; }
-        .diet-btn.active { background: #E8231A; color: #fff; border-color: #E8231A; }
-
         .card-price { font-size: 15px; font-weight: bold; color: #E8231A; margin-bottom: 8px; }
-        .size-select {
-            width: 100%; padding: 6px 8px; border: 1px solid #ddd;
-            border-radius: 8px; font-size: 12px; margin-bottom: 8px;
-            background: #fff; color: #111;
+
+        .size-select,
+        .topping-select,
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 8px;
+            background: #fff;
+            color: #111;
         }
-        .qty-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .qty-controls { display: flex; align-items: center; border: 1px solid #E8231A; border-radius: 8px; overflow: hidden; }
-        .qty-btn {
-            background: #fff; border: none; width: 30px; height: 30px;
-            font-size: 16px; cursor: pointer; color: #E8231A;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .qty-btn:hover { background: #fff5f5; }
-        .qty-num { width: 28px; text-align: center; font-size: 13px; font-weight: 600; color: #E8231A; }
+
         .add-btn {
             background: #E8231A; color: #fff; border: none;
-            padding: 7px 14px; border-radius: 8px; font-size: 13px;
-            cursor: pointer; font-weight: 600;
+            padding: 9px 14px; border-radius: 8px; font-size: 13px;
+            cursor: pointer; font-weight: 600; width: 100%;
         }
         .add-btn:hover { background: #c01e14; }
+
         .add-link {
             display: block; text-align: center; background: #E8231A; color: #fff;
             padding: 8px; border-radius: 8px; font-size: 13px;
@@ -125,28 +125,12 @@
         .item-desc { font-size: 11px; color: #888; margin-bottom: 4px; line-height: 1.3; }
         .item-price { font-size: 14px; font-weight: bold; color: #E8231A; margin-top: 4px; }
 
-        .combo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        .combo-card {
-            background: #fff; border-radius: 12px; border: 1px solid #eee;
-            padding: 18px; transition: box-shadow 0.2s;
-        }
-        .combo-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
-        .combo-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .combo-desc { font-size: 12px; color: #777; margin-bottom: 10px; line-height: 1.5; }
-        .combo-includes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-        .combo-tag {
-            font-size: 11px; background: #f5f5f5; border-radius: 6px;
-            padding: 3px 8px; color: #444; border: 1px solid #eee;
-        }
-        .combo-price { font-size: 17px; font-weight: bold; color: #E8231A; }
-        .combo-save { font-size: 11px; color: #888; margin-top: 3px; }
-        .deal-badge {
-            background: #E8231A; color: #fff; font-size: 10px; font-weight: bold;
-            padding: 2px 7px; border-radius: 20px; display: inline-block; margin-left: 6px;
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin: 8px 0 4px;
+            display: block;
+            color: #444;
         }
     </style>
 </head>
@@ -155,8 +139,6 @@
 <nav class="navbar">
     <a href="/" class="nav-logo">PizzaNor</a>
     <div class="nav-links">
-        <a href="#">Oslo</a>
-        <a href="#">+47 22 00 00 00</a>
         {% if user.is_authenticated %}
             <a href="{% url 'order_history' %}">My Orders</a>
             <a href="{% url 'view_cart' %}" class="cart-btn">Cart</a>
@@ -172,18 +154,16 @@
 </nav>
 
 <div class="hero">
-    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=80" alt="Pizza" />
+    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=80" alt="Pizza">
     <div class="hero-overlay">
         <h1>Fresh pizza,<br>fast delivery</h1>
-        <p>Delivered in Oslo in 30 minutes</p>
+        <p>Choose your favorites and order online</p>
         <a href="#menu" class="hero-order-btn">Order now</a>
     </div>
 </div>
 
 <div class="cat-bar" id="menu">
     <a href="#" class="cat-tab active" onclick="showSection('all', this); return false;">All Pizzas</a>
-    <a href="#" class="cat-tab" onclick="showSection('bestseller', this); return false;">Best Sellers</a>
-    <a href="#" class="cat-tab" onclick="showSection('deals', this); return false;">Deals</a>
     <a href="#" class="cat-tab" onclick="showSection('sides', this); return false;">Sides</a>
     <a href="#" class="cat-tab" onclick="showSection('dips', this); return false;">Dips</a>
     <a href="#" class="cat-tab" onclick="showSection('drinks', this); return false;">Drinks</a>
@@ -191,310 +171,134 @@
 
 <div class="menu-content">
 
-    <!-- ALL PIZZAS -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-box">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="section" id="sec-all">
         <div class="section-heading">All Pizzas</div>
         <div class="card-grid">
-            {% for pizza in pizzas %}
+            {% for item in pizza_data %}
             <div class="pizza-card">
-                {% if pizza.image %}
-                    <img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
+                {% if item.pizza.image %}
+                    <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
                 {% else %}
-                    <img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />
+                    <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
                 {% endif %}
+
                 <div class="card-body">
-                    <div class="card-name">{{ pizza.name }}</div>
-                    <div class="card-desc">{{ pizza.description }}</div>
-                    <div class="dietary-toggles">
-                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
-                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
-                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
-                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'all-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
-                    </div>
-                    <div class="card-price">from {{ pizza.price_small }} kr</div>
+                    <div class="card-name">{{ item.pizza.name }}</div>
+                    <div class="card-desc">{{ item.pizza.description }}</div>
+                    <div class="card-price">Small from {{ item.pizza.price_small }} kr</div>
+
                     {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
+                    <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
                         {% csrf_token %}
-                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="apqty-{{ pizza.id }}" value="1">
-                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="all-diet-{{ pizza.id }}" value="">
-                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
-                            <option value="S">Small - {{ pizza.price_small }} kr</option>
-                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
-                            <option value="L">Large - {{ pizza.price_large }} kr</option>
-                        </select>
-                        <div class="qty-row">
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty('apqty-{{ pizza.id }}', -1)">−</button>
-                                <span class="qty-num" id="apqty-{{ pizza.id }}-display">1</span>
-                                <button type="button" class="qty-btn" onclick="changeQty('apqty-{{ pizza.id }}', 1)">+</button>
-                            </div>
-                            <button type="submit" class="add-btn">Add to cart</button>
-                        </div>
+
+                        <label class="form-label">Size</label>
+                        {{ item.form.size }}
+
+                        <label class="form-label">Quantity</label>
+                        {{ item.form.quantity }}
+
+                        <label class="form-label">Toppings</label>
+                        {{ item.form.toppings }}
+
+                        <button type="submit" class="add-btn">Add Pizza to Cart</button>
                     </form>
                     {% else %}
                     <a href="/accounts/login/" class="add-link">Sign in to order</a>
                     {% endif %}
                 </div>
             </div>
-            {% empty %}<p>No pizzas available yet.</p>{% endfor %}
+            {% empty %}
+            <p>No pizzas available yet.</p>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- BEST SELLERS -->
-    <div class="section" id="sec-bestseller" style="display:none;">
-        <div class="section-heading">Best Sellers</div>
-        <div class="card-grid">
-            {% for pizza in pizzas %}{% if pizza.category == 'bestseller' %}
-            <div class="pizza-card">
-                {% if pizza.image %}<img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
-                {% else %}<img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />{% endif %}
-                <div class="card-body">
-                    <div class="card-name">{{ pizza.name }}</div>
-                    <div class="card-desc">{{ pizza.description }}</div>
-                    <div class="dietary-toggles">
-                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
-                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
-                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
-                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'bs-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
-                    </div>
-                    <div class="card-price">from {{ pizza.price_small }} kr</div>
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="bspqty-{{ pizza.id }}" value="1">
-                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="bs-diet-{{ pizza.id }}" value="">
-                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
-                            <option value="S">Small - {{ pizza.price_small }} kr</option>
-                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
-                            <option value="L">Large - {{ pizza.price_large }} kr</option>
-                        </select>
-                        <div class="qty-row">
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty('bspqty-{{ pizza.id }}', -1)">−</button>
-                                <span class="qty-num" id="bspqty-{{ pizza.id }}-display">1</span>
-                                <button type="button" class="qty-btn" onclick="changeQty('bspqty-{{ pizza.id }}', 1)">+</button>
-                            </div>
-                            <button type="submit" class="add-btn">Add to cart</button>
-                        </div>
-                    </form>
-                    {% else %}<a href="/accounts/login/" class="add-link">Sign in to order</a>{% endif %}
-                </div>
-            </div>
-            {% endif %}{% endfor %}
-        </div>
-    </div>
-
-    <!-- DEALS -->
-    <div class="section" id="sec-deals" style="display:none;">
-        <div class="section-heading">Deals</div>
-        <div class="combo-grid">
-            <div class="combo-card">
-                <div class="combo-title">Classic Combo</div>
-                <div class="combo-desc">Any small pizza with a side and a drink of your choice.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">Any Pizza (S)</span>
-                    <span class="combo-tag">Any Side</span>
-                    <span class="combo-tag">Any Drink</span>
-                </div>
-                <div class="combo-price">from 229 kr</div>
-                <div class="combo-save">Save up to 24 kr</div>
-            </div>
-            <div class="combo-card">
-                <div class="combo-title">Family Deal</div>
-                <div class="combo-desc">Two large pizzas, two sides, and four drinks.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">2x Pizza (L)</span>
-                    <span class="combo-tag">2x Sides</span>
-                    <span class="combo-tag">4x Drinks</span>
-                </div>
-                <div class="combo-price">from 699 kr</div>
-                <div class="combo-save">Save up to 120 kr</div>
-            </div>
-            <div class="combo-card">
-                <div class="combo-title">Pizza + Dip</div>
-                <div class="combo-desc">Any medium pizza with two dipping sauces of your choice.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">Any Pizza (M)</span>
-                    <span class="combo-tag">2x Dips</span>
-                </div>
-                <div class="combo-price">from 199 kr</div>
-                <div class="combo-save">Save up to 18 kr</div>
-            </div>
-            <div class="combo-card">
-                <div class="combo-title">Lunch Special</div>
-                <div class="combo-desc">Small pizza with one side and one drink, weekdays only.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">Any Pizza (S)</span>
-                    <span class="combo-tag">1x Side</span>
-                    <span class="combo-tag">1x Drink</span>
-                </div>
-                <div class="combo-price">from 189 kr</div>
-                <div class="combo-save">Save up to 30 kr</div>
-            </div>
-            <div class="combo-card">
-                <div class="combo-title">Party Pack</div>
-                <div class="combo-desc">Four pizzas, four sides, and eight drinks for a group.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">4x Pizza (M)</span>
-                    <span class="combo-tag">4x Sides</span>
-                    <span class="combo-tag">8x Drinks</span>
-                </div>
-                <div class="combo-price">from 1299 kr</div>
-                <div class="combo-save">Save up to 230 kr</div>
-            </div>
-            <div class="combo-card">
-                <div class="combo-title">Dip Lover</div>
-                <div class="combo-desc">Any large pizza with all five dipping sauces.</div>
-                <div class="combo-includes">
-                    <span class="combo-tag">Any Pizza (L)</span>
-                    <span class="combo-tag">All 5 Dips</span>
-                </div>
-                <div class="combo-price">from 319 kr</div>
-                <div class="combo-save">Save up to 40 kr</div>
-            </div>
-        </div>
-
-        {% if pizzas %}
-        <div class="sub-heading">Pizzas on Deal</div>
-        <div class="card-grid">
-            {% for pizza in pizzas %}{% if pizza.category == 'discount' %}
-            <div class="pizza-card">
-                {% if pizza.image %}<img class="card-img" src="{{ pizza.image.url }}" alt="{{ pizza.name }}" />
-                {% else %}<img class="card-img" src="{{ pizza.fallback_image }}" alt="{{ pizza.name }}" />{% endif %}
-                <div class="card-body">
-                    <div class="card-name">{{ pizza.name }} <span class="deal-badge">DEAL</span></div>
-                    <div class="card-desc">{{ pizza.description }}</div>
-                    <div class="dietary-toggles">
-                        {% if pizza.can_be_vegetarian %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','vegetarian')">Vegetarian</button>{% endif %}
-                        {% if pizza.can_be_vegan %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','vegan')">Vegan</button>{% endif %}
-                        {% if pizza.can_be_glutenfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','glutenfree')">Gluten-Free</button>{% endif %}
-                        {% if pizza.can_be_dairyfree %}<button type="button" class="diet-btn" onclick="toggleDiet(this,'deal-diet-{{ pizza.id }}','dairyfree')">Dairy-Free</button>{% endif %}
-                    </div>
-                    <div class="card-price">from {{ pizza.price_small }} kr</div>
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'add_pizza_to_cart' pizza.id %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="pizza_{{ pizza.id }}-quantity" id="dpqty-{{ pizza.id }}" value="1">
-                        <input type="hidden" name="pizza_{{ pizza.id }}-dietary" id="deal-diet-{{ pizza.id }}" value="">
-                        <select name="pizza_{{ pizza.id }}-size" class="size-select">
-                            <option value="S">Small - {{ pizza.price_small }} kr</option>
-                            <option value="M">Medium - {{ pizza.price_medium }} kr</option>
-                            <option value="L">Large - {{ pizza.price_large }} kr</option>
-                        </select>
-                        <div class="qty-row">
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty('dpqty-{{ pizza.id }}', -1)">−</button>
-                                <span class="qty-num" id="dpqty-{{ pizza.id }}-display">1</span>
-                                <button type="button" class="qty-btn" onclick="changeQty('dpqty-{{ pizza.id }}', 1)">+</button>
-                            </div>
-                            <button type="submit" class="add-btn">Add to cart</button>
-                        </div>
-                    </form>
-                    {% else %}<a href="/accounts/login/" class="add-link">Sign in to order</a>{% endif %}
-                </div>
-            </div>
-            {% endif %}{% endfor %}
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- SIDES -->
     <div class="section" id="sec-sides" style="display:none;">
         <div class="section-heading">Sides</div>
         <div class="item-grid">
             {% for side in sides %}
             <div class="item-card">
-                <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}" />
+                <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}">
                 <div class="item-body">
                     <div class="item-name">{{ side.name }}</div>
                     <div class="item-desc">{{ side.description }}</div>
                     <div class="item-price">{{ side.price }} kr</div>
                 </div>
             </div>
-            {% empty %}<p>No sides available yet.</p>{% endfor %}
+            {% empty %}
+            <p>No sides available yet.</p>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- DIPS -->
     <div class="section" id="sec-dips" style="display:none;">
         <div class="section-heading">Dips</div>
         <div class="item-grid">
             {% for dip in dips %}
             <div class="item-card">
-                <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}" />
+                <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}">
                 <div class="item-body">
                     <div class="item-name">{{ dip.name }}</div>
                     <div class="item-desc">{{ dip.description }}</div>
                     <div class="item-price">{{ dip.price }} kr</div>
                 </div>
             </div>
-            {% empty %}<p>No dips available yet.</p>{% endfor %}
+            {% empty %}
+            <p>No dips available yet.</p>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- DRINKS -->
     <div class="section" id="sec-drinks" style="display:none;">
         <div class="section-heading">Drinks</div>
         <div class="item-grid">
             {% for drink in drinks %}
             <div class="item-card">
-                <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}" />
+                <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}">
                 <div class="item-body">
                     <div class="item-name">{{ drink.name }}</div>
                     <div class="item-price" style="margin-bottom:8px;">{{ drink.price }} kr</div>
+
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
                         {% csrf_token %}
-                        <input type="hidden" name="drink_{{ drink.id }}-quantity" id="drqty-{{ drink.id }}" value="1">
-                        <div class="qty-row">
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty('drqty-{{ drink.id }}', -1)">−</button>
-                                <span class="qty-num" id="drqty-{{ drink.id }}-display">1</span>
-                                <button type="button" class="qty-btn" onclick="changeQty('drqty-{{ drink.id }}', 1)">+</button>
-                            </div>
-                            <button type="submit" class="add-btn">Add</button>
-                        </div>
+                        {{ drink_forms|get_item:drink.id }}
+                        <button type="submit" class="add-btn">Add Drink to Cart</button>
                     </form>
                     {% else %}
                     <a href="/accounts/login/" class="add-link">Sign in to order</a>
                     {% endif %}
                 </div>
             </div>
-            {% empty %}<p>No drinks available yet.</p>{% endfor %}
+            {% empty %}
+            <p>No drinks available yet.</p>
+            {% endfor %}
         </div>
     </div>
 
 </div>
 
 <script>
-function changeQty(inputId, change) {
-    var input = document.getElementById(inputId);
-    var display = document.getElementById(inputId + '-display');
-    var newVal = Math.max(1, parseInt(input.value) + change);
-    input.value = newVal;
-    if (display) display.textContent = newVal;
-}
-
 function showSection(name, el) {
-    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    ['all','bestseller','deals','sides','dips','drinks'].forEach(function(s) {
-        var sec = document.getElementById('sec-' + s);
-        if (sec) sec.style.display = (s === name) ? 'block' : 'none';
+    document.querySelectorAll('.cat-tab').forEach(function(tab) {
+        tab.classList.remove('active');
     });
-}
+    el.classList.add('active');
 
-function toggleDiet(btn, inputId, value) {
-    var input = document.getElementById(inputId);
-    var siblings = btn.parentElement.querySelectorAll('.diet-btn');
-    if (btn.classList.contains('active')) {
-        btn.classList.remove('active');
-        input.value = '';
-    } else {
-        siblings.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        input.value = value;
-    }
+    ['all', 'sides', 'dips', 'drinks'].forEach(function(section) {
+        var sec = document.getElementById('sec-' + section);
+        if (sec) {
+            sec.style.display = (section === name) ? 'block' : 'none';
+        }
+    });
 }
 </script>
 
