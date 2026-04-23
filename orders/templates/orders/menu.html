@@ -270,7 +270,7 @@
                     {% if user.is_authenticated %}
                     <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
                         {% csrf_token %}
-                        {{ drink_forms|get_item:drink.id }}
+                        <input type="hidden" name="drink_{{ drink.id }}-quantity" value="1">
                         <button type="submit" class="add-btn">Add Drink to Cart</button>
                     </form>
                     {% else %}
