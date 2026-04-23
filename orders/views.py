@@ -11,69 +11,80 @@ def get_pizza_image(name):
     n = name.lower()
 
     if 'margherita' in n:
-        return 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80'
     elif 'pepperoni' in n:
-        return 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80'
     elif 'picante' in n or 'pikanta' in n or 'spicy' in n:
-        return 'https://images.unsplash.com/photo-1548369937-47519962c11a?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=800&q=80'
     elif 'beef' in n:
-        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
     elif 'chicken' in n:
-        return 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=800&q=80'
     elif 'nduja' in n:
-        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
     elif 'truffle' in n:
-        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
     elif 'salami' in n:
-        return 'https://images.unsplash.com/photo-1620374645498-af6bd681a0bd?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1620374645498-af6bd681a0bd?auto=format&fit=crop&w=800&q=80'
     elif 'tomat' in n or 'tomato' in n:
-        return 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=800&q=80'
     elif 'devil' in n:
-        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
     else:
-        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80'
+        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
 
 
 def get_drink_image(name):
     n = name.lower()
 
     if 'cola' in n or 'coca' in n:
-        return 'https://images.unsplash.com/photo-1581636625402-29b2a704ef13?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=600&q=80'
     elif 'fanta' in n or 'orange' in n:
-        return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80'
     elif 'pepsi' in n:
-        return 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=600&q=80'
     elif 'farris' in n or 'water' in n or 'vann' in n:
-        return 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80'
     elif 'solo' in n or 'lemon' in n:
-        return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&q=80'
     elif 'sprite' in n or 'sprit' in n:
-        return 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80'
     elif 'red bull' in n or 'energy' in n:
-        return 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=600&q=80'
     else:
-        return 'https://images.unsplash.com/photo-1581636625402-29b2a704ef13?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1543253687-c931c8e01820?auto=format&fit=crop&w=600&q=80'
 
 
 def get_side_image(name, side_type):
     n = name.lower()
 
-    if 'dip' in side_type or 'dip' in n:
+    # DIPS (each different now)
+    if 'truffle' in n:
+        return 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=300&q=80'
+    elif 'bbq' in n:
+        return 'https://images.unsplash.com/photo-1625944525533-473f1b3d54b4?w=300&q=80'
+    elif 'spicy cheddar' in n:
         return 'https://images.unsplash.com/photo-1639744093608-7e5c84c70f65?w=300&q=80'
-    elif 'nugget' in n or 'chicken' in n:
-        return 'https://images.unsplash.com/photo-1562967916-eb82221dfb92?w=300&q=80'
+    elif 'spicy' in n:
+        return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=80'
+    elif 'classic' in n:
+        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=300&q=80'
+
+    # SIDES
+    elif 'fish' in n:
+        return 'https://images.unsplash.com/photo-1559847844-5315695dadae?w=300&q=80'
+    elif 'chicken nugget' in n:
+        return 'https://images.unsplash.com/photo-1606755962773-0a3a2f1b0c5d?w=300&q=80'
     elif 'mozzarella' in n:
         return 'https://images.unsplash.com/photo-1548340748-6d2b7d7da280?w=300&q=80'
-    elif 'chilli' in n or 'chili' in n:
-        return 'https://images.unsplash.com/photo-1625944525533-473f1b3d54b4?w=300&q=80'
+    elif 'chilli poppers' in n:
+        return 'https://images.unsplash.com/photo-1604908177522-040c2a8b1f98?w=300&q=80'
     elif 'churros' in n:
         return 'https://images.unsplash.com/photo-1624371414361-e670edf1ff8d?w=300&q=80'
-    elif 'salat' in n or 'salad' in n or 'caprese' in n:
+    elif 'salat' in n or 'salad' in n:
         return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&q=80'
-    else:
-        return 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=300&q=80'
 
-
+    return 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=300&q=80'
 def menu(request):
     pizzas = Pizza.objects.all()
     drinks = Drink.objects.all()

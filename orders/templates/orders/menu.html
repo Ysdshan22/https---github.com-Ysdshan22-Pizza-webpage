@@ -3,6 +3,9 @@
 <head>
     <title>PizzaNor - Menu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'orders/style.css' %}">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f5f5f5; color: #111; }
@@ -64,6 +67,31 @@
             border-radius: 10px;
             margin-bottom: 20px;
         }
+        .item-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+        }
+        .item-body {
+            padding: 12px;
+        }
+
+        .item-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.18)
+        }
 
         .card-grid {
             display: grid;
@@ -115,15 +143,18 @@
             gap: 14px;
         }
         .item-card {
-            background: #fff; border-radius: 12px; overflow: hidden;
-            border: 1px solid #eee; transition: box-shadow 0.2s;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        .item-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
-        .item-img { width: 100%; height: 120px; object-fit: cover; display: block; }
-        .item-body { padding: 10px 12px; }
-        .item-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-        .item-desc { font-size: 11px; color: #888; margin-bottom: 4px; line-height: 1.3; }
-        .item-price { font-size: 14px; font-weight: bold; color: #E8231A; margin-top: 4px; }
+
+        .item-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.2);
+        }
 
         .form-label {
             font-size: 12px;

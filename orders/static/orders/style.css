@@ -1,70 +1,105 @@
-/*GENERAL STYLES */
+/* GENERAL STYLES */
+
+* {
+    box-sizing: border-box;
+}
 
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
-
+    background: linear-gradient(135deg, #fff8f3 0%, #ffe9dc 45%, #fff3ec 100%);
+    color: #222;
 }
 
 h1, h2, h3 {
-    color: #333;
+    color: #1f1f1f;
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.6;
 }
 
 a,
 button {
     display: inline-block;
-    margin-top: 8px;
+    margin-top: 10px;
     margin-right: 10px;
     text-decoration: none;
     color: white;
-    background-color: #007bff;
-    padding: 8px 14px;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #ff5a36, #d62828);
+    padding: 10px 16px;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
     width: auto;
+    font-weight: 600;
+    transition: 0.2s ease;
+    box-shadow: 0 6px 16px rgba(214, 40, 40, 0.18);
 }
 
 a:hover,
 button:hover {
-    background-color: #0056b3;
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #e64926, #b71f1f);
 }
 
 input,
-select {
-    margin-top: 5px;
-    margin-bottom: 8px;
-    padding: 6px;
-    border-radius: 6px;
+select,
+textarea {
+    margin-top: 6px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e0d6cf;
+    background-color: #fff;
+    font-size: 14px;
+    width: 100%;
 }
 
-/*  MENU PAGE */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #ff6b3d;
+    box-shadow: 0 0 0 3px rgba(255, 107, 61, 0.15);
+}
+
+/* MENU PAGE */
 
 .container {
     display: flex;
-    max-width: 1200px;
-    margin: 30px auto;
-    gap: 20px;
+    max-width: 1250px;
+    margin: 40px auto;
+    gap: 24px;
+    padding: 0 20px;
+    align-items: flex-start;
 }
 
 .menu-section {
     flex: 3;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 28px;
+    border-radius: 22px;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0e3da;
 }
 
 .account-section {
     flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff, #fff4eb);
+    padding: 24px;
+    border-radius: 22px;
     height: fit-content;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0e3da;
+    position: sticky;
+    top: 20px;
 }
 
 .item-box {
-    border-bottom: 1px solid #ddd;
-    padding: 12px 0;
+    border-bottom: 1px solid #f0e3da;
+    padding: 18px 0;
 }
 
 .item-box:last-child {
@@ -72,33 +107,52 @@ select {
 }
 
 .welcome-text {
-    margin-bottom: 15px;
+    margin-bottom: 16px;
     font-weight: bold;
+    color: #d62828;
+    font-size: 18px;
 }
 
 .menu-section form {
-    margin-top: 10px;
+    margin-top: 12px;
+    padding: 14px;
+    background: #fff8f3;
+    border: 1px solid #f2e4da;
+    border-radius: 14px;
 }
 
 .menu-section input,
 .menu-section select {
     width: 100%;
-    max-width: 220px;
+    max-width: 260px;
 }
 
-/*  CART PAGE */
+.message-box {
+    background: linear-gradient(135deg, #e9fff0, #d7f7e2);
+    color: #155724;
+    border: 1px solid #bfe5c9;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin: 15px 0 20px;
+    font-weight: 500;
+}
+
+/* CART PAGE */
 
 .cart-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 900px;
-    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 28px;
+    border-radius: 24px;
+    max-width: 950px;
+    margin: 40px auto;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0e3da;
 }
 
 .cart-item {
-    border-bottom: 1px solid #ddd;
-    padding: 12px 0;
+    border-bottom: 1px solid #f0e3da;
+    padding: 16px 0;
+    line-height: 1.7;
 }
 
 .cart-item:last-child {
@@ -106,26 +160,29 @@ select {
 }
 
 .danger {
-    background-color: #dc3545;
+    background: linear-gradient(135deg, #ff4d6d, #c9184a);
+    box-shadow: 0 6px 16px rgba(201, 24, 74, 0.18);
 }
 
 .danger:hover {
-    background-color: #a71d2a;
+    background: linear-gradient(135deg, #e6395f, #a4133c);
 }
 
 /* CHECKOUT PAGE */
 
 .checkout-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 900px;
-    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 28px;
+    border-radius: 24px;
+    max-width: 950px;
+    margin: 40px auto;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0e3da;
 }
 
 .checkout-box .cart-item {
-    border-bottom: 1px solid #ddd;
-    padding: 12px 0;
+    border-bottom: 1px solid #f0e3da;
+    padding: 16px 0;
 }
 
 .checkout-box .cart-item:last-child {
@@ -134,67 +191,101 @@ select {
 
 .checkout-box input {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
 }
 
 /* ORDER HISTORY PAGE */
 
 .order-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 1000px;
-    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 28px;
+    border-radius: 24px;
+    max-width: 1050px;
+    margin: 40px auto;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0e3da;
 }
 
 .order {
-    border: 1px solid #ddd;
-    padding: 15px;
+    border: 1px solid #f0e3da;
+    padding: 18px;
     margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #fff;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #fff8f3);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
 }
 
 .item {
     margin-left: 20px;
-    padding: 5px 0;
+    padding: 6px 0;
 }
 
-/*   LOGIN / REGISTER PAGES ,  login.html and register.html */
+/* LOGIN / REGISTER */
 
-.form-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    margin: 50px auto;
+.form-box,
+.login-box {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 30px;
+    border-radius: 24px;
+    max-width: 430px;
+    margin: 70px auto;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
+    border: 1px solid #f0e3da;
+}
+
+.form-box h2,
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 28px;
 }
 
 .form-box input,
 .form-box select,
-.form-box button {
+.form-box button,
+.login-box input,
+.login-box select,
+.login-box button {
     display: block;
     width: 100%;
-    margin-top: 10px;
-    padding: 8px;
-    border-radius: 6px;
+    margin-top: 12px;
+    padding: 11px 12px;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
-.form-box button {
-    background-color: #007bff;
+.form-box button,
+.login-box button {
+    background: linear-gradient(135deg, #ff5a36, #d62828);
     color: white;
     border: none;
 }
 
-.form-box button:hover {
-    background-color: #0056b3;
+.form-box button:hover,
+.login-box button:hover {
+    background: linear-gradient(135deg, #e64926, #b71f1f);
 }
-.message-box {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin: 15px 0;
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .account-section {
+        position: static;
+        width: 100%;
+    }
+
+    .menu-section,
+    .account-section,
+    .cart-box,
+    .checkout-box,
+    .order-box,
+    .form-box,
+    .login-box {
+        padding: 20px;
+        border-radius: 18px;
+    }
 }
