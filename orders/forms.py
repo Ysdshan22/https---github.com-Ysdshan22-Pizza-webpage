@@ -13,10 +13,10 @@ class PizzaCartForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, initial=1)
 
     toppings = forms.ModelMultipleChoiceField(
-        queryset=Topping.objects.all(),
-        required=False,
-        widget=forms.CheckboxSelectMultiple
-    )
+    queryset=Topping.objects.none(),
+    required=False,
+    widget=forms.CheckboxSelectMultiple
+)
 
 
 class DrinkCartForm(forms.Form):

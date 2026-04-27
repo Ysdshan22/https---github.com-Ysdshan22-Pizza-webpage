@@ -5,101 +5,188 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f8f8f8;
+            background: #f6f3ef;
+            margin: 0;
+            color: #222;
         }
 
         .checkout-box {
+            max-width: 950px;
+            margin: 50px auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 900px;
-            margin: auto;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            margin-top: 25px;
+            margin-bottom: 15px;
         }
 
         .cart-item {
-            border-bottom: 1px solid #ddd;
-            padding: 12px 0;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            line-height: 1.7;
         }
 
-        .cart-item:last-child {
-            border-bottom: none;
+        .total-box {
+            background: #fff3f1;
+            color: #e8231a;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 18px;
+            border-radius: 14px;
+            margin-top: 20px;
         }
 
-        input, button, a {
-            margin-top: 10px;
-            padding: 8px 14px;
-            border-radius: 6px;
+        .delivery-box {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
 
         button, a {
+            display: inline-block;
             text-decoration: none;
             color: white;
-            background-color: #007bff;
+            background: #007bff;
+            padding: 11px 18px;
+            border-radius: 9px;
             border: none;
+            font-weight: bold;
             cursor: pointer;
-            display: inline-block;
+            margin-top: 12px;
+            margin-right: 10px;
         }
 
-        button:hover, a:hover {
-            background-color: #0056b3;
+        button {
+            background: #e8231a;
+        }
+
+        button:hover {
+            background: #c91f16;
+        }
+
+        a:hover {
+            background: #0056b3;
         }
 
         .message-box {
-            background: #eaf7ea;
+            background: #e9f8ec;
             color: #1f6b2a;
-            border: 1px solid #b7e1bd;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            border: 1px solid #bee8c6;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="checkout-box">
 
-        {% if messages %}
-            {% for message in messages %}
-                <div class="message-box">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+<div class="checkout-box">
 
-        <h1>Checkout</h1>
-
-        <h2>Order Summary</h2>
-
-        {% for item in cart %}
-            <div class="cart-item">
-                {% if item.type == 'pizza' %}
-                    <strong>Pizza:</strong> {{ item.name }} |
-                    <strong>Size:</strong> {{ item.size }} |
-                    <strong>Quantity:</strong> {{ item.quantity }} |
-                    <strong>Subtotal:</strong> {{ item.subtotal }}
-
-                    {% if item.toppings %}
-                        <br>
-                        <strong>Toppings:</strong> {{ item.toppings|join:", " }}
-                    {% endif %}
-                {% else %}
-                    <strong>Drink:</strong> {{ item.name }} |
-                    <strong>Quantity:</strong> {{ item.quantity }} |
-                    <strong>Subtotal:</strong> {{ item.subtotal }}
-                {% endif %}
-            </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-box">{{ message }}</div>
         {% endfor %}
+    {% endif %}
 
-        <h3>Total: {{ total }}</h3>
+    <h1>Checkout</h1>
 
-        <h2>Delivery Details</h2>
+    <h2>Order Summary</h2>
+
+    {% for item in cart %}
+        <div class="cart-item">
+            {% if item.type == 'pizza' %}
+                <strong>Pizza:</strong> {{ item.name }} |
+                <strong>Size:</strong> {{ item.size }} |
+                <strong>Quantity:</strong> {{ item.quantity }} |
+                <strong>Subtotal:</strong> {{ item.subtotal }} kr
+
+                {% if item.toppings %}
+                    <br>
+                    <strong>Toppings:</strong> {{ item.toppings|join:", " }}
+                {% endif %}
+
+            {% elif item.type == 'drink' %}
+                <strong>Drink:</strong> {{ item.name }} |
+                <strong>Quantity:</strong> {{ item.quantity }} |
+                <strong>Subtotal:</strong> {{ item.subtotal }} kr
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="total-box">
+        Total: {{ total }} kr
+    </div>
+
+    <h2>Delivery Details</h2>
+
+    <div class="delivery-box">
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+
+            <label for="delivery_address">Choose delivery area in Oslo</label>
+            <select name="delivery_address" id="delivery_address" required>
+                <option value="">-- Select delivery area --</option>
+                <option value="Oslo Sentrum">Oslo Sentrum</option>
+                <option value="Grünerløkka">Grünerløkka</option>
+                <option value="Majorstuen">Majorstuen</option>
+                <option value="Frogner">Frogner</option>
+                <option value="St. Hanshaugen">St. Hanshaugen</option>
+                <option value="Tøyen">Tøyen</option>
+                <option value="Bjørvika">Bjørvika</option>
+                <option value="Sagene">Sagene</option>
+                <option value="Nydalen">Nydalen</option>
+                <option value="Sinsen">Sinsen</option>
+                <option value="Bryn">Bryn</option>
+                <option value="Helsfyr">Helsfyr</option>
+                <option value="Lambertseter">Lambertseter</option>
+                <option value="Manglerud">Manglerud</option>
+                <option value="Skøyen">Skøyen</option>
+                <option value="Ullern">Ullern</option>
+            </select>
+            <label for="payment_method">Payment method</label>
+            <select name="payment_method" id="payment_method" required>
+                <option value="">-- Select payment method --</option>
+                <option value="Pay on delivery">Pay on delivery</option>
+                <option value="Card on delivery">Card on delivery</option>
+                <option value="Vipps">Vipps</option>
+            </select>
+
             <button type="submit">Place Order</button>
         </form>
 
         <a href="{% url 'view_cart' %}">Back to Cart</a>
     </div>
+
+</div>
+
 </body>
 </html>

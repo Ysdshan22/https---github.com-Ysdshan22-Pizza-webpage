@@ -3,176 +3,388 @@
 <head>
     <title>PizzaNor - Menu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'orders/style.css' %}">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; color: #111; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f3ef;
+            color: #222;
+        }
 
         .navbar {
-            background: #fff; border-bottom: 1px solid #eee;
-            padding: 0 30px; height: 60px; display: flex;
-            align-items: center; position: sticky; top: 0; z-index: 200;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 0 30px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .nav-logo { font-size: 22px; font-weight: bold; color: #E8231A; text-decoration: none; margin-right: auto; }
-        .nav-links { display: flex; align-items: center; gap: 20px; font-size: 14px; }
-        .nav-links a { text-decoration: none; color: #333; }
-        .nav-links a:hover { color: #E8231A; }
-        .cart-btn { background: #E8231A !important; color: #fff !important; padding: 8px 16px !important; border-radius: 8px !important; font-weight: bold; }
-        .cart-btn:hover { background: #c01e14 !important; }
-        .inline-form { display: inline; }
-        .logout-btn { background: none; border: 1px solid #ddd; color: #555; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; }
 
-        .hero { position: relative; height: 260px; overflow: hidden; }
-        .hero img { width: 100%; height: 100%; object-fit: cover; }
-        .hero-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.52);
-            display: flex; flex-direction: column; justify-content: center; padding: 0 60px;
+        .nav-logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e8231a;
+            text-decoration: none;
+            margin-right: auto;
         }
-        .hero-overlay h1 { font-size: 36px; color: #fff; margin-bottom: 6px; }
-        .hero-overlay p { font-size: 15px; color: rgba(255,255,255,0.85); margin-bottom: 18px; }
-        .hero-order-btn {
-            display: inline-block; background: #E8231A; color: #fff;
-            padding: 11px 26px; border-radius: 8px; text-decoration: none;
-            font-weight: bold; font-size: 14px; width: fit-content;
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .cart-btn {
+            background: #e8231a;
+            color: white !important;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: white;
+            border: 1px solid #ddd;
+            color: #555;
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hero {
+            height: 270px;
+            background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            url("https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=80");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            margin-bottom: 18px;
+        }
+
+        .hero a {
+            background: #e8231a;
+            color: white;
+            padding: 11px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         .cat-bar {
-            background: #fff; border-bottom: 1px solid #eee;
-            padding: 0 30px; display: flex; gap: 0; overflow-x: auto;
-            position: sticky; top: 60px; z-index: 100;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 0 30px;
+            display: flex;
+            gap: 5px;
+            position: sticky;
+            top: 60px;
+            z-index: 90;
         }
-        .cat-tab {
-            padding: 14px 18px; font-size: 14px; font-weight: 500; color: #555;
-            cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap;
-            background: none; border-top: none; border-left: none; border-right: none;
-            text-decoration: none; display: inline-block;
-        }
-        .cat-tab:hover { color: #E8231A; }
-        .cat-tab.active { color: #E8231A; border-bottom-color: #E8231A; font-weight: 600; }
 
-        .menu-content { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .section { margin-bottom: 40px; }
+        .cat-tab {
+            padding: 14px 18px;
+            color: #555;
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+        }
+
+        .cat-tab:hover,
+        .cat-tab.active {
+            color: #e8231a;
+            border-bottom-color: #e8231a;
+            font-weight: bold;
+        }
+
+        .menu-content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            margin-bottom: 45px;
+        }
+
         .section-heading {
-            font-size: 20px; font-weight: bold; margin-bottom: 16px;
-            padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
+            font-size: 22px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid #e5e5e5;
+            padding-bottom: 10px;
         }
 
         .message-box {
-            background: #eaf7ea;
+            background: #e9f8ec;
             color: #1f6b2a;
-            border: 1px solid #b7e1bd;
-            padding: 12px 16px;
+            border: 1px solid #bee8c6;
+            padding: 12px 15px;
             border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .item-card {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            display: flex;
-            flex-direction: column;
-        }
-        .item-body {
-            padding: 12px;
-        }
-
-        .item-img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .item-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.18)
+            margin-bottom: 18px;
         }
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
         }
-        .pizza-card {
-            background: #fff; border-radius: 12px; overflow: hidden;
-            border: 1px solid #eee; display: flex; flex-direction: column;
-            transition: box-shadow 0.2s;
+
+        .pizza-card,
+        .item-card {
+            background: white;
+            border-radius: 14px;
+            overflow: visible;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transition: 0.2s;
         }
-        .pizza-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
-        .card-img { width: 100%; height: 155px; object-fit: cover; display: block; }
-        .card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
-        .card-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-        .card-desc { font-size: 12px; color: #777; line-height: 1.4; margin-bottom: 8px; flex: 1; }
 
-        .card-price { font-size: 15px; font-weight: bold; color: #E8231A; margin-bottom: 8px; }
+        .pizza-card:hover,
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+        }
 
-        .size-select,
-        .topping-select,
+        .card-img,
+        .item-img {
+            width: 100%;
+            height: 155px;
+            object-fit: cover;
+            display: block;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .card-body,
+        .item-body {
+            padding: 14px;
+        }
+
+        .card-name,
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-desc,
+        .item-desc {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .card-price,
+        .item-price {
+            color: #e8231a;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        select,
         input[type="number"] {
             width: 100%;
             padding: 8px 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 12px;
             margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .topping-box {
+            margin-bottom: 10px;
+        }
+
+        .topping-toggle {
+            width: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 9px 10px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .topping-options {
+            display: none;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
             background: #fff;
-            color: #111;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .topping-box.open .topping-options {
+            display: block;
+        }
+
+        .topping-options ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .topping-options li {
+            margin-bottom: 5px;
+        }
+
+        .topping-options label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: normal;
+            background: #fafafa;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .topping-options input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: #e8231a;
+        }
+
+        .personal-box {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .personal-box label {
+            font-weight: normal;
+            font-size: 12px;
+            background: #fafafa;
+            padding: 6px;
+            border-radius: 6px;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .personal-box input {
+            width: auto;
         }
 
         .add-btn {
-            background: #E8231A; color: #fff; border: none;
-            padding: 9px 14px; border-radius: 8px; font-size: 13px;
-            cursor: pointer; font-weight: 600; width: 100%;
+            width: 100%;
+            background: #e8231a;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 6px;
         }
-        .add-btn:hover { background: #c01e14; }
+
+        .add-btn:hover {
+            background: #c91f16;
+        }
 
         .add-link {
-            display: block; text-align: center; background: #E8231A; color: #fff;
-            padding: 8px; border-radius: 8px; font-size: 13px;
-            text-decoration: none; font-weight: 600; margin-top: 6px;
+            display: block;
+            text-align: center;
+            background: #e8231a;
+            color: white;
+            padding: 9px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .meal-box {
+            border-top: 1px solid #eee;
+            margin-top: 12px;
+            padding-top: 12px;
+        }
+
+        .meal-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e8231a;
+            margin-bottom: 6px;
         }
 
         .item-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 14px;
-        }
-        .item-card {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            border: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 18px;
         }
 
-        .item-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 14px 30px rgba(0,0,0,0.2);
-        }
+        @media (max-width: 700px) {
+            .hero {
+                padding: 0 25px;
+            }
 
-        .form-label {
-            font-size: 12px;
-            font-weight: 600;
-            margin: 8px 0 4px;
-            display: block;
-            color: #444;
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-links {
+                gap: 10px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar">
     <a href="/" class="nav-logo">PizzaNor</a>
+
     <div class="nav-links">
         {% if user.is_authenticated %}
             <a href="{% url 'order_history' %}">My Orders</a>
-            <a href="{% url 'view_cart' %}" class="cart-btn">Cart</a>
+            <a href="{% url 'view_cart' %}" class="cart-btn">Cart ({{ cart_count|default:0 }})</a>
+
             <form action="/accounts/logout/" method="post" class="inline-form">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn">Logout</button>
@@ -185,16 +397,16 @@
 </nav>
 
 <div class="hero">
-    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1400&q=80" alt="Pizza">
-    <div class="hero-overlay">
-        <h1>Fresh pizza,<br>fast delivery</h1>
-        <p>Choose your favorites and order online</p>
-        <a href="#menu" class="hero-order-btn">Order now</a>
+    <div>
+        <h1>Fresh Pizza,<br>Made Your Way</h1>
+        <p>Choose pizza, toppings, drinks and meal deals online.</p>
+        <a href="#menu">Order now</a>
     </div>
 </div>
 
 <div class="cat-bar" id="menu">
-    <a href="#" class="cat-tab active" onclick="showSection('all', this); return false;">All Pizzas</a>
+    <a href="#" class="cat-tab active" onclick="showSection('all', this); return false;">Pizzas</a>
+    <a href="#" class="cat-tab" onclick="showSection('meal', this); return false;">Meal Deals</a>
     <a href="#" class="cat-tab" onclick="showSection('sides', this); return false;">Sides</a>
     <a href="#" class="cat-tab" onclick="showSection('dips', this); return false;">Dips</a>
     <a href="#" class="cat-tab" onclick="showSection('drinks', this); return false;">Drinks</a>
@@ -204,113 +416,192 @@
 
     {% if messages %}
         {% for message in messages %}
-            <div class="message-box">
-                {{ message }}
-            </div>
+            <div class="message-box">{{ message }}</div>
         {% endfor %}
     {% endif %}
 
     <div class="section" id="sec-all">
-        <div class="section-heading">All Pizzas</div>
+        <h2 class="section-heading">Pizza Menu</h2>
+
         <div class="card-grid">
             {% for item in pizza_data %}
-            <div class="pizza-card">
-                {% if item.pizza.image %}
-                    <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
-                {% else %}
-                    <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
-                {% endif %}
-
-                <div class="card-body">
-                    <div class="card-name">{{ item.pizza.name }}</div>
-                    <div class="card-desc">{{ item.pizza.description }}</div>
-                    <div class="card-price">Small from {{ item.pizza.price_small }} kr</div>
-
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
-                        {% csrf_token %}
-
-                        <label class="form-label">Size</label>
-                        {{ item.form.size }}
-
-                        <label class="form-label">Quantity</label>
-                        {{ item.form.quantity }}
-
-                        <label class="form-label">Toppings</label>
-                        {{ item.form.toppings }}
-
-                        <button type="submit" class="add-btn">Add Pizza to Cart</button>
-                    </form>
+                <div class="pizza-card">
+                    {% if item.pizza.image %}
+                        <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
                     {% else %}
-                    <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
                     {% endif %}
+
+                    <div class="card-body">
+                        <div class="card-name">{{ item.pizza.name }}</div>
+                        <div class="card-desc">{{ item.pizza.description }}</div>
+                        <div class="card-price">From {{ item.pizza.price_small }} kr</div>
+
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+                                {% csrf_token %}
+
+                                <label>Size</label>
+                                {{ item.form.size }}
+
+                                <label>Quantity</label>
+                                {{ item.form.quantity }}
+
+                                <label>Toppings</label>
+                                <div class="topping-box">
+                                    <button type="button" class="topping-toggle">Choose toppings</button>
+                                    <div class="topping-options">
+                                        {{ item.form.toppings }}
+                                    </div>
+                                </div>
+
+                                <label>Personalize</label>
+                                <div class="personal-box">
+                                    <label><input type="checkbox" name="vegetarian"> Vegetarian</label>
+                                    <label><input type="checkbox" name="vegan"> Vegan</label>
+                                    <label><input type="checkbox" name="gluten_free"> Gluten-free</label>
+                                    <label><input type="checkbox" name="dairy_free"> Dairy-free</label>
+                                </div>
+
+                                <button type="submit" class="add-btn">Add Pizza to Cart</button>
+                            </form>
+                        {% else %}
+                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
             {% empty %}
-            <p>No pizzas available yet.</p>
+                <p>No pizzas available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section" id="sec-meal" style="display:none;">
+        <h2 class="section-heading">Meal Deals</h2>
+
+        <div class="card-grid">
+            {% for item in pizza_data %}
+                <div class="pizza-card">
+                    {% if item.pizza.image %}
+                        <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
+                    {% else %}
+                        <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <div class="card-name">{{ item.pizza.name }} Meal Deal</div>
+                        <div class="card-desc">Choose one pizza size and add one drink with your pizza.</div>
+                        <div class="card-price">Pizza + Drink</div>
+
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+                                {% csrf_token %}
+
+                                <label>Pizza size</label>
+                                {{ item.form.size }}
+
+                                <label>Quantity</label>
+                                {{ item.form.quantity }}
+
+                                <label>Choose drink</label>
+                                <select name="meal_drink">
+                                    {% for drink in drinks %}
+                                        <option value="{{ drink.id }}">{{ drink.name }} - {{ drink.price }} kr</option>
+                                    {% endfor %}
+                                </select>
+
+                                
+
+                                <label>Choose side</label>
+                                <select name="meal_side">
+                                    {% for side in sides %}
+                                        <option value="{{ side.id }}">{{ side.name }} - {{ side.price }} kr</option>
+                                    {% endfor %}
+                                    </select>
+
+                                <label>Toppings</label>
+                                <div class="topping-box">
+                                    <button type="button" class="topping-toggle">Choose toppings</button>
+                                    <div class="topping-options">
+                                        {{ item.form.toppings }}
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="add-btn">Add Meal Deal</button>
+                            </form>
+                        {% else %}
+                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No meal deals available yet.</p>
             {% endfor %}
         </div>
     </div>
 
     <div class="section" id="sec-sides" style="display:none;">
-        <div class="section-heading">Sides</div>
+        <h2 class="section-heading">Sides</h2>
+
         <div class="item-grid">
             {% for side in sides %}
-            <div class="item-card">
-                <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}">
-                <div class="item-body">
-                    <div class="item-name">{{ side.name }}</div>
-                    <div class="item-desc">{{ side.description }}</div>
-                    <div class="item-price">{{ side.price }} kr</div>
+                <div class="item-card">
+                    <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}">
+                    <div class="item-body">
+                        <div class="item-name">{{ side.name }}</div>
+                        <div class="item-desc">{{ side.description }}</div>
+                        <div class="item-price">{{ side.price }} kr</div>
+                    </div>
                 </div>
-            </div>
             {% empty %}
-            <p>No sides available yet.</p>
+                <p>No sides available yet.</p>
             {% endfor %}
         </div>
     </div>
 
     <div class="section" id="sec-dips" style="display:none;">
-        <div class="section-heading">Dips</div>
+        <h2 class="section-heading">Dips</h2>
+
         <div class="item-grid">
             {% for dip in dips %}
-            <div class="item-card">
-                <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}">
-                <div class="item-body">
-                    <div class="item-name">{{ dip.name }}</div>
-                    <div class="item-desc">{{ dip.description }}</div>
-                    <div class="item-price">{{ dip.price }} kr</div>
+                <div class="item-card">
+                    <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}">
+                    <div class="item-body">
+                        <div class="item-name">{{ dip.name }}</div>
+                        <div class="item-desc">{{ dip.description }}</div>
+                        <div class="item-price">{{ dip.price }} kr</div>
+                    </div>
                 </div>
-            </div>
             {% empty %}
-            <p>No dips available yet.</p>
+                <p>No dips available yet.</p>
             {% endfor %}
         </div>
     </div>
 
     <div class="section" id="sec-drinks" style="display:none;">
-        <div class="section-heading">Drinks</div>
+        <h2 class="section-heading">Drinks</h2>
+
         <div class="item-grid">
             {% for drink in drinks %}
-            <div class="item-card">
-                <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}">
-                <div class="item-body">
-                    <div class="item-name">{{ drink.name }}</div>
-                    <div class="item-price" style="margin-bottom:8px;">{{ drink.price }} kr</div>
+                <div class="item-card">
+                    <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}">
+                    <div class="item-body">
+                        <div class="item-name">{{ drink.name }}</div>
+                        <div class="item-price">{{ drink.price }} kr</div>
 
-                    {% if user.is_authenticated %}
-                    <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="drink_{{ drink.id }}-quantity" value="1">
-                        <button type="submit" class="add-btn">Add Drink to Cart</button>
-                    </form>
-                    {% else %}
-                    <a href="/accounts/login/" class="add-link">Sign in to order</a>
-                    {% endif %}
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="drink_{{ drink.id }}-quantity" value="1">
+                                <button type="submit" class="add-btn">Add Drink to Cart</button>
+                            </form>
+                        {% else %}
+                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
             {% empty %}
-            <p>No drinks available yet.</p>
+                <p>No drinks available yet.</p>
             {% endfor %}
         </div>
     </div>
@@ -322,15 +613,55 @@ function showSection(name, el) {
     document.querySelectorAll('.cat-tab').forEach(function(tab) {
         tab.classList.remove('active');
     });
+
     el.classList.add('active');
 
-    ['all', 'sides', 'dips', 'drinks'].forEach(function(section) {
+    ['all', 'meal', 'sides', 'dips', 'drinks'].forEach(function(section) {
         var sec = document.getElementById('sec-' + section);
         if (sec) {
-            sec.style.display = (section === name) ? 'block' : 'none';
+            sec.style.display = section === name ? 'block' : 'none';
         }
     });
 }
+
+document.querySelectorAll('.topping-box').forEach(function(box) {
+    var button = box.querySelector('.topping-toggle');
+    var checkboxes = box.querySelectorAll('input[type="checkbox"]');
+
+    button.addEventListener('click', function(event) {
+        event.stopPropagation();
+
+        document.querySelectorAll('.topping-box').forEach(function(otherBox) {
+            if (otherBox !== box) {
+                otherBox.classList.remove('open');
+            }
+        });
+
+        box.classList.toggle('open');
+    });
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            var selected = box.querySelectorAll('input[type="checkbox"]:checked').length;
+
+            if (selected === 0) {
+                button.textContent = 'Choose toppings';
+            } else if (selected === 1) {
+                button.textContent = '1 topping selected';
+            } else {
+                button.textContent = selected + ' toppings selected';
+            }
+        });
+    });
+});
+
+document.addEventListener('click', function(event) {
+    document.querySelectorAll('.topping-box').forEach(function(box) {
+        if (!box.contains(event.target)) {
+            box.classList.remove('open');
+        }
+    });
+});
 </script>
 
 </body>

@@ -5,115 +5,180 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f8f8f8;
+            background: #f6f3ef;
+            margin: 0;
+            color: #222;
         }
 
         .cart-box {
+            max-width: 1000px;
+            margin: 50px auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 900px;
-            margin: auto;
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 34px;
         }
 
         .cart-item {
-            border-bottom: 1px solid #ddd;
-            padding: 12px 0;
+            display: flex;
+            gap: 18px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            align-items: center;
         }
 
-        .cart-item:last-child {
-            border-bottom: none;
+        .cart-img {
+            width: 150px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            flex-shrink: 0;
         }
 
-        a, button {
-            display: inline-block;
-            margin-top: 10px;
-            margin-right: 10px;
+        .item-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e8231a;
+            margin-bottom: 8px;
+        }
+
+        .item-details {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .total-box {
+            margin-top: 25px;
+            padding: 18px;
+            background: #fff3f1;
+            border-radius: 14px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #e8231a;
+        }
+
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        a {
             text-decoration: none;
             color: white;
-            background-color: #007bff;
-            padding: 8px 14px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        }
-
-        a:hover, button:hover {
-            background-color: #0056b3;
+            background: #007bff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
         }
 
         .danger {
-            background-color: #dc3545;
+            background: #dc3545;
         }
 
-        .danger:hover {
-            background-color: #a71d2a;
+        .menu-btn {
+            background: #333;
         }
 
-        .message-box {
-            background: #eaf7ea;
-            color: #1f6b2a;
-            border: 1px solid #b7e1bd;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #777;
+            background: #fafafa;
+            border-radius: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-img {
+                width: 100%;
+                height: 180px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="cart-box">
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-box">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-
     <h1>Your Cart</h1>
 
     {% if cart %}
         {% for item in cart %}
             <div class="cart-item">
 
-                {% if item.type == 'pizza' %}
-                    <strong>Pizza:</strong> {{ item.name }} |
-                    <strong>Size:</strong> {{ item.size }} |
-                    <strong>Quantity:</strong> {{ item.quantity }} |
-                    <strong>Unit Price:</strong> {{ item.price }} |
-                    <strong>Subtotal:</strong> {{ item.subtotal }}
-
-                    {% if item.toppings %}
-                        <br>
-                        <strong>Toppings:</strong> {{ item.toppings|join:", " }}
-                    {% endif %}
-
-                {% else %}
-                    <strong>Drink:</strong> {{ item.name }} |
-                    <strong>Quantity:</strong> {{ item.quantity }} |
-                    <strong>Unit Price:</strong> {{ item.price }} |
-                    <strong>Subtotal:</strong> {{ item.subtotal }}
+                {% if item.image %}
+                    <img class="cart-img" src="{{ item.image }}" alt="{{ item.name }}">
                 {% endif %}
 
-                <br>
-                <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">Remove</a>
+                <div>
+                    {% if item.type == 'pizza' %}
+                        <div class="item-title">🍕 {{ item.name }}</div>
+                        <div class="item-details">
+                            <strong>Size:</strong> {{ item.size }}<br>
+                            <strong>Quantity:</strong> {{ item.quantity }}<br>
+                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
+                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+
+                            {% if item.toppings %}
+                                <br>
+                                <strong>Toppings:</strong> {{ item.toppings|join:", " }}
+                            {% endif %}
+
+                            {% if item.meal_drink %}
+                                <br>
+                                <strong>Drink:</strong> {{ item.meal_drink }}
+                            {% endif %}
+
+                            {% if item.meal_side %}
+                                <br>
+                                <strong>Side:</strong> {{ item.meal_side }}
+                            {% endif %}
+                        </div>
+                    {% elif item.type == 'drink' %}
+                        <div class="item-title">🥤 {{ item.name }}</div>
+                        <div class="item-details">
+                            <strong>Quantity:</strong> {{ item.quantity }}<br>
+                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
+                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+                        </div>
+                    {% endif %}
+
+                    <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">Remove</a>
+                </div>
             </div>
         {% endfor %}
 
-        <h3>Total: {{ total }}</h3>
+        <div class="total-box">
+            Total: {{ total }} kr
+        </div>
 
-        <a href="{% url 'checkout' %}">Proceed to Checkout</a>
-        <a class="danger" href="{% url 'clear_cart' %}">Clear Cart</a>
+        <div class="actions">
+            <a href="{% url 'checkout' %}">Proceed to Checkout</a>
+            <a class="danger" href="{% url 'clear_cart' %}">Clear Cart</a>
+            <a class="menu-btn" href="{% url 'menu' %}">Back to Menu</a>
+        </div>
 
     {% else %}
-        <p>Your cart is empty.</p>
+        <div class="empty">
+            <h2>Your cart is empty</h2>
+            <p>Add some pizza first.</p>
+            <a href="{% url 'menu' %}">Back to Menu</a>
+        </div>
     {% endif %}
-
-    <a href="{% url 'menu' %}">Back to Menu</a>
-
 </div>
 
 </body>

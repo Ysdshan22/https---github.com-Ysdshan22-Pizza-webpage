@@ -119,6 +119,7 @@ def menu(request):
         'drink_forms': drink_forms,
         'sides': sides,
         'dips': dips,
+        'cart_count': len(request.session.get('cart', [])),
     })
 
 
@@ -150,7 +151,7 @@ def add_pizza_to_cart(request, pizza_id):
 
     if request.method == 'POST':
         form = PizzaCartForm(request.POST, prefix=f"pizza_{pizza.id}")
-        form.fields['toppings'].queryset = pizza.available_toppings.all()
+        form.fields['toppings'].queryset = Topping.objects.all()
 
         if form.is_valid():
             size = form.cleaned_data['size']
@@ -187,6 +188,7 @@ def add_pizza_to_cart(request, pizza_id):
                 'type': 'pizza',
                 'id': pizza.id,
                 'name': pizza.name,
+                'image': pizza.image.url if pizza.image else get_pizza_image(pizza.name),
                 'size': size,
                 'quantity': quantity,
                 'price': unit_price,
@@ -217,6 +219,7 @@ def add_drink_to_cart(request, drink_id):
                 'type': 'drink',
                 'id': drink.id,
                 'name': drink.name,
+                'image': get_drink_image(drink.name),
                 'quantity': quantity,
                 'price': price,
                 'subtotal': price * quantity,
