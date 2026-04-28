@@ -125,6 +125,8 @@
                 {% endif %}
 
                 <div>
+
+                    <!-- PIZZA -->
                     {% if item.type == 'pizza' %}
                         <div class="item-title">🍕 {{ item.name }}</div>
                         <div class="item-details">
@@ -134,20 +136,19 @@
                             <strong>Subtotal:</strong> {{ item.subtotal }} kr
 
                             {% if item.toppings %}
-                                <br>
-                                <strong>Toppings:</strong> {{ item.toppings|join:", " }}
+                                <br><strong>Toppings:</strong> {{ item.toppings|join:", " }}
                             {% endif %}
 
                             {% if item.meal_drink %}
-                                <br>
-                                <strong>Drink:</strong> {{ item.meal_drink }}
+                                <br><strong>Drink:</strong> {{ item.meal_drink }}
                             {% endif %}
 
                             {% if item.meal_side %}
-                                <br>
-                                <strong>Side:</strong> {{ item.meal_side }}
+                                <br><strong>Side:</strong> {{ item.meal_side }}
                             {% endif %}
                         </div>
+
+                    <!-- DRINK -->
                     {% elif item.type == 'drink' %}
                         <div class="item-title">🥤 {{ item.name }}</div>
                         <div class="item-details">
@@ -155,9 +156,20 @@
                             <strong>Unit Price:</strong> {{ item.price }} kr<br>
                             <strong>Subtotal:</strong> {{ item.subtotal }} kr
                         </div>
+
+                    <!-- SIDE / DIP -->
+                    {% elif item.type == 'side' %}
+                        <div class="item-title">🍟 {{ item.name }}</div>
+                        <div class="item-details">
+                            <strong>Quantity:</strong> {{ item.quantity }}<br>
+                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
+                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+                        </div>
                     {% endif %}
 
-                    <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">Remove</a>
+                    <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">
+                        Remove
+                    </a>
                 </div>
             </div>
         {% endfor %}
@@ -175,7 +187,7 @@
     {% else %}
         <div class="empty">
             <h2>Your cart is empty</h2>
-            <p>Add some pizza first.</p>
+            <p>Add something from the menu.</p>
             <a href="{% url 'menu' %}">Back to Menu</a>
         </div>
     {% endif %}

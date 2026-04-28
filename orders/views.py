@@ -58,33 +58,33 @@ def get_drink_image(name):
 def get_side_image(name, side_type):
     n = name.lower()
 
-    # DIPS (each different now)
+    # DIPS
     if 'truffle' in n:
-        return 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d'
     elif 'bbq' in n:
-        return 'https://images.unsplash.com/photo-1625944525533-473f1b3d54b4?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092'
     elif 'spicy cheddar' in n:
-        return 'https://images.unsplash.com/photo-1639744093608-7e5c84c70f65?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1639744093608-7e5c84c70f65'
     elif 'spicy' in n:
-        return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97'
     elif 'classic' in n:
-        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092'
 
-    # SIDES
+    
     elif 'fish' in n:
-        return 'https://images.unsplash.com/photo-1559847844-5315695dadae?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1559847844-5315695dadae'
     elif 'chicken nugget' in n:
-        return 'https://images.unsplash.com/photo-1606755962773-0a3a2f1b0c5d?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1606755962773-0a3a2f1b0c5d'
     elif 'mozzarella' in n:
-        return 'https://images.unsplash.com/photo-1548340748-6d2b7d7da280?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1548340748-6d2b7d7da280'
     elif 'chilli poppers' in n:
-        return 'https://images.unsplash.com/photo-1604908177522-040c2a8b1f98?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1604908177522-040c2a8b1f98'
     elif 'churros' in n:
-        return 'https://images.unsplash.com/photo-1624371414361-e670edf1ff8d?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1624371414361-e670edf1ff8d'
     elif 'salat' in n or 'salad' in n:
-        return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&q=80'
+        return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd'
 
-    return 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=300&q=80'
+    return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38'
 def menu(request):
     pizzas = Pizza.objects.all()
     drinks = Drink.objects.all()
@@ -227,6 +227,29 @@ def add_drink_to_cart(request, drink_id):
             request.session['cart'] = cart
 
             messages.success(request, "Drink added to cart successfully.")
+
+    return redirect('menu')
+@login_required
+def add_side_to_cart(request, side_id):
+    side = get_object_or_404(Side, id=side_id)
+
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        price = float(side.price)
+
+        cart = request.session.get('cart', [])
+        cart.append({
+            'type': 'side',
+            'id': side.id,
+            'name': side.name,
+            'image': get_side_image(side.name, side.side_type),
+            'quantity': quantity,
+            'price': price,
+            'subtotal': price * quantity,
+        })
+        request.session['cart'] = cart
+
+        messages.success(request, "Item added to cart successfully.")
 
     return redirect('menu')
 

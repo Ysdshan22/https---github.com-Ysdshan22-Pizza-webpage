@@ -553,6 +553,13 @@
                         <div class="item-price">{{ side.price }} kr</div>
                     </div>
                 </div>
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_side_to_cart' side.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="add-btn">Add to Cart</button>
+                </form>
+                {% endif %}
             {% empty %}
                 <p>No sides available yet.</p>
             {% endfor %}
@@ -572,6 +579,13 @@
                         <div class="item-price">{{ dip.price }} kr</div>
                     </div>
                 </div>
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_side_to_cart' dip.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="add-btn">Add to Cart</button>
+                </form>
+                {% endif %}
             {% empty %}
                 <p>No dips available yet.</p>
             {% endfor %}
