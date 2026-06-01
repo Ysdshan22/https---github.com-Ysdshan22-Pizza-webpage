@@ -60,15 +60,15 @@ def get_side_image(name, side_type):
 
     # DIPS
     if 'truffle' in n:
-        return 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d'
+        return 'https://images.unsplash.com/photo-1617331721523-74863928da29?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'bbq' in n:
-        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092'
+        return 'https://images.unsplash.com/photo-1516407019386-e27ad4597cf6?q=80&w=1209&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'spicy cheddar' in n:
-        return 'https://images.unsplash.com/photo-1639744093608-7e5c84c70f65'
+        return 'https://images.unsplash.com/photo-1722239312531-486bbfd50f18?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'spicy' in n:
-        return 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97'
+        return 'https://images.unsplash.com/photo-1722239312531-486bbfd50f18?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'classic' in n:
-        return 'https://images.unsplash.com/photo-1600891964599-f61ba0e24092'
+        return 'https://images.unsplash.com/photo-1628520381646-0ab983902c65?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
     
     elif 'fish' in n:
@@ -85,6 +85,7 @@ def get_side_image(name, side_type):
         return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd'
 
     return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38'
+
 def menu(request):
     pizzas = Pizza.objects.all()
     drinks = Drink.objects.all()
