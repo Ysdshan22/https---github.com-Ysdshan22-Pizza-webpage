@@ -152,8 +152,7 @@
             margin-bottom: 18px;
         }
 
-        .card-grid,
-        .item-grid {
+        .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
             gap: 20px;
@@ -163,12 +162,9 @@
         .item-card {
             background: white;
             border-radius: 14px;
-            overflow: hidden;
+            overflow: visible;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
             transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
         }
 
         .pizza-card:hover,
@@ -180,17 +176,15 @@
         .card-img,
         .item-img {
             width: 100%;
-            height: 180px;
+            height: 155px;
             object-fit: cover;
             display: block;
+            border-radius: 14px 14px 0 0;
         }
 
         .card-body,
         .item-body {
             padding: 14px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
         }
 
         .card-name,
@@ -202,18 +196,18 @@
 
         .card-desc,
         .item-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: #777;
-            line-height: 1.5;
-            margin-bottom: 10px;
+            line-height: 1.4;
+            margin-bottom: 8px;
         }
 
         .card-price,
         .item-price {
             color: #e8231a;
             font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 12px;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
 
         label {
@@ -266,6 +260,8 @@
 
         .topping-options ul {
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .topping-options li {
@@ -317,12 +313,11 @@
             background: #e8231a;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: auto;
-            font-size: 15px;
+            margin-top: 6px;
         }
 
         .add-btn:hover {
@@ -334,17 +329,29 @@
             text-align: center;
             background: #e8231a;
             color: white;
-            padding: 10px;
+            padding: 9px;
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: auto;
         }
 
         .meal-box {
             border-top: 1px solid #eee;
             margin-top: 12px;
             padding-top: 12px;
+        }
+
+        .meal-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e8231a;
+            margin-bottom: 6px;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 18px;
         }
 
         @media (max-width: 700px) {
@@ -378,7 +385,7 @@
             <a href="{% url 'order_history' %}">My Orders</a>
             <a href="{% url 'view_cart' %}" class="cart-btn">Cart ({{ cart_count|default:0 }})</a>
 
-            <form action="/accounts/logout/" method="post">
+            <form action="/accounts/logout/" method="post" class="inline-form">
                 {% csrf_token %}
                 <button type="submit" class="logout-btn">Logout</button>
             </form>
@@ -413,32 +420,138 @@
         {% endfor %}
     {% endif %}
 
-    <!-- SIDES -->
+    <div class="section" id="sec-all">
+        <h2 class="section-heading">Pizza Menu</h2>
+
+        <div class="card-grid">
+            {% for item in pizza_data %}
+                <div class="pizza-card">
+                    {% if item.pizza.image %}
+                        <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
+                    {% else %}
+                        <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <div class="card-name">{{ item.pizza.name }}</div>
+                        <div class="card-desc">{{ item.pizza.description }}</div>
+                        <div class="card-price">From {{ item.pizza.price_small }} kr</div>
+
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+                                {% csrf_token %}
+
+                                <label>Size</label>
+                                {{ item.form.size }}
+
+                                <label>Quantity</label>
+                                {{ item.form.quantity }}
+
+                                <label>Toppings</label>
+                                <div class="topping-box">
+                                    <button type="button" class="topping-toggle">Choose toppings</button>
+                                    <div class="topping-options">
+                                        {{ item.form.toppings }}
+                                    </div>
+                                </div>
+
+                                <label>Personalize</label>
+                                <div class="personal-box">
+                                    <label><input type="checkbox" name="vegetarian"> Vegetarian</label>
+                                    <label><input type="checkbox" name="vegan"> Vegan</label>
+                                    <label><input type="checkbox" name="gluten_free"> Gluten-free</label>
+                                    <label><input type="checkbox" name="dairy_free"> Dairy-free</label>
+                                </div>
+
+                                <button type="submit" class="add-btn">Add Pizza to Cart</button>
+                            </form>
+                        {% else %}
+                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No pizzas available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section" id="sec-meal" style="display:none;">
+        <h2 class="section-heading">Meal Deals</h2>
+
+        <div class="card-grid">
+            {% for item in pizza_data %}
+                <div class="pizza-card">
+                    {% if item.pizza.image %}
+                        <img class="card-img" src="{{ item.pizza.image.url }}" alt="{{ item.pizza.name }}">
+                    {% else %}
+                        <img class="card-img" src="{{ item.pizza.fallback_image }}" alt="{{ item.pizza.name }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <div class="card-name">{{ item.pizza.name }} Meal Deal</div>
+                        <div class="card-desc">Choose one pizza size and add one drink with your pizza.</div>
+                        <div class="card-price">Pizza + Drink</div>
+
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'add_pizza_to_cart' item.pizza.id %}">
+                                {% csrf_token %}
+
+                                <label>Pizza size</label>
+                                {{ item.form.size }}
+
+                                <label>Quantity</label>
+                                {{ item.form.quantity }}
+
+                                <label>Choose drink</label>
+                                <select name="meal_drink">
+                                    {% for drink in drinks %}
+                                        <option value="{{ drink.id }}">{{ drink.name }} - {{ drink.price }} kr</option>
+                                    {% endfor %}
+                                </select>
+
+                                
+
+                                <label>Choose side</label>
+                                <select name="meal_side">
+                                    {% for side in sides %}
+                                        <option value="{{ side.id }}">{{ side.name }} - {{ side.price }} kr</option>
+                                    {% endfor %}
+                                    </select>
+
+                                <label>Toppings</label>
+                                <div class="topping-box">
+                                    <button type="button" class="topping-toggle">Choose toppings</button>
+                                    <div class="topping-options">
+                                        {{ item.form.toppings }}
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="add-btn">Add Meal Deal</button>
+                            </form>
+                        {% else %}
+                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No meal deals available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
     <div class="section" id="sec-sides" style="display:none;">
         <h2 class="section-heading">Sides</h2>
 
         <div class="item-grid">
             {% for side in sides %}
                 <div class="item-card">
-
                     <img class="item-img" src="{{ side.display_image }}" alt="{{ side.name }}">
-
                     <div class="item-body">
                         <div class="item-name">{{ side.name }}</div>
                         <div class="item-desc">{{ side.description }}</div>
                         <div class="item-price">{{ side.price }} kr</div>
-
-                        {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'add_side_to_cart' side.id %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="add-btn">Add to Cart</button>
-                            </form>
-                        {% else %}
-                            <a href="/accounts/login/" class="add-link">Sign in to order</a>
-                        {% endif %}
                     </div>
-
                 </div>
             {% empty %}
                 <p>No sides available yet.</p>
@@ -446,35 +559,49 @@
         </div>
     </div>
 
-    <!-- DIPS -->
     <div class="section" id="sec-dips" style="display:none;">
         <h2 class="section-heading">Dips</h2>
 
         <div class="item-grid">
             {% for dip in dips %}
                 <div class="item-card">
-
                     <img class="item-img" src="{{ dip.display_image }}" alt="{{ dip.name }}">
-
                     <div class="item-body">
                         <div class="item-name">{{ dip.name }}</div>
                         <div class="item-desc">{{ dip.description }}</div>
                         <div class="item-price">{{ dip.price }} kr</div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No dips available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section" id="sec-drinks" style="display:none;">
+        <h2 class="section-heading">Drinks</h2>
+
+        <div class="item-grid">
+            {% for drink in drinks %}
+                <div class="item-card">
+                    <img class="item-img" src="{{ drink.display_image }}" alt="{{ drink.name }}">
+                    <div class="item-body">
+                        <div class="item-name">{{ drink.name }}</div>
+                        <div class="item-price">{{ drink.price }} kr</div>
 
                         {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'add_side_to_cart' dip.id %}">
+                            <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
                                 {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="add-btn">Add to Cart</button>
+                                <input type="hidden" name="drink_{{ drink.id }}-quantity" value="1">
+                                <button type="submit" class="add-btn">Add Drink to Cart</button>
                             </form>
                         {% else %}
                             <a href="/accounts/login/" class="add-link">Sign in to order</a>
                         {% endif %}
                     </div>
-
                 </div>
             {% empty %}
-                <p>No dips available yet.</p>
+                <p>No drinks available yet.</p>
             {% endfor %}
         </div>
     </div>
@@ -496,6 +623,45 @@ function showSection(name, el) {
         }
     });
 }
+
+document.querySelectorAll('.topping-box').forEach(function(box) {
+    var button = box.querySelector('.topping-toggle');
+    var checkboxes = box.querySelectorAll('input[type="checkbox"]');
+
+    button.addEventListener('click', function(event) {
+        event.stopPropagation();
+
+        document.querySelectorAll('.topping-box').forEach(function(otherBox) {
+            if (otherBox !== box) {
+                otherBox.classList.remove('open');
+            }
+        });
+
+        box.classList.toggle('open');
+    });
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            var selected = box.querySelectorAll('input[type="checkbox"]:checked').length;
+
+            if (selected === 0) {
+                button.textContent = 'Choose toppings';
+            } else if (selected === 1) {
+                button.textContent = '1 topping selected';
+            } else {
+                button.textContent = selected + ' toppings selected';
+            }
+        });
+    });
+});
+
+document.addEventListener('click', function(event) {
+    document.querySelectorAll('.topping-box').forEach(function(box) {
+        if (!box.contains(event.target)) {
+            box.classList.remove('open');
+        }
+    });
+});
 </script>
 
 </body>
