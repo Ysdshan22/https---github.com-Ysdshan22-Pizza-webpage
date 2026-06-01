@@ -17,17 +17,17 @@ def get_pizza_image(name):
     elif 'picante' in n or 'pikanta' in n or 'spicy' in n:
         return 'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=800&q=80'
     elif 'beef' in n:
-        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
+        return 'https://images.unsplash.com/photo-1621070766841-a7bf1ee96df0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'chicken' in n:
         return 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=800&q=80'
     elif 'nduja' in n:
-        return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
+        return 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?q=80&w=728&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'truffle' in n:
         return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
     elif 'salami' in n:
-        return 'https://images.unsplash.com/photo-1620374645498-af6bd681a0bd?auto=format&fit=crop&w=800&q=80'
+        return 'https://images.unsplash.com/photo-1712460840521-04846c6b1c8b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'tomat' in n or 'tomato' in n:
-        return 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=800&q=80'
+        return 'https://images.unsplash.com/photo-1669895616443-5d21d5acc6e0?q=80&w=1025&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'devil' in n:
         return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
     else:
@@ -38,17 +38,17 @@ def get_drink_image(name):
     n = name.lower()
 
     if 'cola' in n or 'coca' in n:
-        return 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=600&q=80'
+        return 'https://plus.unsplash.com/premium_photo-1725075086631-b21a5642918b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'fanta' in n or 'orange' in n:
-        return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80'
+        return 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?q=80&w=803&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'pepsi' in n:
-        return 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=600&q=80'
+        return 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?q=80&w=1229&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'farris' in n or 'water' in n or 'vann' in n:
         return 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80'
     elif 'solo' in n or 'lemon' in n:
-        return 'https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=600&q=80'
+        return 'https://images.unsplash.com/photo-1766050587712-72b737dc1d39?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'sprite' in n or 'sprit' in n:
-        return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80'
+        return 'https://images.unsplash.com/photo-1680404005217-a441afdefe83?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'red bull' in n or 'energy' in n:
         return 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=600&q=80'
     else:
@@ -72,15 +72,15 @@ def get_side_image(name, side_type):
 
     
     elif 'fish' in n:
-        return 'https://images.unsplash.com/photo-1559847844-5315695dadae'
+        return 'https://images.unsplash.com/photo-1655690125465-5947c227d836?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'chicken nugget' in n:
-        return 'https://images.unsplash.com/photo-1606755962773-0a3a2f1b0c5d'
+        return 'https://images.unsplash.com/photo-1619881590738-a111d176d906?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'mozzarella' in n:
         return 'https://images.unsplash.com/photo-1548340748-6d2b7d7da280'
     elif 'chilli poppers' in n:
-        return 'https://images.unsplash.com/photo-1604908177522-040c2a8b1f98'
+        return 'https://images.unsplash.com/photo-1585039261108-ec658b915e37?q=80&w=797&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'churros' in n:
-        return 'https://images.unsplash.com/photo-1624371414361-e670edf1ff8d'
+        return 'https://plus.unsplash.com/premium_photo-1713687789756-b38c7870eef6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     elif 'salat' in n or 'salad' in n:
         return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd'
 
