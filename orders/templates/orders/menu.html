@@ -29,15 +29,18 @@
         }
 
         .nav-logo {
-            font-size:34px;
-            font-weight:900;
-            color:#ff5a3d;
-            text-decoration:none;
-            letter-spacing:-2px;
-            background:none;
-            padding:0;
-            box-shadow:none;
-                }
+            font-size: 90px;
+            font-weight: 900;
+            color: #ff4d4d;
+            letter-spacing: 3px;
+
+            
+            -webkit-text-stroke: 6px white;
+
+            
+            text-shadow:
+            0 0 0 white;
+        }
 
         .nav-links {
             display: flex;
@@ -92,11 +95,17 @@
             padding:0 80px;
     }
         .hero-brand{
-            font-size:95px;
+            font-size:90px;
             font-weight:900;
             color:#e63946;
             margin-bottom:10px;
-            text-shadow:0 3px 10px rgba(255,255,255,.3);
+            -webkit-text-stroke: 3px white;
+            text-shadow:
+                3px 3px 0 black,
+                -3px 3px 0 black,
+                3px -3px 0 black,
+                -3px -3px 0 black;
+            letter-spacing: 1px;
     }   
         .hero-content{
             margin-top:120px;
@@ -106,11 +115,17 @@
 
 
         .hero h1 {
-            font-size: 25x;
-            font-weight: 900;
-            color: #111;
-            line-height: 0.95;
-            margin-bottom: 20px;
+            display:inline-block;
+
+            background:rgba(255,255,255,0.15);
+
+            border:2px solid white;
+
+            padding:20px;
+
+            border-radius:15px;
+
+            backdrop-filter:blur(5px);
 
         }
 
@@ -448,6 +463,67 @@
                 margin-left:auto;
             }
         }
+       
+    
+
+        .offer-popup{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 0, 0, 0.6); /* darker for contrast */
+
+            display: none;
+            justify-content: center;
+            align-items: center;
+
+            z-index: 9999;
+        }
+
+        .popup-card{
+            width: 850px;
+            padding: 60px;
+            border-radius: 25px;
+            text-align: center;
+
+            background: rgba(122, 119, 119, 0.984);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+
+            color: hsl(0, 11%, 95%);
+
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .offer-popup.show .popup-card{
+            transform: translateX(0);
+            opacity: 1;
+        }  
+       
+        
+        
+        .popup-card h2{
+            color: rgb(225, 7, 7) !important;
+        }
+        .popup-card h2{
+            font-size: 56px;
+        }
+        .popup-card p{
+            font-size: 25px;
+        }
+        .close-btn{
+            float: right;
+            cursor: pointer;
+            font-size: 40px;
+        }
+    
     </style>
 </head>
 
@@ -469,6 +545,7 @@
         {% endif %}
     </div>
 </nav>
+
 
 <div class="hero">
 
@@ -804,7 +881,39 @@ document.addEventListener('click', function(event) {
         }
     });
 });
-</script>
+document.addEventListener("DOMContentLoaded", function () {
+    var popup = document.getElementById("offerPopup");
+    var closeBtn = document.querySelector("#offerPopup .close-btn");
 
+    if (!popup || !closeBtn) return;
+
+    // show popup
+    popup.style.display = "flex";
+    popup.classList.add("show"); // ⭐ ADD THIS LINE
+
+    // close popup
+    closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";
+    });
+});
+</script>
+<!-- POPUP START -->
+<div id="offerPopup" class="offer-popup">
+    <div class="popup-card">
+        <span class="close-btn">&times;</span>
+
+        <h2> Meal Deal Discount</h2>
+
+        <p>
+            Order any Meal Deal today and get
+            <strong>15% OFF</strong>
+        </p>
+
+        
+    </div>
+</div>
+<!-- POPUP END -->
 </body>
 </html>
+
+
