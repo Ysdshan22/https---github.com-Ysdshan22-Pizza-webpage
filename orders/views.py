@@ -158,6 +158,8 @@ def add_pizza_to_cart(request, pizza_id):
             size = form.cleaned_data['size']
             quantity = form.cleaned_data['quantity']
             toppings = form.cleaned_data['toppings']
+            meal_drink = request.POST.get('meal_drink')
+            meal_side = request.POST.get('meal_side')
 
             if size == 'S':
                 base_price = float(pizza.price_small)
@@ -185,18 +187,50 @@ def add_pizza_to_cart(request, pizza_id):
             subtotal = unit_price * quantity
 
             cart = request.session.get('cart', [])
-            cart.append({
-                'type': 'pizza',
-                'id': pizza.id,
-                'name': pizza.name,
-                'image': pizza.image.url if pizza.image else get_pizza_image(pizza.name),
-                'size': size,
-                'quantity': quantity,
-                'price': unit_price,
-                'subtotal': subtotal,
-                'toppings': topping_names,
-                'topping_ids': topping_ids,
-            })
+            if meal_drink and meal_side:
+
+                drink = Drink.objects.get(id=meal_drink)
+                side = Side.objects.get(id=meal_side)
+
+                cart.append({
+                    'type': 'meal_deal',
+
+                    'id': pizza.id,
+                    'name': f"{pizza.name} Meal Deal",
+
+                    'pizza_name': pizza.name,
+                    'drink_name': drink.name,
+                    'side_name': side.name,
+
+                    'image': pizza.image.url if pizza.image else get_pizza_image(pizza.name),
+
+                    'size': size,
+                    'quantity': quantity,
+
+                    'price': unit_price + float(drink.price) + float(side.price),
+
+                    'subtotal':
+                        (unit_price + float(drink.price) + float(side.price))
+                        * quantity,
+
+                    'toppings': topping_names,
+                    'topping_ids': topping_ids,
+                })
+
+            else:
+
+                cart.append({
+                    'type': 'pizza',
+                    'id': pizza.id,
+                    'name': pizza.name,
+                    'image': pizza.image.url if pizza.image else get_pizza_image(pizza.name),
+                    'size': size,
+                    'quantity': quantity,
+                    'price': unit_price,
+                    'subtotal': subtotal,
+                    'toppings': topping_names,
+                    'topping_ids': topping_ids,
+                })
             request.session['cart'] = cart
 
             messages.success(request, "Pizza added to cart successfully.")

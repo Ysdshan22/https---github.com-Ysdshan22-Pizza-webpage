@@ -1,120 +1,231 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Cart</title>
+    <title>PizzaNor - Your Cart</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f6f3ef;
-            margin: 0;
-            color: #222;
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
         }
 
-        .cart-box {
-            max-width: 1000px;
-            margin: 50px auto;
-            background: white;
-            padding: 28px;
-            border-radius: 18px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        body{
+            font-family:Arial,sans-serif;
+            background:
+            linear-gradient(
+                180deg,
+                #fff8f3,
+                #fff2eb
+            );
+            color:#222;
         }
 
-        h1 {
-            margin-bottom: 25px;
-            font-size: 34px;
+        .hero-banner{
+            height:260px;
+
+            background-image:
+            linear-gradient(
+                rgba(0,0,0,.35),
+                rgba(0,0,0,.35)
+            ),
+            url("https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&q=80");
+
+            background-size:cover;
+            background-position:center;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
         }
 
-        .cart-item {
-            display: flex;
-            gap: 18px;
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 16px;
-            align-items: center;
+        .hero-banner h1{
+            color:white;
+            font-size:72px;
+            font-weight:900;
+            letter-spacing:-2px;
         }
 
-        .cart-img {
-            width: 150px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            flex-shrink: 0;
+        .cart-box{
+            max-width:1200px;
+            margin:-40px auto 40px;
+
+            background:white;
+
+            padding:35px;
+
+            border-radius:28px;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.08);
+
+            position:relative;
+            z-index:10;
         }
 
-        .item-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e8231a;
-            margin-bottom: 8px;
+        .cart-item{
+            display:flex;
+            gap:20px;
+
+            background:#fffdfc;
+
+            border:1px solid #ffe5dc;
+
+            border-radius:20px;
+
+            padding:20px;
+
+            margin-bottom:18px;
+
+            transition:.25s;
         }
 
-        .item-details {
-            font-size: 14px;
-            line-height: 1.7;
+        .cart-item:hover{
+            transform:translateY(-3px);
+
+            box-shadow:
+                0 8px 20px rgba(0,0,0,.08);
         }
 
-        .total-box {
-            margin-top: 25px;
-            padding: 18px;
-            background: #fff3f1;
-            border-radius: 14px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #e8231a;
+        .cart-img{
+            width:170px;
+            height:130px;
+            object-fit:cover;
+            border-radius:16px;
+            flex-shrink:0;
         }
 
-        .actions {
-            margin-top: 22px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        .item-title{
+            font-size:24px;
+            font-weight:800;
+            color:#ff5a3d;
+            margin-bottom:10px;
         }
 
-        a {
-            text-decoration: none;
-            color: white;
-            background: #007bff;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            display: inline-block;
+        .item-details{
+            line-height:1.9;
+            font-size:15px;
         }
 
-        .danger {
-            background: #dc3545;
+        .total-box{
+            margin-top:30px;
+
+            background:#fff3ef;
+
+            border:1px solid #ffd5c8;
+
+            padding:22px;
+
+            border-radius:18px;
+
+            font-size:30px;
+
+            font-weight:900;
+
+            color:#ff5a3d;
         }
 
-        .menu-btn {
-            background: #333;
+        .actions{
+            margin-top:25px;
+
+            display:flex;
+            gap:15px;
+            flex-wrap:wrap;
         }
 
-        .empty {
-            padding: 30px;
-            text-align: center;
-            color: #777;
-            background: #fafafa;
-            border-radius: 14px;
+        .btn{
+            text-decoration:none;
+            color:white;
+
+            padding:14px 24px;
+
+            border-radius:12px;
+
+            font-weight:bold;
+
+            transition:.25s;
         }
 
-        @media (max-width: 700px) {
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
+        .checkout-btn{
+            background:
+            linear-gradient(
+                135deg,
+                #ff5f3a,
+                #ff2d20
+            );
+        }
+
+        .danger{
+            background:#dc3545;
+        }
+
+        .menu-btn{
+            background:#333;
+        }
+
+        .btn:hover{
+            transform:translateY(-2px);
+        }
+
+        .empty{
+            text-align:center;
+            padding:50px;
+        }
+
+        @media(max-width:700px){
+
+            .cart-item{
+                flex-direction:column;
             }
 
-            .cart-img {
-                width: 100%;
-                height: 180px;
+            .cart-img{
+                width:100%;
+                height:220px;
+            }
+
+            .hero-banner h1{
+                font-size:48px;
             }
         }
-    </style>
+            .remove-btn{
+                display:inline-block;
+                margin-top:12px;
+
+                background:linear-gradient(
+                    135deg,
+                    #ff5f3a,
+                    #ff2d20
+                );
+
+                color:white;
+                text-decoration:none;
+
+                padding:10px 20px;
+
+                border-radius:12px;
+
+                font-weight:700;
+
+                box-shadow:0 6px 15px rgba(255,77,48,.25);
+
+                transition:.25s;
+            }
+            .remove-btn:hover{
+                transform:translateY(-2px);
+            }
+            </style>
+
 </head>
 <body>
 
-<div class="cart-box">
+<div class="hero-banner">
     <h1>Your Cart</h1>
+</div>
+
+<div class="cart-box">
 
     {% if cart %}
         {% for item in cart %}
@@ -127,13 +238,20 @@
                 <div>
 
                     <!-- PIZZA -->
-                    {% if item.type == 'pizza' %}
+                    {% if item.type == 'pizza' or item.type == 'meal_deal' %}
                         <div class="item-title">🍕 {{ item.name }}</div>
+                        {% if item.type == 'meal_deal' %}
+                            <br><strong>Drink:</strong> {{ item.drink_name }}
+                            <br><strong>Side:</strong> {{ item.side_name }}
+                        {% endif %}
                         <div class="item-details">
                             <strong>Size:</strong> {{ item.size }}<br>
                             <strong>Quantity:</strong> {{ item.quantity }}<br>
-                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
-                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+                            <strong>Unit Price:</strong>
+                            {{ item.price|floatformat:2 }} kr
+                            <br>
+                            <strong>Subtotal:</strong>
+                            {{ item.subtotal|floatformat:2 }}
 
                             {% if item.toppings %}
                                 <br><strong>Toppings:</strong> {{ item.toppings|join:", " }}
@@ -153,8 +271,11 @@
                         <div class="item-title">🥤 {{ item.name }}</div>
                         <div class="item-details">
                             <strong>Quantity:</strong> {{ item.quantity }}<br>
-                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
-                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+                            <strong>Unit Price:</strong>
+                            {{ item.price|floatformat:2 }} kr
+                            <br>
+                            <strong>Subtotal:</strong>
+                            {{ item.subtotal|floatformat:2 }}           
                         </div>
 
                     <!-- SIDE / DIP -->
@@ -162,12 +283,14 @@
                         <div class="item-title">🍟 {{ item.name }}</div>
                         <div class="item-details">
                             <strong>Quantity:</strong> {{ item.quantity }}<br>
-                            <strong>Unit Price:</strong> {{ item.price }} kr<br>
-                            <strong>Subtotal:</strong> {{ item.subtotal }} kr
+                            <strong>Unit Price:</strong>
+                            {{ item.price|floatformat:2 }} kr
+                            <br>
+                            <strong>Subtotal:</strong>
+                            {{ item.subtotal|floatformat:2 }}
                         </div>
                     {% endif %}
-
-                    <a class="danger" href="{% url 'remove_from_cart' forloop.counter0 %}">
+                    <a class="remove-btn" href="{% url 'remove_from_cart' forloop.counter0 %}">
                         Remove
                     </a>
                 </div>
@@ -175,21 +298,46 @@
         {% endfor %}
 
         <div class="total-box">
-            Total: {{ total }} kr
+            Total: {{ total|floatformat:2 }} kr
         </div>
 
         <div class="actions">
-            <a href="{% url 'checkout' %}">Proceed to Checkout</a>
-            <a class="danger" href="{% url 'clear_cart' %}">Clear Cart</a>
-            <a class="menu-btn" href="{% url 'menu' %}">Back to Menu</a>
-        </div>
 
-    {% else %}
-        <div class="empty">
-            <h2>Your cart is empty</h2>
-            <p>Add something from the menu.</p>
-            <a href="{% url 'menu' %}">Back to Menu</a>
+            <a href="{% url 'checkout' %}"
+            class="btn checkout-btn">
+                Proceed to Checkout
+            </a>
+
+            <a href="{% url 'clear_cart' %}"
+            class="btn danger">
+                Clear Cart
+            </a>
+
+            <a href="{% url 'menu' %}"
+            class="btn menu-btn">
+                Back to Menu
+            </a>
+
+            
+
         </div>
+    {% else %}
+    <div class="empty">
+
+        <h2 style="font-size:42px; margin-bottom:15px;">
+            🍕 Your Cart is Empty
+        </h2>
+
+        <p style="font-size:18px; color:#666; margin-bottom:25px;">
+            Add something delicious from PizzaNor.
+        </p>
+
+        <a href="{% url 'menu' %}"
+        class="btn menu-btn">
+            Browse Menu
+        </a>
+
+    </div>
     {% endif %}
 </div>
 

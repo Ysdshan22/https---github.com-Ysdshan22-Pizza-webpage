@@ -3,90 +3,240 @@
 <head>
     <title>My Orders</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f8f8f8;
+        body{
+            font-family:Arial,sans-serif;
+            background:#fff8f3;
+            margin:0;
+            padding:40px;
         }
 
-        .order-box {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 1000px;
-            margin: auto;
+        .order-container{
+            max-width:1200px;
+            margin:auto;
         }
 
-        .order {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background-color: #fff;
+        .page-title{
+            text-align:center;
+            font-size:52px;
+            font-weight:900;
+            color:#111;
+            margin-bottom:40px;
         }
 
-        .item {
-            margin-left: 20px;
-            padding: 5px 0;
+        .order-card{
+            background:white;
+            border-radius:20px;
+            padding:30px;
+            margin-bottom:25px;
+            box-shadow:0 8px 25px rgba(0,0,0,.08);
         }
 
-        a {
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            padding: 8px 14px;
-            border-radius: 6px;
+        .order-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
         }
 
-        a:hover {
-            background-color: #0056b3;
+        .order-id{
+            font-size:26px;
+            font-weight:800;
+        }
+
+        .status{
+            padding:10px 18px;
+            border-radius:30px;
+            font-weight:bold;
+        }
+
+        .pending{
+            background:#fff3cd;
+            color:#856404;
+        }
+
+        .preparing{
+            background:#d1ecf1;
+            color:#0c5460;
+        }
+
+        .delivered{
+            background:#d4edda;
+            color:#155724;
+        }
+
+        .order-info{
+            margin-bottom:20px;
+            line-height:2;
+        }
+
+        .items-title{
+            font-size:22px;
+            font-weight:700;
+            margin-bottom:15px;
+        }
+
+        .item-tag{
+            display:inline-block;
+            background:#fff3ef;
+            color:#ff5a3d;
+            padding:10px 15px;
+            border-radius:12px;
+            margin:5px;
+            font-weight:600;
+        }
+
+        .total-price{
+            margin-top:20px;
+            font-size:30px;
+            font-weight:900;
+            color:#ff5a3d;
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-top:30px;
+            background:linear-gradient(
+                135deg,
+                #ff5f3a,
+                #ff2d20
+            );
+            color:white;
+            text-decoration:none;
+            padding:14px 25px;
+            border-radius:12px;
+            font-weight:bold;
+            box-shadow:0 6px 20px rgba(255,77,48,.25);
+        }
+
+        .back-btn:hover{
+            opacity:.9;
+        }
+        .hero-banner{
+            height:250px;
+            border-radius:25px;
+            overflow:hidden;
+            margin-bottom:40px;
+
+            background-image:
+            linear-gradient(
+                rgba(0,0,0,.35),
+                rgba(0,0,0,.35)
+            ),
+            url("https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600&q=80");
+
+            background-size:cover;
+            background-position:center;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .hero-banner h1{
+            color:white;
+            font-size:64px;
+            font-weight:900;
+            margin:0;
         }
     </style>
 </head>
 <body>
-    <div class="order-box">
-        <h1>My Orders</h1>
 
-        {% if orders %}
-            {% for order in orders %}
-                <div class="order">
-                    <p><strong>Order ID:</strong> {{ order.id }}</p>
-                    <p><strong>Date:</strong> {{ order.date }}</p>
-                    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
-                    <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
-                    <p><strong>Total Price:</strong> {{ order.total_price }}</p>
 
-                    <h3>Items:</h3>
-                    {% for item in order.orderitem_set.all %}
-                        <div class="item">
-                            {% if item.pizza %}
-                                Pizza: {{ item.pizza.name }} |
-                                Size: {{ item.size }} |
-                                Quantity: {{ item.quantity }}
+<div class="order-container">
 
-                                {% if item.toppings.all %}
-                                    <br>
-                                    Toppings:
-                                    {% for t in item.toppings.all %}
-                                        {{ t.name }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                {% endif %}
+    <h1 class="page-title">My Orders</h1>
 
-                            {% elif item.drink %}
-                                Drink: {{ item.drink.name }} |
-                                Quantity: {{ item.quantity }}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+    {% if orders %}
+        {% for order in orders %}
+
+            <div class="order-card">
+
+                <div class="order-header">
+
+                    <div class="order-id">
+                        Order #{{ order.id }}
+                    </div>
+
+                    {% if order.status == 'P' %}
+                        <span class="status pending">
+                            Pending
+                        </span>
+
+                    {% elif order.status == 'PR' %}
+                        <span class="status preparing">
+                            Preparing
+                        </span>
+
+                    {% else %}
+                        <span class="status delivered">
+                            Delivered
+                        </span>
+                    {% endif %}
+
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>You have not placed any orders yet.</p>
-        {% endif %}
 
-        <a href="{% url 'menu' %}">Back to Menu</a>
-    </div>
+                <div class="order-info">
+
+                    <strong>Date:</strong>
+                    {{ order.date }}
+
+                    <br>
+
+                    <strong>Delivery Address:</strong>
+                    {{ order.delivery_address }}
+
+                </div>
+
+                <div class="items-title">
+                    Ordered Items
+                </div>
+
+                {% for item in order.orderitem_set.all %}
+
+                    {% if item.pizza %}
+                        <div class="item-tag">
+                            🍕 {{ item.pizza.name }}
+                            | {{ item.size }}
+                            | Qty: {{ item.quantity }}
+                        </div>
+
+                    {% elif item.drink %}
+                        <div class="item-tag">
+                            🥤 {{ item.drink.name }}
+                            | Qty: {{ item.quantity }}
+                        </div>
+
+                    {% elif item.side %}
+                        <div class="item-tag">
+                            🍟 {{ item.side.name }}
+                            | Qty: {{ item.quantity }}
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
+                <div class="total-price">
+                    {{ order.total_price|floatformat:2 }} kr
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="order-card">
+            <h2>No orders yet</h2>
+            <p>Your pizza journey starts now 🍕</p>
+        </div>
+
+    {% endif %}
+
+    <a href="{% url 'menu' %}" class="back-btn">
+        Back to Menu
+    </a>
+
+</div>
 </body>
 </html>
